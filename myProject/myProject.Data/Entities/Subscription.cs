@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using myProject.Core;
 
 namespace myProject.Data.Entities;
 
-public class Subscription
+public class Subscription : IBaseEntity
 {
     [Key]
     public int Id { get; set; }

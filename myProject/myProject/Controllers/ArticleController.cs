@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using myProject.Data;
+using myProject.Core.DTOs;
+using myProject.Abstractions.Services;
 
 namespace myProject.Controllers
 {
     public class ArticleController : Controller
     {
-        private readonly MyProjectContext _dbContext;
+        private readonly IArticleService _articleService;
 
-        public ArticleController (MyProjectContext dbContext)
+        public ArticleController (IArticleService articleService)
         {
-            _dbContext = dbContext;
+            _articleService = articleService;
         }
 
-        [HttpGet]
+       [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var data = await _dbContext.Categories.ToListAsync();
+            var data = await _articleService.GetListCategoriesAsync();
             return View(data);
         }
     }

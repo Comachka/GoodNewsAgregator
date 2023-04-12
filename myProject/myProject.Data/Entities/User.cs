@@ -6,10 +6,11 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using myProject.Core;
 
 namespace myProject.Data.Entities;
 
-public class User
+public class User : IBaseEntity
 {
     [Key]
     public int Id { get; set; }

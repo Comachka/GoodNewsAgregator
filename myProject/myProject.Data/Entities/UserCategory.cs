@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using myProject.Core;
 
 namespace myProject.Data.Entities;
 
-public class UserCategory
+public class UserCategory : IBaseEntity
 {
     [Key]
     public int Id { get; set; }
