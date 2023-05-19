@@ -1,15 +1,22 @@
-﻿@model List<myProject.Core.DTOs.CategoryDto>
-@{
-    foreach (var el in Model)
-    {
-        <div> 
-        <b>@el.Id</b> - @el.Name
-        </div>
-        
-    }
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+﻿@model ArticlesWithPaginationModel
+<div class="row">
+    <h4>Search</h4>
+    <input type="text" id="article-search" class="form-control col col-12" placeholder="Type article name" />
 </div>
+
+<div class="row article-list">
+    @foreach (var el in Model.ArticlePreviews)
+    {
+       await Html.RenderPartialAsync("ArticlePreviewPartial", el);
+    }
+</div>
+
+<pagination page-info="Model.PageInfo" page-action="Index">
+    <p>1123123123123123123</p>
+</pagination>
+
+@section Scripts
+{
+    <script src="/lib/bootstrap-autocomplete/autocomplete.js"></script>
+    <script src="/js/article-search.js"></script>
+}

@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myProject.Mvc", "myProject\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myProject.Data", "myProject.Data\myProject.Data.csproj", "{F7C8D83F-78D1-4FE3-A764-3580F592BF22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myProject.Abstractions", "myProject.Abstractions\myProject.Abstractions.csproj", "{9EF56A73-E55D-474F-8CAB-9A9D7ACD8303}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myProject.Abstractions", "myProject.Abstractions\myProject.Abstractions.csproj", "{9EF56A73-E55D-474F-8CAB-9A9D7ACD8303}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myProject.Business", "myProject.Business\myProject.Business.csproj", "{0A4F203B-DB15-448B-A38E-0E6F882ABF4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myProject.Business", "myProject.Business\myProject.Business.csproj", "{0A4F203B-DB15-448B-A38E-0E6F882ABF4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myProject.Core", "myProject.Core\myProject.Core.csproj", "{8A66F5F5-83B9-4597-BC10-8E55649EAFE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myProject.Core", "myProject.Core\myProject.Core.csproj", "{8A66F5F5-83B9-4597-BC10-8E55649EAFE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myProject.Repositories", "myProject.Repositories\myProject.Repositories.csproj", "{E3E2F564-D1E2-4D9C-BC4C-999FB28C93D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myProject.Repositories", "myProject.Repositories\myProject.Repositories.csproj", "{E3E2F564-D1E2-4D9C-BC4C-999FB28C93D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

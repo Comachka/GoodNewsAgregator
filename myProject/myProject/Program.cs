@@ -8,6 +8,9 @@ using myProject.Repositories;
 using myProject.Repositories.Implementations;
 using myProject.Abstractions.Data.Repositories;
 using myProject.Data.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
+using Serilog.Events;
 
 namespace myProject
 {
@@ -16,6 +19,15 @@ namespace myProject
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.File("F:\\434\\log.txt", LogEventLevel.Information)
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
 
             //Add DbContext
             builder.Services.AddDbContext<MyProjectContext>(options =>
@@ -37,12 +49,24 @@ namespace myProject
             builder.Services.AddScoped<IRepository<UserCategory>, Repository<UserCategory>>();
             builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 
+            builder.Services.AddTransient<ICommentService, CommentService>();
             builder.Services.AddTransient<IArticleService, ArticleService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IRoleService, RoleService>();
             // Add services to the container.
             builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+            {
+                option.LoginPath = new PathString("/Account/Login");
+                option.AccessDeniedPath = new PathString("/Account/Login");
+            });
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -52,11 +76,14 @@ namespace myProject
                 app.UseHsts();
             }
 
+            app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

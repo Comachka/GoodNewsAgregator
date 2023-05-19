@@ -1,0 +1,13 @@
+﻿@model ArticlePreviewModel
+
+<div class="card card-with-margin col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    @*<img src="..." class="card-img-top" alt="...">*@
+    <div class="card-body">
+        <h5 class="card-title"> @Model.Title</h5>
+        <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">@Html.Raw(Model.Content)</p>
+        <a asp-action="Details" asp-controller="Article" asp-route-id="@Model.Id" class="btn btn-primary">Go somewhere</a>
+    </div>
+    <div class="card-footer">
+        @Model.SourceName
+    </div>
+</div>

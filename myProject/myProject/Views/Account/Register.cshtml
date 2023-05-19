@@ -1,0 +1,55 @@
+﻿@model RegisterModel
+
+<h3 class="register-page-title">Register</h3>
+
+<form class="register-form" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <div class="register-input">
+            <label class="form-label" asp-for="Email">Email</label>
+            <input class="form-control" type="email" asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="register-input">
+            <label class="form-label" asp-for="Name">Name</label>
+            <input class="form-control" type="text" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="register-input">
+            <label class="form-label" asp-for="Password">Password</label>
+            <input class="form-control" type="password" asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div class="register-input">
+            <label class="form-label" asp-for="PasswordConfirmation">PasswordConfirmation</label>
+            <input class="form-control" type="password" asp-for="PasswordConfirmation" />
+            <span asp-validation-for="PasswordConfirmation"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="register-input w-100">
+            <label class="form-label" asp-for="Avatar">Avatar:</label>
+            <input type="file" name="Avatar" class="form-control" asp-for="Avatar" accept="image/*" maxlength="102400" />
+            <span asp-validation-for="Avatar"></span>
+        </div>
+    </div>
+    <div class="register-input register-textarea-wrapper">
+        <label class="form-label" asp-for="AboutMyself">AboutMyself</label>
+        <textarea class="form-control" type="text" asp-for="AboutMyself"></textarea>
+    </div>
+    
+    <div class="w-100 d-flex align-items-center">
+        <label class="form-label register-label-checkbox" asp-for="MailNotification">MailNotification</label>
+        <input type="checkbox" name="MailNotification" asp-for="MailNotification">
+    </div>
+    <div class="register-button-wrapper">
+        <input class="btn bg-primary register-button" asp-page-handler="Upload" type="submit" value="Confirm" />
+    </div>
+</form>
+
+@section Scripts
+    {
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

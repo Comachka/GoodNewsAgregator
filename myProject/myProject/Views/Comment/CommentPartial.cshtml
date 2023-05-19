@@ -1,0 +1,12 @@
+﻿@model List<CommentModel>
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    @foreach (var comment in Model)
+    {
+        await Html.RenderPartialAsync("CommentPartial", comment);
+    }
+</div>

@@ -66,6 +66,7 @@ namespace myProject.Repositories.Implementations
         public async Task<List<Article>> GetArticlesForPageAsync(int page, int pageSize)
         {
             var articles = await _dbSet
+                .Include(article => article.NewsResource)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

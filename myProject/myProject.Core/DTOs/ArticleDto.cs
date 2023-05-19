@@ -8,6 +8,8 @@
         public int PositiveRaiting { get; set; }
         public DateTime DatePosting { get; set; }
         public int NewsResourceId { get; set; }
+        public string ArticleSourceUrl { get; set; }
+        public string SourceName { get; set; }
         public int CategoryId { get; set; }
     }
 }
