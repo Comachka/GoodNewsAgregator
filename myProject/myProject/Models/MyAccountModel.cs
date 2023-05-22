@@ -7,8 +7,10 @@ namespace myProject.Models
     {
         public string Name { get; set; }
 
-        public string Avatar { get; set; }
-
-        public string AboutMyself { get; set; }
+        public string? Avatar { get; set; }
+        
+        public string? AboutMyself { get; set; }
+        public bool MailNotification { get; set; }
+        public int? Raiting { get; set; }
     }
 }

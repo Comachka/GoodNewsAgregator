@@ -3,6 +3,7 @@ using myProject.Models;
 using myProject.Abstractions.Services;
 using System.Security.Claims;
 using myProject.Core.DTOs;
+using myProject.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,9 @@ using System.Web;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
+using Microsoft.AspNetCore.Hosting.Server;
+using System.IO;
+using AutoMapper;
 
 namespace myProject.Mvc.Controllers
 {
@@ -17,12 +21,15 @@ namespace myProject.Mvc.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IMapper _mapper;
 
         public AccountController(IUserService userService,
-            IRoleService roleService)
+            IRoleService roleService,
+            IMapper mapper)
         {
             _userService = userService;
             _roleService = roleService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -34,34 +41,28 @@ namespace myProject.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            
+
             var errors = ModelState
             .Where(x => x.Value.Errors.Count > 0)
             .Select(x => new { x.Key, x.Value.Errors })
             .ToArray();
-            var avatar = new byte[] { };
-            using (var memoryStream = new MemoryStream())
-            {
-                await model.Avatar.CopyToAsync(memoryStream);
-
-                // Upload the file if less than 100 KB
-                if (memoryStream.Length < 102400)
-                {
-                    avatar = memoryStream.ToArray();
-                }
-                else
-                {
-                    ModelState.AddModelError("File", "The file is too large.");
-                }
-
-            }
 
             if (ModelState.IsValid)
             {
-                
-                string strAvatar = Convert.ToBase64String(avatar);
-
-                var user = await _userService.RegisterAsync(model.Email, model.Password, model.Name, model.AboutMyself, model.MailNotification, strAvatar);
+                Directory.CreateDirectory($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{model.Email}\\");
+                var fileName = Path.GetFileName(model.Avatar.FileName);
+                var filePath = Path.Combine($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{model.Email}\\", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.Avatar.CopyToAsync(fileStream);
+                }
+                var modelAvatar = Path.Combine($"\\img\\Avatars\\{model.Email}", fileName);
+                var user = await _userService.RegisterAsync(model.Email,
+                    model.Password,
+                    model.Name,
+                    model.AboutMyself,
+                    model.MailNotification,
+                    modelAvatar);
                 if (user != null)
                 {
                     await AuthenticateAsync(user);
@@ -76,7 +77,7 @@ namespace myProject.Mvc.Controllers
         public async Task<IActionResult> Logout([FromQuery] string? returnUrl)
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            
+
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 return Redirect(returnUrl);
@@ -136,17 +137,11 @@ namespace myProject.Mvc.Controllers
         public async Task<IActionResult> MyAccount()
         {
             var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-           // var avatar = new MemoryStream(Convert.FromBase64String(user.Avatar));
 
             if (user != null)
             {
-                var model = new MyAccountModel
-                {
-                    Name = user.Name,
-                    Avatar =user.Avatar, //new FileStreamResult(avatar, "image/jpeg"),
-                    AboutMyself = user.AboutMyself
-                };
-                return View(model);
+                
+                return View(_mapper.Map<MyAccountModel>(user));
             }
             return View();
         }

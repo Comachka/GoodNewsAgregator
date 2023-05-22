@@ -79,6 +79,7 @@ namespace myProject.Business
                     Name = name,
                     AboutMyself = aboutMyself,
                     MailNotification = mailNotification,
+                    Raiting = 0,
                     Avatar = avatar,
                     RoleId = userRoleId
                 };

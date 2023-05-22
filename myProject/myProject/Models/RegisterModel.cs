@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using myProject.Models.CustomValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace myProject.Models
@@ -28,6 +29,7 @@ namespace myProject.Models
         [Required]
         public bool MailNotification { get; set; }
 
+        [ImgValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
         [DataType(DataType.Upload)]
         public IFormFile Avatar { get; set; }
 

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="img\**" />
+    <Content Remove="img\**" />
+    <EmbeddedResource Remove="img\**" />
+    <None Remove="img\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
@@ -25,6 +32,10 @@
     <ProjectReference Include="..\myProject.Business\myProject.Business.csproj" />
     <ProjectReference Include="..\myProject.Data\myProject.Data.csproj" />
     <ProjectReference Include="..\myProject.Repositories\myProject.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\img\Avatars\" />
   </ItemGroup>
 
 </Project>

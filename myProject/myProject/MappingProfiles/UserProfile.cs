@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using myProject.Core.DTOs;
 using myProject.Data.Entities;
+using myProject.Models;
 
 namespace myProject.Mvc.MappingProfiles
 {
@@ -10,6 +11,7 @@ namespace myProject.Mvc.MappingProfiles
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+            CreateMap<UserDto, MyAccountModel>();
         }
     }
 }

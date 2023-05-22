@@ -11,7 +11,7 @@ function addCommentsHtml(resp, commentBlock) {
         let time = dateTime.toLocaleTimeString();
         let div = document.createElement("div");
         div.classList.add('comment-item');
-        div.innerHTML = `<img class="comment-avatar" src="data:image/jpeg;base64,${comment.avatar}" "alt="Аватар"> 
+        div.innerHTML = `<img class="comment-avatar" src="${comment.avatar}" "alt="Аватар"> 
                 <div class="comment-content">
                     <h5 class="comment-title">${comment.user}</h5> <p>${comment.content}</p> <p class="comment-date">${date}  ${time}</p>
                 </div>`

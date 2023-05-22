@@ -10,7 +10,7 @@ namespace myProject.Business
     public class CommentService: ICommentService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper; // Convert(article) => _mapper.Map<ArticleDto>(article);
+        private readonly IMapper _mapper; 
 
 
         public CommentService(IUnitOfWork unitOfWork,
