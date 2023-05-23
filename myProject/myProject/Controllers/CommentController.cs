@@ -46,7 +46,8 @@ namespace myProject.Mvc.Controllers
                 var comments = await _commentService.CreateCommentAsync(_mapper.Map<CommentDto>(model));
                 if (comments != null)
                 {
-                    return Ok(comments);
+                    // return Ok(comments);
+                    return Ok(comments.FirstOrDefault(c => c.Content == model.Content));
                 }
                 ModelState.AddModelError("", "Smth goes wrong");
             }

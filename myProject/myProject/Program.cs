@@ -11,6 +11,7 @@ using myProject.Data.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
 using Serilog.Events;
+using myProject.Mvc.SignalR;
 
 namespace myProject
 {
@@ -19,6 +20,8 @@ namespace myProject
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddSignalR();
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -89,6 +92,7 @@ namespace myProject
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapHub<CommentsHub>("/commentsHub");
 
             app.Run();
         }
