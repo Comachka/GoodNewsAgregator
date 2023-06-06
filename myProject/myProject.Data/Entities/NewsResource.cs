@@ -15,7 +15,8 @@ public class NewsResource : IBaseEntity
     [Required]
     public string Name { get; set; }
     [Required]
-    public string Link { get; set; }
+    public string RssFeedUrl { get; set; }
+    public string OriginUrl { get; set; }
     //nav prop
     public List<Article> Articles { get; set; }
 }

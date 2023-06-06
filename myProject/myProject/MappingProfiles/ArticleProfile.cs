@@ -14,15 +14,16 @@ namespace myProject.Mvc.MappingProfiles
                 opt
                     => opt.MapFrom(
                         article
-                            => article.NewsResource.Name))
-                .ForMember(dto => dto.ArticleSourceUrl,
-                opt
-                    => opt.MapFrom(
-                        article
-                            => article.NewsResource.Link));
+                            => article.NewsResource.Name));
+                //.ForMember(dto => dto.ArticleSourceUrl,
+                //opt
+                //    => opt.MapFrom(
+                //        article
+                //            => article.NewsResource.OriginUrl));
             
             CreateMap<ArticleDto, Article>();
             CreateMap<ArticleDto, ArticlePreviewModel>();
+            CreateMap<ArticleDto, ArticleDetailsModel>();
             CreateMap<Article, AutoCompleteDataDto>()
             .ForMember(dto => dto.Label,
                 opt

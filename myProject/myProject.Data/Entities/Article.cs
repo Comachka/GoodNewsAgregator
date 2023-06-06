@@ -14,12 +14,14 @@ public class Article : IBaseEntity
     public int Id { get; set; }
     [Required]
     public string Title { get; set; }
+    public string ShortDescription { get; set; }
     [Required]
     public string Content { get; set; }
     [Required]
-    public int PositiveRaiting { get; set; }
+    public double? PositiveRaiting { get; set; }
     [Required]
     public DateTime DatePosting { get; set; }
+    public string ArticleSourceUrl { get; set; }
     //nav prop
     public int NewsResourceId { get; set; }
     public NewsResource NewsResource { get; set; }

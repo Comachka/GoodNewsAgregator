@@ -1,8 +1,17 @@
 ﻿@model ArticlesWithPaginationModel
+
+<div class="gx-2">
+    <a class="btn btn-info" asp-action="CreateArticleWithSource" asp-controller="Article">Create with source</a>
+    <a class="btn btn-info" asp-action="Aggregator" asp-controller="Article">Aggregator</a>
+</div>
+
 <div class="row">
     <h4>Search</h4>
     <input type="text" id="article-search" class="form-control col col-12" placeholder="Type article name" />
 </div>
+<button type="submit" class="btn-search">Perform search</button>
+
+
 
 <div class="row article-list">
     @foreach (var el in Model.ArticlePreviews)

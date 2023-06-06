@@ -24,7 +24,7 @@ async function addComment(e) {
     let contentComment = document.querySelector('#content-area').value;
     let articleIdJson = parseInt(document.querySelector('#article-id').value);
     document.querySelector('#content-area').value = "";
-    if (contentComment) {
+    if (contentComment.trim().length) {
         let commentsViewResponse = await fetch('https://localhost:7245/Comment/Create', {
             method: 'POST',
             headers: {
@@ -51,17 +51,10 @@ async function addComment(e) {
 
         console.log(resp);
         let content = resp.content;
-        console.log(content);
         let avatar = resp.avatar;
-        console.log(avatar);
-
         let user = resp.user;
-        console.log(user);
-
         let dateCreated = resp.dateCreated;
         let raiting = resp.raiting;
-        console.log(raiting);
-
         hubConnection.invoke("SendMessage", content, avatar, user, dateCreated, raiting);
         document.querySelector('#content-area').style.borderColor = '#dee2e6';
     } else {

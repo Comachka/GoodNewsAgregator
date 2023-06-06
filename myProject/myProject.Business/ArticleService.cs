@@ -1,13 +1,22 @@
 ﻿using AutoMapper;
+using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using myProject.Abstractions;
 using myProject.Abstractions.Services;
+using myProject.Business.RateModels;
 using myProject.Core.DTOs;
 using myProject.Data.Entities;
+using Newtonsoft.Json;
+using System.Collections.Concurrent;
+using System.Net.Http.Headers;
+using System.ServiceModel.Syndication;
+using System.Text.RegularExpressions;
+using System.Text;
+using System.Xml;
 
 namespace myProject.Business
 {
-    public class ArticleService: IArticleService
+    public class ArticleService : IArticleService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper; // Convert(article) => _mapper.Map<ArticleDto>(article);
@@ -43,10 +52,6 @@ namespace myProject.Business
                         .GetArticlesForPageAsync(page, pageSize))
                     .Select(article => _mapper.Map<ArticleDto>(article))
                     .ToList();
-
-                //var x = 0;
-                //var z = 15 / x;
-
                 return articles;
             }
             catch (Exception e)
@@ -65,7 +70,7 @@ namespace myProject.Business
             {
                 var dto = _mapper.Map<ArticleDto>(article);
                 dto.SourceName = source.Name;
-                dto.ArticleSourceUrl = source.Link;
+                dto.ArticleSourceUrl = source.OriginUrl;
                 return dto;
             }
             return null;
@@ -81,6 +86,281 @@ namespace myProject.Business
                 .ToListAsync();
 
             return articles;
+
+        }
+
+        public async Task AddAsync(ArticleDto dto)
+        {
+            await _unitOfWork.Articles.AddAsync(_mapper.Map<Article>(dto));
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task AddArticlesAsync(IEnumerable<ArticleDto> articles)
+        {
+            var entities = articles.Select(a => _mapper.Map<Article>(a)).ToArray();
+
+            await _unitOfWork.Articles.AddRangeAsync(entities);
+            await _unitOfWork.SaveChangesAsync();
+
+        }
+
+        //aggregator
+        public async Task<List<ArticleDto>> AggregateArticlesDataFromRssSourceAsync(NewsResourceDto source, CancellationToken cancellationToken)
+        {
+            var articles = new ConcurrentBag<ArticleDto>();
+            var urls = await GetContainsArticleUrlsBySourceAsync(source.Id);
+            using (var reader = XmlReader.Create(source.RssFeedUrl))
+            {
+                var feed = SyndicationFeed.Load(reader);
+
+                await Parallel.ForEachAsync(feed.Items
+                        .Where(item => !urls.Contains(item.Id)).ToArray(), cancellationToken,
+                    (item, token) =>
+                    {
+                        articles.Add(new ArticleDto()
+                        {
+                            ArticleSourceUrl = item.Links[0].Uri.AbsoluteUri,
+                            NewsResourceId = source.Id,
+                            SourceName = source.Name,
+                            Title = item.Title.Text,
+                            ShortDescription = item.Summary.Text,
+                            DatePosting = item.PublishDate.DateTime,
+                            CategoryId = CategoryCheck(item.Categories[0].Name)
+                        });
+                        return ValueTask.CompletedTask;
+                    });
+
+                reader.Close();
+            }
+
+            return articles.ToList();
+        }
+
+        private int CategoryCheck(string category)
+        {
+            int id = 0;
+            if (category.IndexOf(':') > 0)
+            {
+                category.Substring(0, category.IndexOf(':'));
+            }
+
+            switch (category.Trim().ToUpper())
+            {
+                case "ЗРОБЛЕНА БЕЛАРУСАМI":
+                case "КУЛЬТУРА":
+                    id = 1; // культура
+                    break;
+                case "ЛАЙФСТАЙЛ":
+                case "ОБЩЕСТВО":
+                    id = 1002; // общество
+                    break;
+                case "ПОЛИТИКА":
+                    id = 3; // политика
+                    break;
+                case "СПОРТ":
+                    id = 4; //спорт
+                    break;
+                case "АВТО":
+                case "ТЕХНОЛОГИИ":
+                case "НАУКА":
+                    id = 2; // технологии и наука
+                    break;
+                case "КОШЕЛЕК":
+                case "НЕДВИЖИМОСТЬ":
+                case "ЭКОНОМИКА":
+                    id = 5; // экономика
+                    break;
+                default:
+                    id = 1003; // другое
+                    break;
+            }
+            return id;
+        }
+
+        public async Task<List<ArticleDto>> GetFullContentArticlesAsync(List<ArticleDto> articlesDataFromRss)
+        {
+            var concBag = new ConcurrentBag<ArticleDto>();
+
+            await Parallel.ForEachAsync(articlesDataFromRss, async (dto, token) =>
+            {
+                var content = await GetArticleContentAsync(dto.ArticleSourceUrl);
+                dto.Content = content;
+                concBag.Add(dto);
+            });
+            return concBag.ToList();
+        }
+
+        public async Task<double?> GetArticleRateAsync(int articleId)
+        {
+            var articleText = (await _unitOfWork.Articles.GetByIdAsync(articleId))?.Content;
+
+
+            if (string.IsNullOrEmpty(articleText))
+            {
+                throw new ArgumentException("Article or article text doesn't exist",
+                    nameof(articleId));
+            }
+            else
+            {
+                Dictionary<string, int>? dictionary;
+                using (var jsonReader = new StreamReader($"{Environment.CurrentDirectory}\\AFINN-ru.json"))
+                {
+                    var jsonDict = await jsonReader.ReadToEndAsync();
+                    dictionary = JsonConvert.DeserializeObject<Dictionary<string, int>>(jsonDict);
+                }
+
+                articleText = PrepareText(articleText);
+
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient
+                        .DefaultRequestHeaders
+                        .Accept
+                        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                    var request = new HttpRequestMessage(HttpMethod.Post,
+                        "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=e692c633ea66c56af621c5b4c7cd28dea941fa86")
+                    {
+                        Content = new StringContent("[{\"text\":\"" + articleText + "\"}]",
+                            Encoding.UTF8, "application/json")
+                    };
+
+                    request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+
+                    var response = await httpClient.SendAsync(request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseString = await response.Content.ReadAsStringAsync();
+                        var lemmas = JsonConvert.DeserializeObject<Root[]>(responseString)
+                            .SelectMany(root => root.Annotations.Lemma).Select(lemma => lemma.Value).ToArray();
+
+                        if (lemmas.Any())
+                        {
+                            var totalRate = lemmas
+                                .Where(lemma => dictionary.ContainsKey(lemma))
+                                .Aggregate<string, double>(0, (current, lemma)
+                                    => current + dictionary[lemma]);
+
+                            totalRate = totalRate / lemmas.Count();
+                            return totalRate;
+                        }
+                    }
+
+                }
+                return null;
+            }
+        }
+
+        private string? PrepareText(string articleText)
+        {
+            articleText = articleText.Trim();
+
+            articleText = Regex.Replace(articleText, "<.*?>", string.Empty);
+            return articleText;
+        }
+
+        public async Task<List<ArticleDto>> GetUnratedArticlesAsync()
+        {
+            var unratedArticles = await _unitOfWork.Articles
+                .GetAsQueryable()
+                .AsNoTracking()
+                .Where(article => article.PositiveRaiting == null)
+                .Select(article => _mapper.Map<ArticleDto>(article))
+                .ToListAsync();
+
+            return unratedArticles;
+        }
+
+        private async Task<string[]> GetContainsArticleUrlsBySourceAsync(int sourceId)
+        {
+            var articleUrls = await _unitOfWork.Articles.GetAsQueryable()
+                .Where(article => article.NewsResourceId.Equals(sourceId))
+                .Select(article => article.ArticleSourceUrl)
+                .ToArrayAsync();
+            return articleUrls;
+        }
+
+        private async Task<string> GetArticleContentAsync(string url)
+        {
+            try
+            {
+                var web = new HtmlWeb();
+                var doc = web.Load(url);
+                var content = "";
+
+                if (url.Contains("onliner"))
+                {
+                    content = DeleteNodes(doc, "//div[@class = 'news-text']", "//div[@id = 'news-text-end']", new List<string>
+                    {
+                        "//div[contains(@class, 'news-reference') or contains(@class, 'news-widget') or contains(@class, 'news-incut') or starts-with(@class, 'adfox')]",
+                        "//script",
+                        "//a[contains(@class, 'news-banner')]"
+                    });
+                }
+                else
+                {
+                    content = DeleteNodes(doc, "//div[@class = ' js-module']", "", new List<string>
+                    {
+                        "//div[contains(@class, 'line') or contains(@class, 'sticky') or contains(@class, 'news-incut') or starts-with(@class, 'adfox')]",
+                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_sidebar')]",
+                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_large_39')]//div[contains(@class='cols__inner')]//div[contains(@class=' js-module')]",
+                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_large_39')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='breadcrumbs')]",
+                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_large_39')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='p-audio-container')]",
+                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='hidden')]",
+                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='unprinted')]",
+                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='article__text')]//div[contains(@class='article__item_source_vk_video')]",
+                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='sharelist')]"
+                    });
+                }
+                return content;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+
+        private string DeleteNodes(HtmlDocument? doc, string startArticle, string endArticle, List<string> nodes)
+        {
+            var textNode = doc.DocumentNode.SelectSingleNode(startArticle);
+
+            if (endArticle != "")
+            {
+                var endNode = doc.DocumentNode.SelectSingleNode(endArticle);
+                if (endNode != null)
+                {
+                    var nodesToRemove = textNode.Descendants()
+                        .SkipWhile(n => n != endNode)
+                        .ToList();
+                    nodesToRemove.ForEach(n => n.Remove());
+                }
+            }
+
+            foreach (var node in nodes)
+            {
+                textNode.SelectNodes(node)?
+                   .ToList()
+                   .ForEach(n => n.Remove());
+            }
+            return textNode.InnerHtml;
+        }
+
+
+        public async Task RateArticleAsync(int id, double? rate)
+        {
+            await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
+            {
+                new PatchDto()
+                {
+                    PropertyName = nameof(ArticleDto.PositiveRaiting),
+                    PropertyValue = rate
+                }
+            });
+
+            await _unitOfWork.SaveChangesAsync();
 
         }
     }

@@ -9,6 +9,6 @@ namespace myProject.Core.DTOs
     public class PatchDto
     {
         public string PropertyName { get; set; }
-        public int PropertyValue { get; set; }
+        public object PropertyValue { get; set; }
     }
 }

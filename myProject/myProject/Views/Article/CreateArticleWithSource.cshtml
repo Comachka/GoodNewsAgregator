@@ -1,0 +1,33 @@
+﻿@model CreateArticleWithSourceModel
+
+<h3>Create article</h3>
+
+<form asp-action="CreateArticleWithSource" asp-controller="Article" asp-antiforgery="true" method="post">
+    <div class="mb-3">
+        <label class="form-label" asp-for="Title">Title</label>
+        <input class="form-control" type="text" asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Content">Text</label>
+        <textarea class="form-control" rows="10" asp-for="Content"></textarea>
+        <span asp-validation-for="Content"></span>
+    </div>
+    <div>
+        <input type="submit" value="Confirm" />
+    </div>
+    <p>
+        <select name="CategoryId">
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </p>
+</form>
+
+@section Scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

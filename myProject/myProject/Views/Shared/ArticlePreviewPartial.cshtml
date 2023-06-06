@@ -4,7 +4,7 @@
     @*<img src="..." class="card-img-top" alt="...">*@
     <div class="card-body">
         <h5 class="card-title"> @Model.Title</h5>
-        <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">@Html.Raw(Model.Content)</p>
+        <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">@Html.Raw(Model.ShortDescription)</p>
         <a asp-action="Details" asp-controller="Article" asp-route-id="@Model.Id" class="btn btn-primary">Go somewhere</a>
     </div>
     <div class="card-footer">
