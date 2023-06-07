@@ -50,3 +50,7 @@ async function collapseCommentsWithJsonData(e) {
     })
 }
 
+
+let html = document.querySelector('.row').innerHTML;
+html = html.replaceAll('amp-img', 'img');
+document.querySelector('.row').innerHTML = html;

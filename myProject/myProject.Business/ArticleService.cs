@@ -141,7 +141,7 @@ namespace myProject.Business
             int id = 0;
             if (category.IndexOf(':') > 0)
             {
-                category.Substring(0, category.IndexOf(':'));
+                category = category.Substring(0, category.IndexOf(':'));
             }
 
             switch (category.Trim().ToUpper())
@@ -184,8 +184,11 @@ namespace myProject.Business
             await Parallel.ForEachAsync(articlesDataFromRss, async (dto, token) =>
             {
                 var content = await GetArticleContentAsync(dto.ArticleSourceUrl);
+                if (content != "")
+                {
                 dto.Content = content;
                 concBag.Add(dto);
+                }
             });
             return concBag.ToList();
         }
@@ -284,33 +287,32 @@ namespace myProject.Business
         private async Task<string> GetArticleContentAsync(string url)
         {
             try
-            {
-                var web = new HtmlWeb();
-                var doc = web.Load(url);
+            { //если майл ру добваь амп
+                
                 var content = "";
 
                 if (url.Contains("onliner"))
                 {
+                    var web = new HtmlWeb();
+                    var doc = web.Load(url);
                     content = DeleteNodes(doc, "//div[@class = 'news-text']", "//div[@id = 'news-text-end']", new List<string>
                     {
-                        "//div[contains(@class, 'news-reference') or contains(@class, 'news-widget') or contains(@class, 'news-incut') or starts-with(@class, 'adfox')]",
+                        "//div[contains(@class, 'news-reference') or contains(@class, 'news-widget') or contains(@class, 'news-incut') or starts-with(@id, 'adfox') or contains(@class, 'news-header')]",
                         "//script",
                         "//a[contains(@class, 'news-banner')]"
                     });
                 }
                 else
                 {
-                    content = DeleteNodes(doc, "//div[@class = ' js-module']", "", new List<string>
+                    var web = new HtmlWeb();
+                    var urlMail = url.Insert((url.IndexOf("ru") + 2), "/amp");
+                    var doc = web.Load(urlMail);
+                    var textNode = doc.DocumentNode.SelectSingleNode("//article");
+                    content = DeleteNodes(doc, "//article", "", new List<string>
                     {
-                        "//div[contains(@class, 'line') or contains(@class, 'sticky') or contains(@class, 'news-incut') or starts-with(@class, 'adfox')]",
-                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_sidebar')]",
-                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_large_39')]//div[contains(@class='cols__inner')]//div[contains(@class=' js-module')]",
-                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_large_39')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='breadcrumbs')]",
-                        "//div[contains(@class, 'block_branding-modified')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column_large_39')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='p-audio-container')]",
-                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='hidden')]",
-                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='unprinted')]",
-                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='article__text')]//div[contains(@class='article__item_source_vk_video')]",
-                        "//div[contains(@class, 'block_collapse_bottom')]//div[contains(@class='wrapper')]//div[contains(@class='cols')]//div[contains(@class='cols__wrapper')]//div[contains(@class='cols__column')]//div[contains(@class='cols__inner')]//div[contains(@class='article')]//div[contains(@class='sharelist')]"
+                        "//h1[contains(@class, 'article__title')]",
+                        "//div[contains(@class, 'article__params') or contains(@class, 'news-widget') or contains(@class, 'rb-slot')]",
+                        "//div[contains(@class, 'article__content')]//div[contains(@class, 'article__item_slot')]"
                     });
                 }
                 return content;
@@ -326,7 +328,7 @@ namespace myProject.Business
         private string DeleteNodes(HtmlDocument? doc, string startArticle, string endArticle, List<string> nodes)
         {
             var textNode = doc.DocumentNode.SelectSingleNode(startArticle);
-
+            if (textNode == null) return "";
             if (endArticle != "")
             {
                 var endNode = doc.DocumentNode.SelectSingleNode(endArticle);
@@ -336,6 +338,7 @@ namespace myProject.Business
                         .SkipWhile(n => n != endNode)
                         .ToList();
                     nodesToRemove.ForEach(n => n.Remove());
+
                 }
             }
 
