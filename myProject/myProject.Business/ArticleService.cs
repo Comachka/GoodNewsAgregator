@@ -114,7 +114,7 @@ namespace myProject.Business
                 var feed = SyndicationFeed.Load(reader);
 
                 await Parallel.ForEachAsync(feed.Items
-                        .Where(item => !urls.Contains(item.Id)).ToArray(), cancellationToken,
+                        .Where(item => !urls.Contains(item.Links[0].Uri.AbsoluteUri)).ToArray(), cancellationToken,
                     (item, token) =>
                     {
                         articles.Add(new ArticleDto()
@@ -259,8 +259,8 @@ namespace myProject.Business
         {
             articleText = articleText.Trim();
 
-            articleText = Regex.Replace(articleText, "<.*?>", string.Empty);
-            return articleText;
+            articleText = Regex.Replace(articleText, "<.*?>|\n|\r|\"", string.Empty);//спец символы
+            return articleText.Trim();
         }
 
         public async Task<List<ArticleDto>> GetUnratedArticlesAsync()
@@ -287,7 +287,7 @@ namespace myProject.Business
         private async Task<string> GetArticleContentAsync(string url)
         {
             try
-            { //если майл ру добваь амп
+            { 
                 
                 var content = "";
 
@@ -331,7 +331,7 @@ namespace myProject.Business
             if (textNode == null) return "";
             if (endArticle != "")
             {
-                var endNode = doc.DocumentNode.SelectSingleNode(endArticle);
+                var endNode = doc.DocumentNode.SelectNodes(endArticle)?.ToList().Last();
                 if (endNode != null)
                 {
                     var nodesToRemove = textNode.Descendants()

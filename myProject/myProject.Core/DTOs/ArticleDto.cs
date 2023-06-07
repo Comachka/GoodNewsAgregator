@@ -6,7 +6,7 @@
         public string Title { get; set; }
         public string Content { get; set; }
         public string ShortDescription { get; set; }
-        public double PositiveRaiting { get; set; }
+        public double? PositiveRaiting { get; set; }
         public DateTime DatePosting { get; set; }
         public int NewsResourceId { get; set; }
         public string ArticleSourceUrl { get; set; }

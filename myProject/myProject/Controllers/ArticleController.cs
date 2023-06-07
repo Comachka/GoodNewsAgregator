@@ -247,7 +247,7 @@ namespace myProject.Controllers
                 await _articleService.RateArticleAsync(unratedArticle.Id, rate);
             }
 
-            return Ok();
+            return RedirectToAction("Index", "Article");
         }
     }
 }
