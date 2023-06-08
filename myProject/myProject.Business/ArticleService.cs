@@ -13,6 +13,7 @@ using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Xml;
+using System.Web;
 
 namespace myProject.Business
 {
@@ -259,7 +260,9 @@ namespace myProject.Business
         {
             articleText = articleText.Trim();
 
-            articleText = Regex.Replace(articleText, "<.*?>|\n|\r|\"", string.Empty);//спец символы
+            articleText = HttpUtility.HtmlDecode(articleText);
+            articleText = Regex.Replace(articleText, "<.*?>|\n|\r|\"", string.Empty);
+
             return articleText.Trim();
         }
 
@@ -340,14 +343,19 @@ namespace myProject.Business
                     nodesToRemove.ForEach(n => n.Remove());
 
                 }
-            }
-
-            foreach (var node in nodes)
-            {
-                textNode.SelectNodes(node)?
+                else
+                {
+                    textNode.SelectNodes("//div[contains(@class, 'news-media_condensed')] | //p[contains(@style, 'text-align: right;')]")?
                    .ToList()
                    .ForEach(n => n.Remove());
+                }
             }
+
+            string selNodes = string.Join(" | ", nodes);
+
+            textNode.SelectNodes(selNodes)?
+                   .ToList()
+                   .ForEach(n => n.Remove());
             return textNode.InnerHtml;
         }
 
