@@ -3,14 +3,14 @@
     .build();
 
 
-hubConnection.on("ReceiveMessage", function (content, avatar, user, dateCreated, raiting) {
+hubConnection.on("ReceiveMessage", function (content, avatar, user, dateCreated, raiting, userId) {
     const commentBlock = document.getElementsByClassName('comments')[0];
     let dateTime = new Date(dateCreated);
     let date = dateTime.toLocaleDateString();
     let time = dateTime.toLocaleTimeString();
     let div = document.createElement("div");
     div.classList.add('comment-item');
-    div.innerHTML = `<img class="comment-avatar" src="${avatar}" "alt="Аватар">
+    div.innerHTML = `<form action="https://localhost:7245/Account/Profile/${userId}"><button сlass="btn_profile" type="submit"><img class="comment-avatar" src="${avatar}" alt="Аватар"/></button></form>
                 <div class="comment-content">
                     <h5 class="comment-title">${user}</h5> <p>${content}</p> <p class="comment-date">${date}  ${time}</p>
                 </div>`
@@ -50,12 +50,13 @@ async function addComment(e) {
         }
 
         console.log(resp);
+        let userId = resp.userId;
         let content = resp.content;
         let avatar = resp.avatar;
         let user = resp.user;
         let dateCreated = resp.dateCreated;
         let raiting = resp.raiting;
-        hubConnection.invoke("SendMessage", content, avatar, user, dateCreated, raiting);
+        hubConnection.invoke("SendMessage", content, avatar, user, dateCreated, raiting, userId);
         document.querySelector('#content-area').style.borderColor = '#dee2e6';
     } else {
         document.querySelector('#content-area').style.borderColor = 'red';

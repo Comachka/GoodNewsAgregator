@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Xml;
 using System.Web;
+using Azure;
 
 namespace myProject.Business
 {
@@ -30,6 +31,30 @@ namespace myProject.Business
             _mapper = mapper;
         }
 
+        public async Task UpRaitingAsync(int id)
+        {
+            var article = await _unitOfWork.Articles.GetByIdAsync(id);
+            var rate = article.PositiveRaiting + 0.003; 
+            await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
+            {
+                new PatchDto()
+                {
+                    PropertyName = nameof(ArticleDto.PositiveRaiting),
+                    PropertyValue = rate
+                }
+            });
+
+            await _unitOfWork.SaveChangesAsync();
+            return;
+        }
+
+        public async Task DeleteArticleByIdAsync(int id)
+        {
+            await _unitOfWork.Articles.Remove(id);
+            await _unitOfWork.SaveChangesAsync();
+            return;
+        }
+
         public async Task<int> GetTotalArticlesCountAsync()
         {
             var count = await _unitOfWork.Articles.CountAsync();
@@ -44,13 +69,13 @@ namespace myProject.Business
                 .ToListAsync();
         }
 
-        public async Task<List<ArticleDto>> GetArticlesByPageAsync(int page, int pageSize)
+        public async Task<List<ArticleDto>> GetArticlesByPageAsync(int page, int pageSize, double positivity)
         {
             try
             {
                 var articles = (await _unitOfWork
                         .Articles
-                        .GetArticlesForPageAsync(page, pageSize))
+                        .GetArticlesForPageAsync(page, pageSize, positivity))
                     .Select(article => _mapper.Map<ArticleDto>(article))
                     .ToList();
                 return articles;
@@ -62,6 +87,19 @@ namespace myProject.Business
             }
 
         }
+
+        public async Task<List<ArticleDto>> GetFavArticleAsync()
+        {
+            var articles = await _unitOfWork
+                    .Articles
+                    .GetAsQueryable()
+                    .OrderByDescending(a => a.PositiveRaiting)
+                    .Take(3)
+                    .Select(article => _mapper.Map<ArticleDto>(article))
+                    .ToListAsync();
+            return articles;
+        }
+
         public async Task<ArticleDto?> GetArticleByIdWithSourceNameAsync(int id)
         {
             var article = await _unitOfWork.Articles.GetByIdAsync(id);
@@ -300,7 +338,7 @@ namespace myProject.Business
                     var doc = web.Load(url);
                     content = DeleteNodes(doc, "//div[@class = 'news-text']", "//div[@id = 'news-text-end']", new List<string>
                     {
-                        "//div[contains(@class, 'news-reference') or contains(@class, 'news-widget') or contains(@class, 'news-incut') or starts-with(@id, 'adfox') or contains(@class, 'news-header')]",
+                        "//div[contains(@class, 'news-reference') or contains(@class, 'news-widget') or contains(@class, 'news-promo') or contains(@class, 'news-incut') or starts-with(@id, 'adfox') or contains(@class, 'news-header')]",
                         "//script",
                         "//a[contains(@class, 'news-banner')]"
                     });

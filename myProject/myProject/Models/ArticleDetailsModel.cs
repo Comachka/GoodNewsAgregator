@@ -10,6 +10,7 @@ namespace myProject.Models
         public string Content { get; set; }
         public double PositiveRaiting { get; set; }
         public string SourceName { get; set; }
+        public DateTime DatePosting { get; set; }
         public string ArticleSourceUrl { get; set; }
     }
 

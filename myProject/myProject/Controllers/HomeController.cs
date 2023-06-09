@@ -26,7 +26,7 @@ namespace myProject.Controllers
         public async Task<IActionResult> Index()
         {
             var favArticles = (await _articleService
-                .GetArticlesByPageAsync(1, 3)).Select(dto => _mapper.Map<ArticlePreviewModel>(dto))
+                .GetFavArticleAsync()).Select(dto => _mapper.Map<ArticlePreviewModel>(dto))
                 .ToList();
 
             var model = new HomePageModel()

@@ -2,7 +2,7 @@
 
 <div class="gx-2">
     <a class="btn btn-info" asp-action="CreateArticleWithSource" asp-controller="Article">Create with source</a>
-    <a class="btn btn-info" asp-action="ManageArticles" asp-controller="Article">Aggregator</a>
+    <a class="btn btn-info" asp-action="Aggregator" asp-controller="Article">Aggregator</a>
 </div>
 
 <div class="row">
@@ -16,7 +16,7 @@
 <div class="row article-list">
     @foreach (var el in Model.ArticlePreviews)
     {
-       await Html.RenderPartialAsync("ArticlePreviewPartial", el);
+       await Html.RenderPartialAsync("ArticlePreviewPartialManage", el);
     }
 </div>
 

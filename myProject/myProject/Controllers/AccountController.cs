@@ -146,6 +146,19 @@ namespace myProject.Mvc.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Profile(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user.Email == HttpContext.User.Identity.Name) return RedirectToAction("MyAccount", "Account");
+            if (user != null)
+            {
+                return View(_mapper.Map<ProfileModel>(user));
+            }
+            return View();
+        }
+
         private async Task AuthenticateAsync(UserDto dto)
         {
             try

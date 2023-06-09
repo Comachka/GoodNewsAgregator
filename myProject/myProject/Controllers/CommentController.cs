@@ -19,15 +19,18 @@ namespace myProject.Mvc.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
+        private readonly IArticleService _articleService;
         private readonly IMapper _mapper;
 
         public CommentController(ICommentService commentService,
             IMapper mapper,
+            IArticleService articleService,
             IUserService userService)
         {
             _commentService = commentService;
             _mapper = mapper;
             _userService = userService;
+            _articleService = articleService;
         }
 
         
@@ -44,6 +47,7 @@ namespace myProject.Mvc.Controllers
             if (ModelState.IsValid)
             {
                 var comments = await _commentService.CreateCommentAsync(_mapper.Map<CommentDto>(model));
+                await _articleService.UpRaitingAsync(model.ArticleId);
                 if (comments != null)
                 {
                     // return Ok(comments);
@@ -54,6 +58,12 @@ namespace myProject.Mvc.Controllers
             return Ok(false);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ManageComments()
+        {
+            return Ok(/*await _userService.GetUsersAsync()*/);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetFakeComments(int articleId)

@@ -5,7 +5,8 @@ namespace myProject.Abstractions.Services
     public interface IArticleService
     {
         public Task<IEnumerable<CategoryDto>> GetListCategoriesAsync();
-        public Task<List<ArticleDto>> GetArticlesByPageAsync(int page, int pageSize);
+        public Task<List<ArticleDto>> GetArticlesByPageAsync(int page, int pageSize, double positivity);
+        public Task<List<ArticleDto>> GetFavArticleAsync();
         public Task<int> GetTotalArticlesCountAsync();
         public Task<ArticleDto?> GetArticleByIdWithSourceNameAsync(int id);
         public Task<List<AutoCompleteDataDto>> GetArticlesNamesByPartNameAsync(string partName);
@@ -18,5 +19,7 @@ namespace myProject.Abstractions.Services
         Task<double?> GetArticleRateAsync(int articleId);
         Task<List<ArticleDto>> GetUnratedArticlesAsync();
         Task RateArticleAsync(int id, double? rate);
+        Task DeleteArticleByIdAsync(int id);
+        Task UpRaitingAsync(int id);
     }
 }

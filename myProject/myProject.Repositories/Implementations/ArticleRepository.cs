@@ -14,16 +14,17 @@ namespace myProject.Repositories.Implementations
         }
 
         
-        public async Task<List<Article>> GetArticlesForPageAsync(int page, int pageSize)
+        public async Task<List<Article>> GetArticlesForPageAsync(int page, int pageSize, double positivity)
         {
             var articles = await _dbSet
                 .Include(article => article.NewsResource)
                 .OrderByDescending(article => article.DatePosting)
+                .Where(article => article.PositiveRaiting > positivity)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
             return articles;
         }
-       
+
     }
 }

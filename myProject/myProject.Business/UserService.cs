@@ -104,6 +104,17 @@ namespace myProject.Business
                     : null;
         }
 
+        public async Task<UserDto?> GetUserByIdAsync(int id)
+        {
+            var user = await _unitOfWork.Users
+                .FindBy(user => user.Id.Equals(id))
+                .FirstOrDefaultAsync();
+            return
+                user != null
+                    ? _mapper.Map<UserDto>(user)
+                    : null;
+        }
+
         public async Task<List<UserDto>> GetUsersAsync()
         {
             return await _unitOfWork.Users.GetAsQueryable().

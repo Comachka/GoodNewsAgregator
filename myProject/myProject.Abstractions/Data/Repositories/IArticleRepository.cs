@@ -9,6 +9,6 @@ namespace myProject.Abstractions.Data.Repositories
 {
     public interface IArticleRepository : IRepository<Article>
     {
-        public Task<List<Article>> GetArticlesForPageAsync(int page, int pageSize);
+        public Task<List<Article>> GetArticlesForPageAsync(int page, int pageSize, double positivity);
     }
 }

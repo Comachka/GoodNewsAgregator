@@ -7,6 +7,8 @@ using Serilog;
 using ILogger = Serilog.ILogger;
 using AutoMapper;
 using myProject.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace myProject.Controllers
 {
@@ -56,7 +58,7 @@ namespace myProject.Controllers
                     };
 
                     var articleDtos = await _articleService
-                        .GetArticlesByPageAsync(page, pageSize);
+                        .GetArticlesByPageAsync(page, pageSize, 0.015);
 
                     var articles = articleDtos
                         .Select(dto =>
@@ -76,6 +78,7 @@ namespace myProject.Controllers
                     return BadRequest();
                 }
             }
+
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
@@ -101,7 +104,7 @@ namespace myProject.Controllers
                     };
 
                     var articleDtos = await _articleService
-                        .GetArticlesByPageAsync(1, pageSize);
+                        .GetArticlesByPageAsync(1, pageSize, 0.015);
 
                     var articles = articleDtos
                         .Select(dto =>
@@ -161,8 +164,63 @@ namespace myProject.Controllers
             return RedirectToAction("Index", "Article");
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ManageArticles(int page = 1)
+        {
+            try
+            {
+                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync();
+                if (int.TryParse(_configuration["Pagination:Articles:DefaultPageSize"], out var pageSize))
+                {
+                    var pageInfo = new PageInfo()
+                    {
+                        PageSize = pageSize,
+                        PageNumber = page,
+                        TotalItems = totalArticlesCount
+                    };
 
+                    var articleDtos = await _articleService
+                        .GetArticlesByPageAsync(page, pageSize, double.MinValue);
 
+                    var articles = articleDtos
+                        .Select(dto =>
+                            _mapper.Map<ArticlePreviewModel>(dto))
+                        .ToList();
+
+                    return View(new ArticlesWithPaginationModel()
+                    {
+                        ArticlePreviews = articles,
+                        PageInfo = pageInfo
+                    });
+                }
+                else
+                {
+                    Log.Warning("Trying to get page with incorrect pageNumber");
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteArticles(int id)
+        {
+            try
+            {
+                await _articleService.DeleteArticleByIdAsync(id);
+                return RedirectToAction("ManageArticles", "Article");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
@@ -171,20 +229,14 @@ namespace myProject.Controllers
 
             if (articleDto != null)
             {
-                //var comments = await _commentService.GetCommentsByArticleIdAsync(articleDto.Id);
                 if (User.Identity.IsAuthenticated)
                 {
-                    //var user = await _userService.GetUserByEmailAsync(User.Identity.Name);
                     var model = new ArticleDetailsWithCreateCommentModel()
                     {
                         ArticleDetails = _mapper.Map<ArticleDetailsModel>(articleDto),
-                        //Comments = comments.Select(dto => _mapper.Map<CommentModel>(dto)).ToList(),
                         CreateComment = new CommentModel()
                         {
                             ArticleId = articleDto.Id
-                            //User = user.Name,
-                            //UserId = user.Id,
-                            //Avatar = user.Avatar
                         }
 
                     };
@@ -213,12 +265,14 @@ namespace myProject.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Aggregator()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AggregateNews()
         {
             var sources = (await _sourceService.GetSourcesAsync())

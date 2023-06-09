@@ -7,8 +7,11 @@
         }
     });
 
+
+
 document.getElementById('commments-toggle-btn')
     .addEventListener('click', (e) => collapseCommentsWithJsonData(e));
+
 
 function addCommentsHtml(resp, commentBlock) {
     for (let comment of resp) {
@@ -17,12 +20,13 @@ function addCommentsHtml(resp, commentBlock) {
         let time = dateTime.toLocaleTimeString();
         let div = document.createElement("div");
         div.classList.add('comment-item');
-        div.innerHTML = `<img class="comment-avatar" src="${comment.avatar}" "alt="Аватар"> 
+        div.innerHTML = `<form action="https://localhost:7245/Account/Profile/${comment.userId}"><button сlass="btn_profile" type="submit"}"><img class="comment-avatar" src="${comment.avatar}" alt="Аватар"/></button></form>
                 <div class="comment-content">
                     <h5 class="comment-title">${comment.user}</h5> <p>${comment.content}</p> <p class="comment-date">${date}  ${time}</p>
                 </div>`
         commentBlock.appendChild(div);
     }
+   
 }
 
 document.querySelector('#content-area').oninput = (e => {

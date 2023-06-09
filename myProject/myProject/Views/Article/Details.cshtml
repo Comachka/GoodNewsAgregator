@@ -5,13 +5,17 @@
     <div class="col-12">
         <h2>@Model.ArticleDetails.Title</h2>
     </div>
-
     <div class="col-12">
         <h5>@Model.ArticleDetails.SourceName</h5>
     </div>
-
+    <div class="col-12">
+        <h5>@Model.ArticleDetails.DatePosting</h5>
+    </div>
     <div class="col-12">
         @Html.Raw(Model.ArticleDetails.Content)
+    </div>
+    <div class="col-12">
+        <h5>@Model.ArticleDetails.PositiveRaiting</h5>
     </div>
 </div>
 

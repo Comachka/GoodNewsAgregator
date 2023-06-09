@@ -12,6 +12,7 @@ namespace myProject.Mvc.MappingProfiles
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
             CreateMap<UserDto, MyAccountModel>();
+            CreateMap<UserDto, ProfileModel>();
         }
     }
 }
