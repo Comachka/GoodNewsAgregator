@@ -20,14 +20,17 @@ namespace myProject.Mvc.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ISubscriptionService _subscriptionService;
         private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
 
         public AccountController(IUserService userService,
             IRoleService roleService,
+            ISubscriptionService subscriptionService,
             IMapper mapper)
         {
             _userService = userService;
+            _subscriptionService = subscriptionService;
             _roleService = roleService;
             _mapper = mapper;
         }
@@ -74,14 +77,10 @@ namespace myProject.Mvc.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Logout([FromQuery] string? returnUrl)
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (!string.IsNullOrEmpty(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -98,6 +97,57 @@ namespace myProject.Mvc.Controllers
             }
             return View();
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Subscribe(ProfileModel profile)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                if (!profile.Subscribe)
+                {
+                    await _subscriptionService.AddSubscriptionByIdAsync(user.Id, profile.Id);
+                    switch (user.RoleId)
+                    {
+                        case 1:
+                            await _userService.ChangeRaiting(user.Id, 10);
+                            break;
+                        case 2:
+                            await _userService.ChangeRaiting(user.Id, 3);
+                            break;
+                        case 4:
+                            await _userService.ChangeRaiting(user.Id, 5);
+                            break;
+                        default:
+                            await _userService.ChangeRaiting(user.Id, 1);
+                            break;
+                    }
+                }
+                else
+                {
+                    await _subscriptionService.DeleteSubscriptionByIdAsync(user.Id, profile.Id);
+                    switch (user.RoleId)
+                    {
+                        case 1:
+                            await _userService.ChangeRaiting(user.Id, -10);
+                            break;
+                        case 2:
+                            await _userService.ChangeRaiting(user.Id, -3);
+                            break;
+                        case 4:
+                            await _userService.ChangeRaiting(user.Id, -5);
+                            break;
+                        default:
+                            await _userService.ChangeRaiting(user.Id, -1);
+                            break;
+                    }
+                }
+                return Redirect(profile.ReturnUrl);
+            }
+            return RedirectToAction("Account", "Login");
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
@@ -140,21 +190,34 @@ namespace myProject.Mvc.Controllers
 
             if (user != null)
             {
-                
-                return View(_mapper.Map<MyAccountModel>(user));
+                var subs = await _subscriptionService.GetMySubscriptionAsync(user.Id);
+                var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(user.Id);
+                var profile = _mapper.Map<MyAccountModel>(user);
+                profile.OnMeLikes = onSubs.Count;
+                profile.MyLikes = subs.Count;
+                return View(profile);
             }
             return View();
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Profile(int id)
+        public async Task<IActionResult> Profile(int id, [FromQuery] string? returnUrl)
         {
             var user = await _userService.GetUserByIdAsync(id);
             if (user.Email == HttpContext.User.Identity.Name) return RedirectToAction("MyAccount", "Account");
             if (user != null)
             {
-                return View(_mapper.Map<ProfileModel>(user));
+                var me = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                var subs = await _subscriptionService.GetMySubscriptionAsync(id);
+                var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(id);
+                bool amISub = onSubs.Any(sub => sub.FollowerId == me.Id);
+                var profile = _mapper.Map<ProfileModel>(user);
+                profile.Subscribe = amISub;
+                profile.OnMeLikes = onSubs.Count;
+                profile.MyLikes = subs.Count;
+                profile.ReturnUrl = returnUrl;
+                return View(profile);
             }
             return View();
         }

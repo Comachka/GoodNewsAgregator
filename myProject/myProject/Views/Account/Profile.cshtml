@@ -3,10 +3,23 @@
 <h3>Profile</h3>
 
 <div>
-    <img src="@Model.Avatar" " alt="Аватар"></img>
-    <p>@Model.Raiting</p>
+    <img src="@Model.Avatar" alt="Аватар"></img>
+    <form asp-action="Subscribe" asp-controller="Account" asp-antiforgery="true" method="post">
+        @Html.HiddenFor(model => model.ReturnUrl)
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Subscribe)
+        @if (!Model.Subscribe)
+        {
+            <button сlass="btn btn-subscribe" type="submit"> Subscribe</button>
+        }
+        else
+        {
+            <button сlass="btn btn-subscribe" type="submit"> Unfollow</button>
+        }
+    </form>
+    <p>Рейтинг: @Model.Raiting</p>
     <h2>@Model.Name</h2>
-    <p>@Model.AboutMyself</p>
-    <p>@Model.MyLikes</p>
-    <p>@Model.OnMeLikes</p>
+    <p>О себе: @Model.AboutMyself</p>
+    <p>Похвалил: @Model.MyLikes</p>
+    <p>Похвалили: @Model.OnMeLikes</p>
 </div>

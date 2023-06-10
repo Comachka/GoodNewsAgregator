@@ -36,6 +36,56 @@ namespace myProject.Business
             return user != null;
         }
 
+        public async Task ChangeRaiting(int id, int raiting)
+        {
+            var user = await _unitOfWork.Users.FindBy(user => user.Id.Equals(id)).FirstOrDefaultAsync();
+            await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+            {
+                new PatchDto()
+                {
+                    PropertyName = nameof(UserDto.Raiting),
+                    PropertyValue = user.Raiting + raiting
+                }
+            });
+            if (user.RoleId != 1)
+            {
+                if (((user.Raiting + raiting) >= 10000) && ((user.Raiting + raiting) < 100000))
+                {
+                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                    {
+                        new PatchDto()
+                        {
+                        PropertyName = nameof(UserDto.RoleId),
+                        PropertyValue = 2
+                        }
+                    });
+                }
+                else if (((user.Raiting + raiting) >= 100000))
+                {
+                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                    {
+                        new PatchDto()
+                        {
+                        PropertyName = nameof(UserDto.RoleId),
+                        PropertyValue = 4
+                        }
+                    });
+                }
+                else if (((user.Raiting + raiting) < 10000))
+                {
+                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                    {
+                        new PatchDto()
+                        {
+                        PropertyName = nameof(UserDto.RoleId),
+                        PropertyValue = 3
+                        }
+                    });
+                }
+            }
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task<bool> IsPasswordCorrectAsync(string email, string password)
         {
             if (await IsUserExistsAsync(email))
@@ -140,5 +190,6 @@ namespace myProject.Business
             }
             return sb.ToString();
         }
+
     }
 }

@@ -58,6 +58,7 @@ namespace myProject
             builder.Services.AddTransient<IRoleService, RoleService>();
             builder.Services.AddTransient<ICategoryService, CategoryService>();
             builder.Services.AddTransient<ISourceService, SourceService>();
+            builder.Services.AddTransient<ISubscriptionService, SubscriptionService>();
             // Add services to the container.
             builder.Services.AddAutoMapper(typeof(Program));
 

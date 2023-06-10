@@ -10,5 +10,6 @@ namespace myProject.Abstractions.Services
         Task<UserDto?> GetUserByEmailAsync(string modelEmail);
         Task<UserDto?> GetUserByIdAsync(int id);
         Task<List<UserDto>> GetUsersAsync();
+        Task ChangeRaiting(int id, int raiting);
     }
 }

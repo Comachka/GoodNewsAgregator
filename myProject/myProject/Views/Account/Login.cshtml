@@ -13,7 +13,7 @@
         <input class="form-control" type="password" asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
-    @*<input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl"/>*@
+    @Html.HiddenFor(model => model.ReturnUrl)
     <div>
         <input class="btn bg-primary" type="submit" value="Confirm" />
     </div>
