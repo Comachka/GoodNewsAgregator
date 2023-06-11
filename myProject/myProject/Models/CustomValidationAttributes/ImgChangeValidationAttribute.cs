@@ -4,14 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace myProject.Models.CustomValidationAttributes
 {
-    public class ImgValidationAttribute: ValidationAttribute
+    public class ImgChangeValidationAttribute: ValidationAttribute
     {
         public override bool IsValid(object file)
         {
             var img = file as IFormFile;
             if (img == null)
             {
-                return true;
+                {
+                    return true;
+                }
             }
        
             string ext = Path.GetExtension(img.FileName);

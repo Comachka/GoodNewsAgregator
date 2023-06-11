@@ -3,7 +3,7 @@
         if (e.keyCode == 13) {
             document.getElementById('add-comment-btn').click();
             document.getElementById('content-area').blur();
-            document.getElementById('content-area').value='';
+            document.getElementById('content-area').value = '';
         }
     });
 
@@ -26,7 +26,7 @@ function addCommentsHtml(resp, commentBlock) {
                 </div>`
         commentBlock.appendChild(div);
     }
-   
+
 }
 
 document.querySelector('#content-area').oninput = (e => {

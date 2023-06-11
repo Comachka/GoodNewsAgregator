@@ -14,6 +14,8 @@ using System.IO.Compression;
 using Microsoft.AspNetCore.Hosting.Server;
 using System.IO;
 using AutoMapper;
+using Serilog.Sinks.File;
+using System.ComponentModel.DataAnnotations;
 
 namespace myProject.Mvc.Controllers
 {
@@ -35,6 +37,45 @@ namespace myProject.Mvc.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangeProfile(MyAccountModel model)
+        {
+
+            var errors = ModelState
+            .Where(x => x.Value.Errors.Count > 0)
+            .Select(x => new { x.Key, x.Value.Errors })
+            .ToArray();
+
+            if (ModelState.IsValid)
+            {
+                var modelAvatar = "";
+                if (model.AvatarChange != null)
+                {
+                    var fileName = Path.GetFileName(model.AvatarChange.FileName);
+                    DirectoryInfo directoryInfo = new DirectoryInfo($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
+                    foreach (FileInfo file in directoryInfo.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    var filePath = Path.Combine($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.AvatarChange.CopyToAsync(fileStream);
+                    }
+                    modelAvatar = Path.Combine($"\\img\\Avatars\\{HttpContext.User.Identity.Name}", fileName);
+                }
+                else
+                {
+                    modelAvatar = "";
+                }
+                
+                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                await _userService.ChangeProfileAsync(modelAvatar, model.AboutMyself, model.Name, model.MailNotification, user.Id);
+                return RedirectToAction("MyAccount", "Account");
+            }
+            return RedirectToAction("MyAccount", "Account", model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Register()
         {
@@ -49,17 +90,25 @@ namespace myProject.Mvc.Controllers
             .Where(x => x.Value.Errors.Count > 0)
             .Select(x => new { x.Key, x.Value.Errors })
             .ToArray();
-
             if (ModelState.IsValid)
             {
-                Directory.CreateDirectory($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{model.Email}\\");
-                var fileName = Path.GetFileName(model.Avatar.FileName);
-                var filePath = Path.Combine($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{model.Email}\\", fileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                string modelAvatar = "";
+                if (model.Avatar == null)
                 {
-                    await model.Avatar.CopyToAsync(fileStream);
+                    modelAvatar = $"\\img\\Avatars\\low.jpg";
                 }
-                var modelAvatar = Path.Combine($"\\img\\Avatars\\{model.Email}", fileName);
+                else
+                {
+                    Directory.CreateDirectory($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{model.Email}\\");
+                    var fileName = Path.GetFileName(model.Avatar.FileName);
+                    var filePath = Path.Combine($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{model.Email}\\", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.Avatar.CopyToAsync(fileStream);
+                    }
+                    modelAvatar = Path.Combine($"\\img\\Avatars\\{model.Email}", fileName);
+                }
+
                 var user = await _userService.RegisterAsync(model.Email,
                     model.Password,
                     model.Name,
@@ -111,16 +160,16 @@ namespace myProject.Mvc.Controllers
                     switch (user.RoleId)
                     {
                         case 1:
-                            await _userService.ChangeRaiting(user.Id, 10);
+                            await _userService.ChangeRaiting(profile.Id, 10);
                             break;
                         case 2:
-                            await _userService.ChangeRaiting(user.Id, 3);
+                            await _userService.ChangeRaiting(profile.Id, 3);
                             break;
                         case 4:
-                            await _userService.ChangeRaiting(user.Id, 5);
+                            await _userService.ChangeRaiting(profile.Id, 5);
                             break;
                         default:
-                            await _userService.ChangeRaiting(user.Id, 1);
+                            await _userService.ChangeRaiting(profile.Id, 1);
                             break;
                     }
                 }
@@ -130,16 +179,16 @@ namespace myProject.Mvc.Controllers
                     switch (user.RoleId)
                     {
                         case 1:
-                            await _userService.ChangeRaiting(user.Id, -10);
+                            await _userService.ChangeRaiting(profile.Id, -10);
                             break;
                         case 2:
-                            await _userService.ChangeRaiting(user.Id, -3);
+                            await _userService.ChangeRaiting(profile.Id, -3);
                             break;
                         case 4:
-                            await _userService.ChangeRaiting(user.Id, -5);
+                            await _userService.ChangeRaiting(profile.Id, -5);
                             break;
                         default:
-                            await _userService.ChangeRaiting(user.Id, -1);
+                            await _userService.ChangeRaiting(profile.Id, -1);
                             break;
                     }
                 }

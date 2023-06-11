@@ -171,6 +171,59 @@ namespace myProject.Business
                 Select(user => _mapper.Map<UserDto>(user)).ToListAsync();
         }
 
+        public async Task ChangeProfileAsync(string modelAvatar, string aboutMyself, string name, bool mailNotification, int id)
+        {
+            var user = await GetUserByIdAsync(id);
+            if (!user.AboutMyself.Equals(aboutMyself))
+            {
+                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                {
+                    new PatchDto()
+                    {
+                    PropertyName = nameof(UserDto.AboutMyself),
+                    PropertyValue = aboutMyself
+                    }
+                });
+            }
+            if (!user.Name.Equals(name))
+            {
+                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                {
+                    new PatchDto()
+                    {
+                    PropertyName = nameof(UserDto.Name),
+                    PropertyValue = name
+                    }
+                });
+            }
+            if (!user.MailNotification.Equals(mailNotification))
+            {
+                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                {
+                    new PatchDto()
+                    {
+                    PropertyName = nameof(UserDto.MailNotification),
+                    PropertyValue = mailNotification
+                    }
+                });
+            }
+            if (modelAvatar != "")
+            {
+                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                {
+                    new PatchDto()
+                    {
+                    PropertyName = nameof(UserDto.Avatar),
+                    PropertyValue = modelAvatar
+                    }
+                });
+
+            }
+            
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+
         private string GetPasswordHash(string password)
         {
             var sb = new StringBuilder();

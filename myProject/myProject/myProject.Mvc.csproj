@@ -34,8 +34,4 @@
     <ProjectReference Include="..\myProject.Repositories\myProject.Repositories.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\img\Avatars\" />
-  </ItemGroup>
-
 </Project>

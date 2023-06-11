@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using myProject.Models.CustomValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace myProject.Models
 {
     public class MyAccountModel
     {
+        [Required]
         public string Name { get; set; }
 
         public string? Avatar { get; set; }
@@ -14,5 +16,8 @@ namespace myProject.Models
         public int? Raiting { get; set; }
         public int MyLikes { get; set; }
         public int OnMeLikes { get; set; }
+        [ImgChangeValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
+        [DataType(DataType.Upload)]
+        public IFormFile? AvatarChange { get; set; }
     }
 }

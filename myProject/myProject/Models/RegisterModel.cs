@@ -31,7 +31,7 @@ namespace myProject.Models
 
         [ImgValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
         [DataType(DataType.Upload)]
-        public IFormFile Avatar { get; set; }
+        public IFormFile? Avatar { get; set; }
 
         public string AboutMyself { get; set; }
     }
