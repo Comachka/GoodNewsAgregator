@@ -134,6 +134,7 @@ namespace myProject.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateArticleWithSource()
         {
             var model = new CreateArticleWithSourceModel()
@@ -144,6 +145,7 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateArticleWithSource(CreateArticleWithSourceModel model)
         {
 
@@ -208,6 +210,7 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteArticles(int id)
         {
             try

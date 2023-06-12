@@ -16,6 +16,5 @@ namespace myProject.Models
         public bool Subscribe { get; set; }
         public int MyLikes { get; set; }
         public int OnMeLikes { get; set; }
-        public string? ReturnUrl { get; set; }
     }
 }

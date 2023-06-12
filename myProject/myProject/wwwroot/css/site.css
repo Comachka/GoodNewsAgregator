@@ -152,6 +152,6 @@ a {
     margin-bottom: 0px;
 }
 
-.hiden {
+.hiden, .admin-hiden {
     display: none;
 }

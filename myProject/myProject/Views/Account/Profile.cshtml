@@ -4,8 +4,7 @@
 
 <div>
     <img src="@Model.Avatar" alt="Аватар"></img>
-    <form asp-action="Subscribe" asp-controller="Account" asp-antiforgery="true" method="post">
-        @Html.HiddenFor(model => model.ReturnUrl)
+    <form asp-action="Subscribe" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path" asp-antiforgery="true" method="post">
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.Subscribe)
         @if (!Model.Subscribe)

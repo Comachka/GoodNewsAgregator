@@ -126,10 +126,13 @@ namespace myProject.Mvc.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout([FromQuery] string? returnUrl)
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Index", "Home");
         }
 
@@ -149,7 +152,7 @@ namespace myProject.Mvc.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Subscribe(ProfileModel profile)
+        public async Task<IActionResult> Subscribe(ProfileModel profile, [FromQuery] string? returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -192,7 +195,11 @@ namespace myProject.Mvc.Controllers
                             break;
                     }
                 }
-                return Redirect(profile.ReturnUrl);
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("MyAccount", "Account");
             }
             return RedirectToAction("Account", "Login");
         }
@@ -232,6 +239,21 @@ namespace myProject.Mvc.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetRole()
+        {
+            if (User.Identity.IsAuthenticated)
+            { 
+                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                var role = user.RoleId;
+                return Ok(role);
+            }
+            else
+            {
+                return Ok(null);
+            }
+        }
+
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> MyAccount()
         {
@@ -251,7 +273,7 @@ namespace myProject.Mvc.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Profile(int id, [FromQuery] string? returnUrl)
+        public async Task<IActionResult> Profile(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
             if (user.Email == HttpContext.User.Identity.Name) return RedirectToAction("MyAccount", "Account");
@@ -265,7 +287,6 @@ namespace myProject.Mvc.Controllers
                 profile.Subscribe = amISub;
                 profile.OnMeLikes = onSubs.Count;
                 profile.MyLikes = subs.Count;
-                profile.ReturnUrl = returnUrl;
                 return View(profile);
             }
             return View();
