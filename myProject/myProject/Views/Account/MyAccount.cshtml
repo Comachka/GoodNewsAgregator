@@ -5,6 +5,8 @@
 <div>
     <form class="register-form" asp-action="ChangeProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
         <h2 class="need-hide">@Model.Name</h2>
+        <h3 class="need-hide">@Model.Role</h3>
+        <h3 class="need-hide">@Model.Raiting</h3>
         <div class="form-group hiden">
             <div class="register-input">
                 <label class="form-label" asp-for="Name" >Name</label>
@@ -35,6 +37,7 @@
         <div class="register-button-wrapper hiden">
             <button сlass="btn btn-subscribe" type="submit"> Subscribe</button>
         </div>
+        @Html.HiddenFor(model => model.Role)
         @Html.HiddenFor(model => model.Avatar)
         @Html.HiddenFor(model => model.Raiting)
         @Html.HiddenFor(model => model.MyLikes)

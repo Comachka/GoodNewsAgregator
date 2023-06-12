@@ -1,7 +1,9 @@
-﻿@*@model CommentModel
+﻿@model CommentModel
 
-<div class="col-12">
-    <img src="@Model.Avatar" "alt="Аватар">
-    <h4>@Model.User</h4>
-    <p>@Model.Content</p>
-</div>*@
+<div class="comment-item">
+    <form action="@($"https://localhost:7245/Account/Profile/{Model.UserId}")"><button сlass="btn_profile" type="submit"><img class="comment-avatar" src="@Model.Avatar" alt="Аватар" /></button></form>
+    <div class="comment-content">
+        <h5 class="comment-title">@Model.User</h5> <p>@Model.Content</p> <p class="comment-date">@Model.DateCreated</p>
+    </div>
+    <form asp-action="DeleteComment" asp-controller="Comment" asp-route-id="@Model.Id" asp-antiforgery="true" method="post"><button сlass="btn_delete" type="submit">Delete</button></form>
+</div>

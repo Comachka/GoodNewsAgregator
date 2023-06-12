@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
 using myProject.Business;
 using AutoMapper;
+using myProject.Data.Entities;
+using System.Xml.Linq;
 
 namespace myProject.Mvc.Controllers
 {
@@ -59,10 +61,25 @@ namespace myProject.Mvc.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ManageComments()
+        [Authorize(Roles = "Admin, Super Moderator, Moderator")]
+        public async Task<IActionResult> ManageComments(int id)
         {
-            return Ok(/*await _userService.GetUsersAsync()*/);
+            var dtos = await _commentService.GetCommentsByArticleIdAsync(id);
+            var comments = dtos.Select(c => _mapper.Map<CommentModel>(c)).ToList();
+            var model = new ManageCommentsModel()
+            {
+                Comments = comments,
+                ArticleId = id
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, Super Moderator, Moderator")]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var articleId = await _commentService.DeleteCommentsByIdAsync(id);
+            return RedirectToAction("ManageComments", "Comment", new { id = articleId });
         }
 
         [HttpGet]

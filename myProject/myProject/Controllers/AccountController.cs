@@ -52,6 +52,10 @@ namespace myProject.Mvc.Controllers
                 if (model.AvatarChange != null)
                 {
                     var fileName = Path.GetFileName(model.AvatarChange.FileName);
+                    if (!Directory.Exists($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\"))
+                    {
+                        Directory.CreateDirectory($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
+                    }
                     DirectoryInfo directoryInfo = new DirectoryInfo($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
                     foreach (FileInfo file in directoryInfo.GetFiles())
                     {
@@ -258,7 +262,7 @@ namespace myProject.Mvc.Controllers
         public async Task<IActionResult> MyAccount()
         {
             var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-
+            var role = await _roleService.GetUserRole(user.Id);
             if (user != null)
             {
                 var subs = await _subscriptionService.GetMySubscriptionAsync(user.Id);
@@ -266,6 +270,7 @@ namespace myProject.Mvc.Controllers
                 var profile = _mapper.Map<MyAccountModel>(user);
                 profile.OnMeLikes = onSubs.Count;
                 profile.MyLikes = subs.Count;
+                profile.Role = role;
                 return View(profile);
             }
             return View();
@@ -280,6 +285,7 @@ namespace myProject.Mvc.Controllers
             if (user != null)
             {
                 var me = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                var role = await _roleService.GetUserRole(user.Id);
                 var subs = await _subscriptionService.GetMySubscriptionAsync(id);
                 var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(id);
                 bool amISub = onSubs.Any(sub => sub.FollowerId == me.Id);
@@ -287,6 +293,7 @@ namespace myProject.Mvc.Controllers
                 profile.Subscribe = amISub;
                 profile.OnMeLikes = onSubs.Count;
                 profile.MyLikes = subs.Count;
+                profile.Role = role;
                 return View(profile);
             }
             return View();

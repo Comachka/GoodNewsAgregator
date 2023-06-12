@@ -12,7 +12,7 @@ namespace myProject.Models
         
         public string? AboutMyself { get; set; }
         public int? Raiting { get; set; }
-        
+        public string? Role { get; set; }
         public bool Subscribe { get; set; }
         public int MyLikes { get; set; }
         public int OnMeLikes { get; set; }

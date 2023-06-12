@@ -60,6 +60,8 @@ namespace myProject.Controllers
                     var articleDtos = await _articleService
                         .GetArticlesByPageAsync(page, pageSize, 0.015);
 
+
+
                     var articles = articleDtos
                         .Select(dto =>
                             _mapper.Map<ArticlePreviewModel>(dto))
@@ -134,7 +136,7 @@ namespace myProject.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Super Moderator")]
         public async Task<IActionResult> CreateArticleWithSource()
         {
             var model = new CreateArticleWithSourceModel()
@@ -145,9 +147,19 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Super Moderator")]
         public async Task<IActionResult> CreateArticleWithSource(CreateArticleWithSourceModel model)
         {
+            var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+            var role = "";
+            if (user.RoleId == 1)
+            {
+                role = "Admin";
+            }
+            else
+            {
+                role = "Super Moderator";
+            }
 
             var articleDto = new ArticleDto()
             {
@@ -156,8 +168,8 @@ namespace myProject.Controllers
                 PositiveRaiting = 0,
                 DatePosting = DateTime.Now,
                 NewsResourceId = 6,
-                ArticleSourceUrl = "Admin",
-                SourceName = "Admin",
+                ArticleSourceUrl = role,
+                SourceName = role,
                 CategoryId = model.CategoryId
                 
             };
@@ -229,20 +241,23 @@ namespace myProject.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var articleDto = await _articleService.GetArticleByIdWithSourceNameAsync(id);
+            var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
 
             if (articleDto != null)
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    var category = await _categoryService.GetCategoryByIdAsync(articleDto.CategoryId);
                     var model = new ArticleDetailsWithCreateCommentModel()
                     {
                         ArticleDetails = _mapper.Map<ArticleDetailsModel>(articleDto),
                         CreateComment = new CommentModel()
                         {
                             ArticleId = articleDto.Id
-                        }
-
+                        },
+                        RoleId = user.RoleId
                     };
+                    model.ArticleDetails.Category = category;
                     return View(model);
                 }
                 return RedirectToAction("Login", "Account");

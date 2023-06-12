@@ -42,5 +42,12 @@ namespace myProject.Business
             return dtos;
         }
 
+        public async Task<int> DeleteCommentsByIdAsync(int commentId)
+        {
+            var comment = await _unitOfWork.Comments.GetByIdAsync(commentId);
+            await _unitOfWork.Comments.Remove(commentId);
+            await _unitOfWork.SaveChangesAsync();
+            return comment.ArticleId;
+        }
     }
 }

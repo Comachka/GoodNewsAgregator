@@ -78,6 +78,11 @@ namespace myProject.Business
                         .GetArticlesForPageAsync(page, pageSize, positivity))
                     .Select(article => _mapper.Map<ArticleDto>(article))
                     .ToList();
+                foreach (var article in articles)
+                {
+                    var category = await _unitOfWork.Categories.GetByIdAsync(article.CategoryId);
+                    article.Category = category.Name;
+                }
                 return articles;
             }
             catch (Exception e)

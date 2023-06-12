@@ -9,6 +9,9 @@
         <h5>@Model.ArticleDetails.SourceName</h5>
     </div>
     <div class="col-12">
+        <h5>@Model.ArticleDetails.Category</h5>
+    </div>
+    <div class="col-12">
         <h5>@Model.ArticleDetails.DatePosting</h5>
     </div>
     <div class="col-12">
@@ -26,6 +29,10 @@
 <div class="collapse" id="collapsisbleComments" aria-expanded="false">
 
     <div class="comments">
+        @if ((Model.RoleId == 1) || (Model.RoleId == 2) || (Model.RoleId == 4))
+        {
+            <a class="edit-comment" asp-action="ManageComments" asp-controller="Comment" asp-route-id="@Model.ArticleDetails.Id">Edit Comments</a>
+        }
     </div>
 
     <form class="add-comment-form" method="post" asp-antiforgery="true">

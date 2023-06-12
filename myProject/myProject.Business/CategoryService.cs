@@ -29,5 +29,10 @@ namespace myProject.Business
                 Select(category => _mapper.Map<CategoryDto>(category)).ToListAsync();
         }
 
+        public async Task<string> GetCategoryByIdAsync(int id)
+        {
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
+            return category.Name;
+        }
     }
 }

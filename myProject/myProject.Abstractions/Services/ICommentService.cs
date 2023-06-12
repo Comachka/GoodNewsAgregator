@@ -6,7 +6,7 @@ namespace myProject.Abstractions.Services
     {
         public Task<List<CommentDto>> GetCommentsByArticleIdAsync(int articleId);
         public Task<List<CommentDto>> CreateCommentAsync(CommentDto commentDto);
-
+        public Task<int> DeleteCommentsByIdAsync(int commentId);
 
     }
 }

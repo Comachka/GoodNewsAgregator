@@ -1,0 +1,13 @@
+﻿@model ManageCommentsModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    @foreach (var comment in Model.Comments)
+    {
+        await Html.RenderPartialAsync("GetFakeCommentsPartial", comment);
+    }
+</div>
+<form asp-action="Details" asp-controller="Article" asp-route-id="@Model.ArticleId" asp-antiforgery="true" method="get"><button сlass="btn_delete" type="submit">Back</button></form>

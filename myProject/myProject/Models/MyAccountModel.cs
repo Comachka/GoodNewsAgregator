@@ -14,6 +14,7 @@ namespace myProject.Models
         public string? AboutMyself { get; set; }
         public bool MailNotification { get; set; }
         public int? Raiting { get; set; }
+        public string? Role { get; set; }
         public int MyLikes { get; set; }
         public int OnMeLikes { get; set; }
         [ImgChangeValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
