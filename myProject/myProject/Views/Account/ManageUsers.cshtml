@@ -1,0 +1,14 @@
+﻿@model ManageUsersModel
+
+<div class="gx-2">
+    <a class="btn btn-info" asp-action="ManageArticles" asp-controller="Article">Back</a>
+</div>
+
+<div class="row article-list">
+    @foreach (var user in Model.Users)
+    {
+       await Html.RenderPartialAsync("UserPreviewPartial", user);
+    }
+</div>
+
+

@@ -102,6 +102,11 @@ namespace myProject.Business
                     .Take(3)
                     .Select(article => _mapper.Map<ArticleDto>(article))
                     .ToListAsync();
+            foreach(var article in articles)
+            {
+                var source = await _unitOfWork.NewsResources.GetByIdAsync(article.NewsResourceId);
+                article.SourceName = source.Name;
+            }
             return articles;
         }
 

@@ -12,5 +12,6 @@ namespace myProject.Abstractions.Services
         Task<List<UserDto>> GetUsersAsync();
         Task ChangeRaiting(int id, int raiting);
         Task ChangeProfileAsync(string modelAvatar, string AboutMyself, string Name, bool MailNotification, int id);
+        Task DeleteUserByIdAsync(int id);
     }
 }

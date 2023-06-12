@@ -7,7 +7,7 @@ using myProject.Core.DTOs;
 using myProject.Data.Entities;
 using System.Text;
 using System.Security.Cryptography;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace myProject.Business
 {
@@ -242,6 +242,18 @@ namespace myProject.Business
                 }
             }
             return sb.ToString();
+        }
+
+        public async Task DeleteUserByIdAsync(int id)
+        {
+            var subs = await _unitOfWork.Subscriptions.FindBy(s => (s.FollowerId == id) || (s.FollowOnId == id)).ToListAsync();
+            if (!subs.IsNullOrEmpty())
+            {
+                await _unitOfWork.Subscriptions.RemoveRange(subs);
+            }
+            await _unitOfWork.Users.Remove(id);
+            await _unitOfWork.SaveChangesAsync();
+            return;
         }
 
     }

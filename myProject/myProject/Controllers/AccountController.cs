@@ -16,6 +16,8 @@ using System.IO;
 using AutoMapper;
 using Serilog.Sinks.File;
 using System.ComponentModel.DataAnnotations;
+using myProject.Business;
+using Serilog;
 
 namespace myProject.Mvc.Controllers
 {
@@ -78,6 +80,22 @@ namespace myProject.Mvc.Controllers
                 return RedirectToAction("MyAccount", "Account");
             }
             return RedirectToAction("MyAccount", "Account", model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                await _userService.DeleteUserByIdAsync(id);
+                return RedirectToAction("ManageUsers", "Account");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpGet]
@@ -239,9 +257,22 @@ namespace myProject.Mvc.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ManageUsers()
         {
-            return Ok(await _userService.GetUsersAsync());
+            var users = await _userService.GetUsersAsync();
+            var admin = users.FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
+            users.Remove(admin);
+            
+            var model = new ManageUsersModel
+            {
+                Users = users.Select(user => _mapper.Map<ProfileModel>(user)).OrderByDescending(u => u.Raiting).ToList()
+            };
+            foreach (var user in model.Users)
+            {
+                var role = await _roleService.GetUserRole(user.Id);
+                user.Role = role;
+            }
+            return View(model);
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> GetRole()
         {
