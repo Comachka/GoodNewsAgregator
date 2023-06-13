@@ -1,23 +1,4 @@
-﻿document.getElementByClass('btn-search')
-    .addEventListener('click', getSearchArticle());
-
-async function getSearchArticle() {
-    const searchText = document.getElementById('article-search').value.trim();
-   
-    if (searchText.length) {
-        let searchResponse = await fetch(
-            `https://localhost:7245/Article/Search/?searchText=${searchText}`);
-        let resp = await searchResponse.json();
-       
-    } else {
-       
-    }
-}
-
-
-
-
-async function getArticleNamesData() {
+﻿async function getArticleNamesData() {
     let artcleNamesResponse = await fetch(
         'https://localhost:7245/Article/GetArticlesNames');
 

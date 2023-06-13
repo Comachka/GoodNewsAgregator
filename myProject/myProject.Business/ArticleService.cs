@@ -31,6 +31,57 @@ namespace myProject.Business
             _mapper = mapper;
         }
 
+        public async Task EditArticleAsync(ArticleDto article)
+        {
+            var art = await _unitOfWork.Articles.GetByIdAsync(article.Id);
+            if (art != null)
+            {
+                bool changed = false;
+                if (article.Title != art.Title)
+                {
+                    await _unitOfWork.Articles.PatchAsync(art.Id, new List<PatchDto>()
+                    {
+                        new PatchDto()
+                        {
+                            PropertyName = nameof(ArticleDto.Title),
+                            PropertyValue = article.Title
+                        }
+                    });
+                    changed = true;
+                }
+                if (article.Content != art.Content)
+                {
+                    await _unitOfWork.Articles.PatchAsync(art.Id, new List<PatchDto>()
+                    {
+                        new PatchDto()
+                        {
+                            PropertyName = nameof(ArticleDto.Content),
+                            PropertyValue = article.Content
+                        }
+                    });
+                    changed = true;
+                }
+                if (article.ShortDescription != art.ShortDescription)
+                {
+
+                    await _unitOfWork.Articles.PatchAsync(art.Id, new List<PatchDto>()
+                    {
+                        new PatchDto()
+                        {
+                            PropertyName = nameof(ArticleDto.ShortDescription),
+                            PropertyValue = article.ShortDescription
+                        }
+                    });
+                    changed = true;
+                }
+                if (changed)
+                {
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+            return;
+        }
+
         public async Task UpRaitingAsync(int id)
         {
             var article = await _unitOfWork.Articles.GetByIdAsync(id);

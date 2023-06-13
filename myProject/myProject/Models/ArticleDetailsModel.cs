@@ -5,9 +5,12 @@ namespace myProject.Models
     public class ArticleDetailsModel
     {
         public int Id { get; set; }
+        [Required]
         public string Title { get; set; }
         public string Category { get; set; }
+        [Required]
         public string ShortDescription { get; set; }
+        [Required]
         public string Content { get; set; }
         public double PositiveRaiting { get; set; }
         public string SourceName { get; set; }

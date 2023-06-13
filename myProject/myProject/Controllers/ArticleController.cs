@@ -164,14 +164,14 @@ namespace myProject.Controllers
             var articleDto = new ArticleDto()
             {
                 Title = model.Title,
+                ShortDescription = model.ShortDescription,
                 Content = model.Content,
-                PositiveRaiting = 0,
+                PositiveRaiting = 0.016,
                 DatePosting = DateTime.Now,
                 NewsResourceId = 6,
                 ArticleSourceUrl = role,
                 SourceName = role,
                 CategoryId = model.CategoryId
-                
             };
             await _articleService.AddAsync(articleDto);
 
@@ -287,6 +287,14 @@ namespace myProject.Controllers
         public async Task<IActionResult> Aggregator()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(ArticleDetailsWithCreateCommentModel article)
+        {
+            await _articleService.EditArticleAsync(_mapper.Map<ArticleDto>(article.ArticleDetails));
+            return RedirectToAction("Details", "Article", new { id = article.ArticleDetails.Id }); 
         }
 
         [HttpPost]

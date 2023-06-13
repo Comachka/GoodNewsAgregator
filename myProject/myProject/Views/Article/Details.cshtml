@@ -1,6 +1,46 @@
 ﻿@model ArticleDetailsWithCreateCommentModel
 
 
+@if (Model.RoleId == 1)
+{
+    <div>
+        <form class="article-form" asp-action="Edit" asp-controller="Article" asp-antiforgery="true" method="post">
+            @Html.HiddenFor(model => model.ArticleDetails.Id)
+            @Html.HiddenFor(model => model.ArticleDetails.ArticleSourceUrl)
+            @Html.HiddenFor(model => model.ArticleDetails.Category)
+            @Html.HiddenFor(model => model.ArticleDetails.DatePosting)
+            @Html.HiddenFor(model => model.ArticleDetails.PositiveRaiting)
+            @Html.HiddenFor(model => model.ArticleDetails.SourceName)
+            <div class="form-group hiden">
+                <div class="register-input">
+                    <label class="form-label" asp-for="ArticleDetails.Title">Title</label>
+                    <input class="form-control" type="text" asp-for="ArticleDetails.Title" value="@Model.ArticleDetails.Title" />
+                    <span asp-validation-for="ArticleDetails.Title"></span>
+                </div>
+            </div>
+            <div class="register-input register-textarea-wrapper hiden">
+                <label class="form-label" asp-for="ArticleDetails.ShortDescription">Short Description</label>
+                <textarea class="form-control" type="text" value="@Model.ArticleDetails.ShortDescription" asp-for="ArticleDetails.ShortDescription"></textarea>
+                <span asp-validation-for="ArticleDetails.ShortDescription"></span>
+            </div>
+            <div class="register-input register-textarea-wrapper hiden">
+                <label class="form-label" asp-for="ArticleDetails.Content">Content</label>
+                <textarea class="form-control" type="text" value="@Model.ArticleDetails.Content" asp-for="ArticleDetails.Content"></textarea>
+                <span asp-validation-for="ArticleDetails.Content"></span>
+            </div>
+            <div class="register-button-wrapper hiden">
+                <button сlass="btn btn-subscribe" type="submit">Save</button>
+            </div>
+        </form>
+        <div class="hiden">
+            <input сlass="btn" id="btn-stop-hide" type="button" value="Back" />
+        </div>
+        <div class="need-hide">
+            <input сlass="btn" id="btn-start-hide" type="button" value="Edit" />
+        </div>
+    </div>
+}
+<div class="need-hide">
 <div class="row">
     <div class="col-12">
         <h2>@Model.ArticleDetails.Title</h2>
@@ -40,17 +80,20 @@
         <div class="mb-3">
             <label class="form-label" asp-for="@Model.CreateComment.Content">Comment Text</label>
             <textarea class="form-control" id="content-area" rows="5" asp-for="@Model.CreateComment.Content"></textarea>
-            <span asp-validation-for="@Model.CreateComment.Content"></span>
         </div>
         <div>
             <input class="btn bg-primary" id="add-comment-btn" type="submit" value="Confirm" />
         </div>
     </form>
 </div>
+    </div>
 
 @section Scripts
     {
+    <script src="/js/myAccount-settings.js"></script>
     <script src="/js/article-details.js"></script>
     <script src="/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="/js/signalr/dist/browser/comments.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 }

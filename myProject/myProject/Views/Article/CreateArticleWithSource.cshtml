@@ -9,6 +9,11 @@
         <span asp-validation-for="Title"></span>
     </div>
     <div class="mb-3">
+        <label class="form-label" asp-for="ShortDescription">Text</label>
+        <textarea class="form-control" rows="10" asp-for="ShortDescription"></textarea>
+        <span asp-validation-for="ShortDescription"></span>
+    </div>
+    <div class="mb-3">
         <label class="form-label" asp-for="Content">Text</label>
         <textarea class="form-control" rows="10" asp-for="Content"></textarea>
         <span asp-validation-for="Content"></span>

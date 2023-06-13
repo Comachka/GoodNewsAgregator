@@ -21,5 +21,6 @@ namespace myProject.Abstractions.Services
         Task RateArticleAsync(int id, double? rate);
         Task DeleteArticleByIdAsync(int id);
         Task UpRaitingAsync(int id);
+        Task EditArticleAsync(ArticleDto article);
     }
 }

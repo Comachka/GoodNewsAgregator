@@ -18,6 +18,8 @@ using Serilog.Sinks.File;
 using System.ComponentModel.DataAnnotations;
 using myProject.Business;
 using Serilog;
+using System.Net.Mail;
+using System.Net;
 
 namespace myProject.Mvc.Controllers
 {
@@ -133,12 +135,28 @@ namespace myProject.Mvc.Controllers
 
                 var user = await _userService.RegisterAsync(model.Email,
                     model.Password,
-                    model.Name,
                     model.AboutMyself,
+                    model.Name,
                     model.MailNotification,
                     modelAvatar);
                 if (user != null)
                 {
+                    if (user.MailNotification)
+                    {
+                        var message = new MailMessage();
+                        message.From = new MailAddress("evdokimchik2012@mail.ru");
+                        message.To.Add(new MailAddress(user.Email));
+                        message.Subject = "Mail notification";
+                        message.Body = $"Hello {user.Name}!";
+                        using (var client = new SmtpClient("smtp.mail.ru", 587))
+                        {
+                            client.UseDefaultCredentials = false;
+                            client.Credentials = new NetworkCredential("evdokimchik2012@mail.ru", "rujDsf7qf1Q84LTF1Frc");
+                            client.EnableSsl = true;
+                            client.Send(message);
+                        }
+                    }
+                   
                     await AuthenticateAsync(user);
                     return RedirectToAction("Index", "Home");
                 }
@@ -223,13 +241,14 @@ namespace myProject.Mvc.Controllers
                 }
                 return RedirectToAction("MyAccount", "Account");
             }
-            return RedirectToAction("Account", "Login");
+            return RedirectToAction("Login", "Account");
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            TempData["ErrorMessage"] = null;
             if (await _userService.IsUserExistsAsync(model.Email)
                 && await _userService.IsPasswordCorrectAsync(model.Email, model.Password))
             {
@@ -243,8 +262,8 @@ namespace myProject.Mvc.Controllers
 
                 return RedirectToAction("MyAccount", "Account");
             }
-
-            return Ok(model);
+                TempData["ErrorMessage"] = "Такой аккаунт не существует";
+                return RedirectToAction("Login", "Account", new { returnUrl = model.ReturnUrl });
         }
 
         [HttpGet]

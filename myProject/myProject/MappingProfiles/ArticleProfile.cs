@@ -24,6 +24,7 @@ namespace myProject.Mvc.MappingProfiles
             CreateMap<ArticleDto, Article>();
             CreateMap<ArticleDto, ArticlePreviewModel>();
             CreateMap<ArticleDto, ArticleDetailsModel>();
+            CreateMap<ArticleDetailsModel, ArticleDto>();
             CreateMap<Article, AutoCompleteDataDto>()
             .ForMember(dto => dto.Label,
                 opt

@@ -7,7 +7,8 @@ namespace myProject.Models
     {
         [Required]
         public string Title { get; set; }
-        
+        [Required]
+        public string ShortDescription { get; set; }
         [Required]
         public string Content { get; set; }
 
