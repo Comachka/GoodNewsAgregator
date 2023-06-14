@@ -171,23 +171,42 @@ namespace myProject.Business
                 Select(user => _mapper.Map<UserDto>(user)).ToListAsync();
         }
 
-        public async Task ChangeProfileAsync(string modelAvatar, string aboutMyself, string name, bool mailNotification, int id)
+        public async Task ChangeProfileAsync(string modelAvatar, string? aboutMyself, string name, bool mailNotification, int id)
         {
             var user = await GetUserByIdAsync(id);
-            if (!user.AboutMyself.Equals(aboutMyself))
+            if (user != null)
             {
-                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                if (string.IsNullOrEmpty(user.AboutMyself))
                 {
-                    new PatchDto()
+                    if(!string.IsNullOrEmpty(aboutMyself))
                     {
-                    PropertyName = nameof(UserDto.AboutMyself),
-                    PropertyValue = aboutMyself
+                        await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                        {
+                        new PatchDto()
+                        {
+                        PropertyName = nameof(UserDto.AboutMyself),
+                        PropertyValue = aboutMyself
+                        }
+                        });
                     }
-                });
-            }
-            if (!user.Name.Equals(name))
-            {
-                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                }
+                else
+                {
+                    if (!user.AboutMyself.Equals(aboutMyself))
+                    {
+                        await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                        {
+                        new PatchDto()
+                        {
+                        PropertyName = nameof(UserDto.AboutMyself),
+                        PropertyValue = aboutMyself
+                        }
+                        });
+                    }
+                }
+                if (!user.Name.Equals(name))
+                {
+                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
                 {
                     new PatchDto()
                     {
@@ -195,10 +214,10 @@ namespace myProject.Business
                     PropertyValue = name
                     }
                 });
-            }
-            if (!user.MailNotification.Equals(mailNotification))
-            {
-                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                }
+                if (!user.MailNotification.Equals(mailNotification))
+                {
+                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
                 {
                     new PatchDto()
                     {
@@ -206,10 +225,10 @@ namespace myProject.Business
                     PropertyValue = mailNotification
                     }
                 });
-            }
-            if (modelAvatar != "")
-            {
-                await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                }
+                if (modelAvatar != "")
+                {
+                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
                 {
                     new PatchDto()
                     {
@@ -218,9 +237,13 @@ namespace myProject.Business
                     }
                 });
 
+                }
+                await _unitOfWork.SaveChangesAsync();
             }
-            
-            await _unitOfWork.SaveChangesAsync();
+            else
+            {
+                throw new Exception("This user is not exist");
+            }
         }
 
 
@@ -253,7 +276,6 @@ namespace myProject.Business
             }
             await _unitOfWork.Users.Remove(id);
             await _unitOfWork.SaveChangesAsync();
-            return;
         }
 
     }

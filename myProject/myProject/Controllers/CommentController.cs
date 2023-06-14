@@ -14,6 +14,7 @@ using myProject.Business;
 using AutoMapper;
 using myProject.Data.Entities;
 using System.Xml.Linq;
+using Serilog;
 
 namespace myProject.Mvc.Controllers
 {
@@ -55,7 +56,7 @@ namespace myProject.Mvc.Controllers
                     // return Ok(comments);
                     return Ok(comments.FirstOrDefault(c => c.Content == model.Content));
                 }
-                ModelState.AddModelError("", "Smth goes wrong");
+                ModelState.AddModelError("", "Cant create comment");
             }
             return Ok(false);
         }
@@ -64,32 +65,67 @@ namespace myProject.Mvc.Controllers
         [Authorize(Roles = "Admin, Super Moderator, Moderator")]
         public async Task<IActionResult> ManageComments(int id)
         {
-            var dtos = await _commentService.GetCommentsByArticleIdAsync(id);
-            var comments = dtos.Select(c => _mapper.Map<CommentModel>(c)).ToList();
-            var model = new ManageCommentsModel()
+            try
             {
-                Comments = comments,
-                ArticleId = id
-            };
-            return View(model);
+                if (id == null)
+                {
+                    throw new Exception("Article id is null");
+                }
+                var dtos = await _commentService.GetCommentsByArticleIdAsync(id);
+                var comments = dtos.Select(c => _mapper.Map<CommentModel>(c)).ToList();
+                var model = new ManageCommentsModel()
+                {
+                    Comments = comments,
+                    ArticleId = id
+                };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin, Super Moderator, Moderator")]
         public async Task<IActionResult> DeleteComment(int id)
         {
-            var articleId = await _commentService.DeleteCommentsByIdAsync(id);
-            return RedirectToAction("ManageComments", "Comment", new { id = articleId });
+            try
+            {
+                if (id == null)
+                {
+                    throw new Exception("Id of deleting comment is null");
+                }
+                var articleId = await _commentService.DeleteCommentsByIdAsync(id);
+                return RedirectToAction("ManageComments", "Comment", new { id = articleId });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFakeComments(int articleId)
         {
-            var comments = await _commentService.GetCommentsByArticleIdAsync(articleId);
+            try
+            {
+                if (articleId == null)
+                {
+                    throw new Exception("Article id is null");
+                }
+                var comments = await _commentService.GetCommentsByArticleIdAsync(articleId);
 
-            return Ok(comments);
+                return Ok(comments);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
-
     }
 }
 

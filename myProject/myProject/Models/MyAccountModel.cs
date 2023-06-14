@@ -17,7 +17,7 @@ namespace myProject.Models
         public string? Role { get; set; }
         public int MyLikes { get; set; }
         public int OnMeLikes { get; set; }
-        [ImgChangeValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
+        [ImgValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
         [DataType(DataType.Upload)]
         public IFormFile? AvatarChange { get; set; }
     }

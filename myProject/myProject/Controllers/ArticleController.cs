@@ -150,32 +150,37 @@ namespace myProject.Controllers
         [Authorize(Roles = "Admin, Super Moderator")]
         public async Task<IActionResult> CreateArticleWithSource(CreateArticleWithSourceModel model)
         {
-            var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-            var role = "";
-            if (user.RoleId == 1)
+            if (ModelState.IsValid)
             {
-                role = "Admin";
-            }
-            else
-            {
-                role = "Super Moderator";
-            }
+                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                var role = "";
+                if (user.RoleId == 1)
+                {
+                    role = "Admin";
+                }
+                else
+                {
+                    role = "Super Moderator";
+                }
 
-            var articleDto = new ArticleDto()
-            {
-                Title = model.Title,
-                ShortDescription = model.ShortDescription,
-                Content = model.Content,
-                PositiveRaiting = 0.016,
-                DatePosting = DateTime.Now,
-                NewsResourceId = 6,
-                ArticleSourceUrl = role,
-                SourceName = role,
-                CategoryId = model.CategoryId
-            };
-            await _articleService.AddAsync(articleDto);
+                var articleDto = new ArticleDto()
+                {
+                    Title = model.Title,
+                    ShortDescription = model.ShortDescription,
+                    Content = model.Content,
+                    PositiveRaiting = 0.016,
+                    DatePosting = DateTime.Now,
+                    NewsResourceId = 6,
+                    ArticleSourceUrl = role,
+                    SourceName = role,
+                    CategoryId = model.CategoryId
+                };
+                await _articleService.AddAsync(articleDto);
 
-            return RedirectToAction("Index", "Article");
+                return RedirectToAction("Index", "Article");
+            }
+            ModelState.AddModelError("", "Article model is incorrect");
+            return View(model);
         }
 
         [HttpGet]
@@ -240,31 +245,42 @@ namespace myProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var articleDto = await _articleService.GetArticleByIdWithSourceNameAsync(id);
-            var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-
-            if (articleDto != null)
+            try
             {
-                if (User.Identity.IsAuthenticated)
+                if (id == null)
                 {
-                    var category = await _categoryService.GetCategoryByIdAsync(articleDto.CategoryId);
-                    var model = new ArticleDetailsWithCreateCommentModel()
-                    {
-                        ArticleDetails = _mapper.Map<ArticleDetailsModel>(articleDto),
-                        CreateComment = new CommentModel()
-                        {
-                            ArticleId = articleDto.Id
-                        },
-                        RoleId = user.RoleId
-                    };
-                    model.ArticleDetails.Category = category;
-                    return View(model);
+                    throw new Exception("Article id is null");
                 }
-                return RedirectToAction("Login", "Account");
-                
-            }
 
-            return NotFound();
+                var articleDto = await _articleService.GetArticleByIdWithSourceNameAsync(id);
+                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                if (articleDto != null)
+                {
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var category = await _categoryService.GetCategoryByIdAsync(articleDto.CategoryId);
+                        var model = new ArticleDetailsWithCreateCommentModel()
+                        {
+                            ArticleDetails = _mapper.Map<ArticleDetailsModel>(articleDto),
+                            CreateComment = new CommentModel()
+                            {
+                                ArticleId = articleDto.Id
+                            },
+                            RoleId = user.RoleId
+                        };
+                        model.ArticleDetails.Category = category;
+                        return View(model);
+                    }
+                    return RedirectToAction("Login", "Account");
+                }
+                return NotFound();
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
+            
         }
 
         [HttpGet]
@@ -293,41 +309,67 @@ namespace myProject.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(ArticleDetailsWithCreateCommentModel article)
         {
-            await _articleService.EditArticleAsync(_mapper.Map<ArticleDto>(article.ArticleDetails));
-            return RedirectToAction("Details", "Article", new { id = article.ArticleDetails.Id }); 
+            try
+            {
+                await _articleService.EditArticleAsync(_mapper.Map<ArticleDto>(article.ArticleDetails));
+                return RedirectToAction("Details", "Article", new { id = article.ArticleDetails.Id });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AggregateNews()
         {
-            var sources = (await _sourceService.GetSourcesAsync())
+            try
+            {
+                var sources = (await _sourceService.GetSourcesAsync())
                 .Where(s => !string.IsNullOrEmpty(s.RssFeedUrl))
                 .ToArray();
 
-            foreach (var sourceDto in sources)
-            {
-                if (sourceDto.Name == "Admin")
+                if (sources == null)
                 {
-                    continue;
+                    throw new Exception("Cant find any sources");
                 }
-                var articlesDataFromRss = (await _articleService
-                    .AggregateArticlesDataFromRssSourceAsync(sourceDto, CancellationToken.None));
 
-                var fullContentArticles = await _articleService.GetFullContentArticlesAsync(articlesDataFromRss);
+                foreach (var sourceDto in sources)
+                {
+                    if (sourceDto.Name == "Admin")
+                    {
+                        continue;
+                    }
+                    var articlesDataFromRss = (await _articleService
+                        .AggregateArticlesDataFromRssSourceAsync(sourceDto, CancellationToken.None));
 
-                await _articleService.AddArticlesAsync(fullContentArticles);
+                    var fullContentArticles = await _articleService.GetFullContentArticlesAsync(articlesDataFromRss);
+
+                    await _articleService.AddArticlesAsync(fullContentArticles);
+                }
+
+                var unratedArticles = await _articleService.GetUnratedArticlesAsync();
+
+                if (unratedArticles == null)
+                {
+                    throw new Exception("Cant find any unrated article after their creation");
+                }
+
+                foreach (var unratedArticle in unratedArticles)
+                {
+                    var rate = await _articleService.GetArticleRateAsync(unratedArticle.Id);
+                    await _articleService.RateArticleAsync(unratedArticle.Id, rate);
+                }
+
+                return RedirectToAction("Index", "Article");
             }
-
-            var unratedArticles = await _articleService.GetUnratedArticlesAsync();
-
-            foreach (var unratedArticle in unratedArticles)
+            catch (Exception ex)
             {
-                var rate = await _articleService.GetArticleRateAsync(unratedArticle.Id);
-                await _articleService.RateArticleAsync(unratedArticle.Id, rate);
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
             }
-
-            return RedirectToAction("Index", "Article");
         }
     }
 }

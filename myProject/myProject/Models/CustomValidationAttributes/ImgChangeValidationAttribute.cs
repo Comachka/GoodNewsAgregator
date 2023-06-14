@@ -11,9 +11,7 @@ namespace myProject.Models.CustomValidationAttributes
             var img = file as IFormFile;
             if (img == null)
             {
-                {
-                    return true;
-                }
+                return true;
             }
        
             string ext = Path.GetExtension(img.FileName);

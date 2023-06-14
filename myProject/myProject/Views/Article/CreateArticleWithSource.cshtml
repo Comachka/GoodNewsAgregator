@@ -22,10 +22,18 @@
         <input type="submit" value="Confirm" />
     </div>
     <p>
+        @Html.HiddenFor(model => model.Categories)
         <select name="CategoryId">
             @foreach (var category in Model.Categories)
             {
-                <option value="@category.Id">@category.Name</option>
+                if (category.Id == Model.Categories.First().Id)
+                {
+                    <option value="@category.Id" selected>@category.Name</option>
+                }
+                else
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
             }
         </select>
     </p>

@@ -3,6 +3,10 @@
 <h3>Profile</h3>
 
 <div>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" id="errorWindow">@TempData["ErrorMessage"]</div>
+    }
     <form class="register-form" asp-action="ChangeProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
         <h2 class="need-hide">@Model.Name</h2>
         <h3 class="need-hide">@Model.Role</h3>
@@ -54,6 +58,7 @@
 
 @section Scripts
     {
+    <script src="/js/error-window.js"></script>
     <script src="/js/myAccount-settings.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

@@ -44,44 +44,55 @@ namespace myProject.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeProfile(MyAccountModel model)
         {
-
-            var errors = ModelState
+            try
+            {
+                var errors = ModelState
             .Where(x => x.Value.Errors.Count > 0)
             .Select(x => new { x.Key, x.Value.Errors })
             .ToArray();
 
-            if (ModelState.IsValid)
-            {
-                var modelAvatar = "";
-                if (model.AvatarChange != null)
+                if (ModelState.IsValid)
                 {
-                    var fileName = Path.GetFileName(model.AvatarChange.FileName);
-                    if (!Directory.Exists($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\"))
+                    var modelAvatar = "";
+                    if (model.AvatarChange != null)
                     {
-                        Directory.CreateDirectory($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
+                        var fileName = Path.GetFileName(model.AvatarChange.FileName);
+                        if (!Directory.Exists($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\"))
+                        {
+                            Directory.CreateDirectory($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
+                        }
+                        DirectoryInfo directoryInfo = new DirectoryInfo($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
+                        foreach (FileInfo file in directoryInfo.GetFiles())
+                        {
+                            file.Delete();
+                        }
+                        var filePath = Path.Combine($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\", fileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await model.AvatarChange.CopyToAsync(fileStream);
+                        }
+                        modelAvatar = Path.Combine($"\\img\\Avatars\\{HttpContext.User.Identity.Name}", fileName);
                     }
-                    DirectoryInfo directoryInfo = new DirectoryInfo($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\");
-                    foreach (FileInfo file in directoryInfo.GetFiles())
+                    else
                     {
-                        file.Delete();
+                        modelAvatar = "";
                     }
-                    var filePath = Path.Combine($"{Environment.CurrentDirectory}\\wwwroot\\img\\Avatars\\{HttpContext.User.Identity.Name}\\", fileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.AvatarChange.CopyToAsync(fileStream);
-                    }
-                    modelAvatar = Path.Combine($"\\img\\Avatars\\{HttpContext.User.Identity.Name}", fileName);
+
+                    var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                    await _userService.ChangeProfileAsync(modelAvatar, model.AboutMyself, model.Name, model.MailNotification, user.Id);
+                    return RedirectToAction("MyAccount", "Account");
                 }
-                else
+                if (!(ModelState.GetFieldValidationState("AvatarChange") == ModelValidationState.Valid))
                 {
-                    modelAvatar = "";
+                    TempData["ErrorMessage"] = "Please select a PNG or JPEG/JPG image smaller than 200kb";
                 }
-                
-                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-                await _userService.ChangeProfileAsync(modelAvatar, model.AboutMyself, model.Name, model.MailNotification, user.Id);
-                return RedirectToAction("MyAccount", "Account");
+                return RedirectToAction("MyAccount", "Account", model);
             }
-            return RedirectToAction("MyAccount", "Account", model);
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -90,6 +101,10 @@ namespace myProject.Mvc.Controllers
         {
             try
             {
+                if (id == null)
+                {
+                    throw new Exception("User id is null");
+                }
                 await _userService.DeleteUserByIdAsync(id);
                 return RedirectToAction("ManageUsers", "Account");
             }
@@ -103,6 +118,10 @@ namespace myProject.Mvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("MyAccount", "Account");
+            }
             return View();
         }
 
@@ -132,22 +151,15 @@ namespace myProject.Mvc.Controllers
                     }
                     modelAvatar = Path.Combine($"\\img\\Avatars\\{model.Email}", fileName);
                 }
-
-                var user = await _userService.RegisterAsync(model.Email,
-                    model.Password,
-                    model.AboutMyself,
-                    model.Name,
-                    model.MailNotification,
-                    modelAvatar);
-                if (user != null)
+                if (model.MailNotification)
                 {
-                    if (user.MailNotification)
+                    try
                     {
                         var message = new MailMessage();
                         message.From = new MailAddress("evdokimchik2012@mail.ru");
-                        message.To.Add(new MailAddress(user.Email));
+                        message.To.Add(new MailAddress(model.Email));
                         message.Subject = "Mail notification";
-                        message.Body = $"Hello {user.Name}!";
+                        message.Body = $"Hello {model.Name}!";
                         using (var client = new SmtpClient("smtp.mail.ru", 587))
                         {
                             client.UseDefaultCredentials = false;
@@ -156,11 +168,26 @@ namespace myProject.Mvc.Controllers
                             client.Send(message);
                         }
                     }
-                   
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, ex.Message);
+                        ModelState.AddModelError("Email", "Такого mail не существует.");
+                        ModelState.AddModelError("", "Register error");
+                        return View(model);
+                    }
+                }
+                var user = await _userService.RegisterAsync(model.Email,
+                    model.Password,
+                    model.AboutMyself,
+                    model.Name,
+                    model.MailNotification,
+                    modelAvatar);
+                if (user != null)
+                {
                     await AuthenticateAsync(user);
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Smth goes wrong");
+                ModelState.AddModelError("", "Register error");
             }
             return View(model);
         }
@@ -179,6 +206,10 @@ namespace myProject.Mvc.Controllers
         [HttpGet]
         public async Task<IActionResult> Login([FromQuery] string? returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("MyAccount", "Account");
+            }
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 var lm = new LoginModel()
@@ -196,50 +227,58 @@ namespace myProject.Mvc.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-                if (!profile.Subscribe)
+                try
                 {
-                    await _subscriptionService.AddSubscriptionByIdAsync(user.Id, profile.Id);
-                    switch (user.RoleId)
+                    var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                    if (!profile.Subscribe)
                     {
-                        case 1:
-                            await _userService.ChangeRaiting(profile.Id, 10);
-                            break;
-                        case 2:
-                            await _userService.ChangeRaiting(profile.Id, 3);
-                            break;
-                        case 4:
-                            await _userService.ChangeRaiting(profile.Id, 5);
-                            break;
-                        default:
-                            await _userService.ChangeRaiting(profile.Id, 1);
-                            break;
+                        await _subscriptionService.AddSubscriptionByIdAsync(user.Id, profile.Id);
+                        switch (user.RoleId)
+                        {
+                            case 1:
+                                await _userService.ChangeRaiting(profile.Id, 10);
+                                break;
+                            case 2:
+                                await _userService.ChangeRaiting(profile.Id, 3);
+                                break;
+                            case 4:
+                                await _userService.ChangeRaiting(profile.Id, 5);
+                                break;
+                            default:
+                                await _userService.ChangeRaiting(profile.Id, 1);
+                                break;
+                        }
                     }
-                }
-                else
-                {
-                    await _subscriptionService.DeleteSubscriptionByIdAsync(user.Id, profile.Id);
-                    switch (user.RoleId)
+                    else
                     {
-                        case 1:
-                            await _userService.ChangeRaiting(profile.Id, -10);
-                            break;
-                        case 2:
-                            await _userService.ChangeRaiting(profile.Id, -3);
-                            break;
-                        case 4:
-                            await _userService.ChangeRaiting(profile.Id, -5);
-                            break;
-                        default:
-                            await _userService.ChangeRaiting(profile.Id, -1);
-                            break;
+                        await _subscriptionService.DeleteSubscriptionByIdAsync(user.Id, profile.Id);
+                        switch (user.RoleId)
+                        {
+                            case 1:
+                                await _userService.ChangeRaiting(profile.Id, -10);
+                                break;
+                            case 2:
+                                await _userService.ChangeRaiting(profile.Id, -3);
+                                break;
+                            case 4:
+                                await _userService.ChangeRaiting(profile.Id, -5);
+                                break;
+                            default:
+                                await _userService.ChangeRaiting(profile.Id, -1);
+                                break;
+                        }
                     }
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("MyAccount", "Account");
                 }
-                if (!string.IsNullOrEmpty(returnUrl))
+                catch (Exception ex)
                 {
-                    return Redirect(returnUrl);
+                    Log.Error(ex, ex.Message);
+                    return StatusCode(500, new { Message = ex.Message });
                 }
-                return RedirectToAction("MyAccount", "Account");
             }
             return RedirectToAction("Login", "Account");
         }
@@ -311,42 +350,68 @@ namespace myProject.Mvc.Controllers
         [Authorize]
         public async Task<IActionResult> MyAccount()
         {
-            var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-            var role = await _roleService.GetUserRole(user.Id);
-            if (user != null)
+            try
             {
-                var subs = await _subscriptionService.GetMySubscriptionAsync(user.Id);
-                var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(user.Id);
-                var profile = _mapper.Map<MyAccountModel>(user);
-                profile.OnMeLikes = onSubs.Count;
-                profile.MyLikes = subs.Count;
-                profile.Role = role;
-                return View(profile);
+                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                var role = await _roleService.GetUserRole(user.Id);
+                if (user != null)
+                {
+                    var subs = await _subscriptionService.GetMySubscriptionAsync(user.Id);
+                    var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(user.Id);
+                    var profile = _mapper.Map<MyAccountModel>(user);
+                    profile.OnMeLikes = onSubs.Count;
+                    profile.MyLikes = subs.Count;
+                    profile.Role = role;
+                    return View(profile);
+                }
+                else
+                {
+                    throw new Exception("Identification error");
+                }
             }
-            return View();
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Profile(int id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user.Email == HttpContext.User.Identity.Name) return RedirectToAction("MyAccount", "Account");
-            if (user != null)
+            try
             {
-                var me = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-                var role = await _roleService.GetUserRole(user.Id);
-                var subs = await _subscriptionService.GetMySubscriptionAsync(id);
-                var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(id);
-                bool amISub = onSubs.Any(sub => sub.FollowerId == me.Id);
-                var profile = _mapper.Map<ProfileModel>(user);
-                profile.Subscribe = amISub;
-                profile.OnMeLikes = onSubs.Count;
-                profile.MyLikes = subs.Count;
-                profile.Role = role;
-                return View(profile);
+                if (id == null)
+                {
+                    throw new Exception("User id is null");
+                }
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user.Email == HttpContext.User.Identity.Name) return RedirectToAction("MyAccount", "Account");
+                if (user != null)
+                {
+                    var me = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                    var role = await _roleService.GetUserRole(user.Id);
+                    var subs = await _subscriptionService.GetMySubscriptionAsync(id);
+                    var onSubs = await _subscriptionService.GetOnMeSubscriptionAsync(id);
+                    bool amISub = onSubs.Any(sub => sub.FollowerId == me.Id);
+                    var profile = _mapper.Map<ProfileModel>(user);
+                    profile.Subscribe = amISub;
+                    profile.OnMeLikes = onSubs.Count;
+                    profile.MyLikes = subs.Count;
+                    profile.Role = role;
+                    return View(profile);
+                }
+                else
+                {
+                    throw new Exception("This user is not exist");
+                }
             }
-            return View();
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         private async Task AuthenticateAsync(UserDto dto)
@@ -374,8 +439,9 @@ namespace myProject.Mvc.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity));
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                Log.Error(ex, ex.Message);
                 throw;
             }
         }

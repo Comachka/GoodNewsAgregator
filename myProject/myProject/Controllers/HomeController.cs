@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using myProject.Abstractions.Services;
 using myProject.Models;
+using Serilog;
 using System.Diagnostics;
 
 namespace myProject.Controllers
@@ -28,25 +29,38 @@ namespace myProject.Controllers
         //[MyCustomActionFilter]
         public async Task<IActionResult> Index()
         {
-            var favArticles = await _articleService.GetFavArticleAsync();
-            var favModel = favArticles.Select(dto => _mapper.Map<ArticlePreviewModel>(dto))
-                .ToList();
-
-            foreach (var article in favArticles)
+            try
             {
-                foreach (var artModel in favModel)
+                var favArticles = await _articleService.GetFavArticleAsync();
+                var favModel = favArticles.Select(dto => _mapper.Map<ArticlePreviewModel>(dto))
+                    .ToList();
+
+                foreach (var article in favArticles)
                 {
-                    var category = await _categoryService.GetCategoryByIdAsync(article.CategoryId);
-                    artModel.Category = category;
+                    foreach (var artModel in favModel)
+                    {
+                        var category = await _categoryService.GetCategoryByIdAsync(article.CategoryId);
+                        artModel.Category = category;
+                        if (category == null)
+                        {
+                            throw new Exception("Category is null");
+                        }
+                    }
                 }
+
+                var model = new HomePageModel()
+                {
+                    FavouredArticles = favModel
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
             }
             
-            var model = new HomePageModel()
-            {
-                FavouredArticles = favModel
-            };
-
-            return View(model);
         }
 
         //[MyCustomActionFilter]

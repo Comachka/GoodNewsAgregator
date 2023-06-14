@@ -48,24 +48,38 @@ namespace myProject.Business
         }
         public async Task DeleteSubscriptionByIdAsync(int myId, int subId)
         {
-            var sub = await _unitOfWork.Subscriptions.FindBy(s => s.FollowerId == myId && s.FollowOnId == subId).FirstOrDefaultAsync();
-            if (sub != null)
+            if ((myId != null) && (subId != null))
             {
-                await _unitOfWork.Subscriptions.Remove(sub.Id);
-                await _unitOfWork.SaveChangesAsync();
+                var sub = await _unitOfWork.Subscriptions.FindBy(s => s.FollowerId == myId && s.FollowOnId == subId).FirstOrDefaultAsync();
+                if (sub != null)
+                {
+                    await _unitOfWork.Subscriptions.Remove(sub.Id);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                throw new Exception("Some of this users does not exists");
             }
         }
 
         public async Task AddSubscriptionByIdAsync(int myId, int subId)
         {
-            var sub = new Subscription
+            if ((myId != null) && (subId != null))
             {
-                FollowerId = myId,
-                FollowOnId = subId
-            };
+                var sub = new Subscription
+                {
+                    FollowerId = myId,
+                    FollowOnId = subId
+                };
 
-            await _unitOfWork.Subscriptions.AddAsync(sub);
-            await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.Subscriptions.AddAsync(sub);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Some of this users does not exists");
+            }
         }
 
     }

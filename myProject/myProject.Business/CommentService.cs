@@ -45,6 +45,10 @@ namespace myProject.Business
         public async Task<int> DeleteCommentsByIdAsync(int commentId)
         {
             var comment = await _unitOfWork.Comments.GetByIdAsync(commentId);
+            if (comment == null)
+            {
+                throw new Exception("Cant find comment by id");
+            }
             await _unitOfWork.Comments.Remove(commentId);
             await _unitOfWork.SaveChangesAsync();
             return comment.ArticleId;

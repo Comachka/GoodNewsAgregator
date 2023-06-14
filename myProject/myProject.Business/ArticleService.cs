@@ -79,7 +79,10 @@ namespace myProject.Business
                     await _unitOfWork.SaveChangesAsync();
                 }
             }
-            return;
+            else
+            {
+                throw new Exception("Cant find editable news");
+            }
         }
 
         public async Task UpRaitingAsync(int id)
@@ -173,7 +176,7 @@ namespace myProject.Business
                 dto.ArticleSourceUrl = source.OriginUrl;
                 return dto;
             }
-            return null;
+            throw new Exception("This article is not exist");
         }
 
         public async Task<List<AutoCompleteDataDto>> GetArticlesNamesByPartNameAsync(string partName)
@@ -286,8 +289,8 @@ namespace myProject.Business
                 var content = await GetArticleContentAsync(dto.ArticleSourceUrl);
                 if (content != "")
                 {
-                dto.Content = content;
-                concBag.Add(dto);
+                    dto.Content = content;
+                    concBag.Add(dto);
                 }
             });
             return concBag.ToList();
@@ -349,7 +352,6 @@ namespace myProject.Business
                             return totalRate;
                         }
                     }
-
                 }
                 return null;
             }
@@ -461,6 +463,14 @@ namespace myProject.Business
 
         public async Task RateArticleAsync(int id, double? rate)
         {
+            if (id == null)
+            {
+                throw new Exception("Id of rated article is null");
+            }
+            if (rate == null)
+            {
+                throw new Exception("Rate of rated article is null");
+            }
             await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
             {
                 new PatchDto()
