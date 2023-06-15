@@ -22,6 +22,7 @@ namespace myProject.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly ILogger<ArticleController> _logger;
 
         public ArticleController (IArticleService articleService,
             ICommentService commentService,
@@ -29,7 +30,8 @@ namespace myProject.Controllers
             IUserService userService,
             ISourceService sourceService,
             ICategoryService categoryService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<ArticleController> logger)
         {
             _articleService = articleService;
             _commentService = commentService;
@@ -38,6 +40,7 @@ namespace myProject.Controllers
             _categoryService = categoryService;
             _configuration = configuration;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]

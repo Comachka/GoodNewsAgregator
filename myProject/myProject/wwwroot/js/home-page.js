@@ -1,34 +1,34 @@
-﻿window.addEventListener("DOMContentLoaded", (event) => {
-    let switcherThemeBtn = document.getElementById('theme-switcher-btn');
+﻿//window.addEventListener("DOMContentLoaded", (event) => {
+//    let switcherThemeBtn = document.getElementById('theme-switcher-btn');
 
-    switcherThemeBtn.addEventListener('change', function () {
-        let isDarkTheme = switcherThemeBtn.checked;
+//    switcherThemeBtn.addEventListener('change', function () {
+//        let isDarkTheme = switcherThemeBtn.checked;
 
-        if (isDarkTheme) {
-            setHomePageDark();
-        } else {
-            setHomePageLight();
-        }
-    });
+//        if (isDarkTheme) {
+//            setHomePageDark();
+//        } else {
+//            setHomePageLight();
+//        }
+//    });
 
-});
+//});
 
-function setHomePageDark() {
-    let cards = document.getElementsByClassName('card');
-    for (let card of cards) {
-        card.classList.add('text-bg-warning');
-    }
+//function setHomePageDark() {
+//    let cards = document.getElementsByClassName('card');
+//    for (let card of cards) {
+//        card.classList.add('text-bg-warning');
+//    }
 
-    let body = document.getElementsByTagName('body')[0];
-    body.style.backgroundColor = 'slategrey';
-}
+//    let body = document.getElementsByTagName('body')[0];
+//    body.style.backgroundColor = 'slategrey';
+//}
 
-function setHomePageLight() {
-    let cards = document.getElementsByClassName('card');
-    for (let card of cards) {
-        card.classList.remove('text-bg-warning');
-    }
+//function setHomePageLight() {
+//    let cards = document.getElementsByClassName('card');
+//    for (let card of cards) {
+//        card.classList.remove('text-bg-warning');
+//    }
 
-    let body = document.getElementsByTagName('body')[0];
-    body.style.backgroundColor = '';
-}
+//    let body = document.getElementsByTagName('body')[0];
+//    body.style.backgroundColor = '';
+//}

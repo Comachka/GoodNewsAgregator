@@ -1,20 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using myProject.Data;
+using myProject.Abstractions.Data.Repositories;
 using myProject.Abstractions.Services;
-using myProject.Business;
-using Microsoft.EntityFrameworkCore.Metadata;
 using myProject.Abstractions;
+using myProject.Data.Entities;
+using myProject.Data;
 using myProject.Repositories;
 using myProject.Repositories.Implementations;
-using myProject.Abstractions.Data.Repositories;
-using myProject.Data.Entities;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Serilog;
-using Serilog.Events;
-using myProject.Mvc.SignalR;
+using myProject.Business;
+using System.Reflection;
 
-
-namespace myProject
+namespace myProject.WebAPI
 {
     public class Program
     {
@@ -22,17 +17,7 @@ namespace myProject
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddSignalR();
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .Enrich.FromLogContext()
-                .MinimumLevel.Debug()
-                .WriteTo.File("F:\\434\\log.txt", LogEventLevel.Information)
-                .CreateLogger();
-
-            builder.Host.UseSerilog();
-
+            // Add services to the container.
             //Add DbContext
             builder.Services.AddDbContext<MyProjectContext>(options =>
             {
@@ -63,40 +48,31 @@ namespace myProject
             // Add services to the container.
             builder.Services.AddAutoMapper(typeof(Program));
 
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(option =>
-            {
-                option.LoginPath = new PathString("/Account/Login");
-                option.AccessDeniedPath = new PathString("/Account/Login");
-            });
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+                   $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+            });
 
             var app = builder.Build();
 
-
             // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
-            app.UseSerilogRequestLogging();
-
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
-            app.UseRouting();
-
-            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapHub<CommentsHub>("/commentsHub");
+
+            app.MapControllers();
 
             app.Run();
         }

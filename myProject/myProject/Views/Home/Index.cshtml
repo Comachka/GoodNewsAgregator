@@ -4,7 +4,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
+<div class="fav-articles">
     @foreach (var article in @Model.FavouredArticles)
     {
         await Html.RenderPartialAsync("ArticlePreviewPartial", article);
@@ -14,4 +14,5 @@
 @section Scripts
     {
     <script src="js/home-page.js"></script>
+    <script src="js/raiting.js"></script>
 }

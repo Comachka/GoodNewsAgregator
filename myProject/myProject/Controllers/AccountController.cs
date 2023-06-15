@@ -29,16 +29,19 @@ namespace myProject.Mvc.Controllers
         private readonly ISubscriptionService _subscriptionService;
         private readonly IRoleService _roleService;
         private readonly IMapper _mapper;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(IUserService userService,
             IRoleService roleService,
             ISubscriptionService subscriptionService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<AccountController> logger)
         {
             _userService = userService;
             _subscriptionService = subscriptionService;
             _roleService = roleService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpPost]

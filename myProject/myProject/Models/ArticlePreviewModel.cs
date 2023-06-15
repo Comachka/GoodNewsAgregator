@@ -10,7 +10,7 @@ namespace myProject.Models
         public string ShortDescription { get; set; }
         public string SourceName { get; set; }
         [Range(-5, 5)]
-        public int PositiveRaiting { get; set; }
+        public double? PositiveRaiting { get; set; }
         public DateTime DatePosting { get; set; }
     }
     

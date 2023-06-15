@@ -15,6 +15,7 @@ using AutoMapper;
 using myProject.Data.Entities;
 using System.Xml.Linq;
 using Serilog;
+using myProject.Controllers;
 
 namespace myProject.Mvc.Controllers
 {
@@ -24,16 +25,19 @@ namespace myProject.Mvc.Controllers
         private readonly IUserService _userService;
         private readonly IArticleService _articleService;
         private readonly IMapper _mapper;
+        private readonly ILogger<CommentController> _logger;
 
         public CommentController(ICommentService commentService,
             IMapper mapper,
             IArticleService articleService,
-            IUserService userService)
+            IUserService userService,
+            ILogger<CommentController> logger)
         {
             _commentService = commentService;
             _mapper = mapper;
             _userService = userService;
             _articleService = articleService;
+            _logger = logger;
         }
 
         

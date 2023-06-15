@@ -1,28 +1,29 @@
 ﻿@model LoginModel
+<div class="container login-page-wrapper">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    <h3>Login</h3>
 
-<h3>Login</h3>
+    <form asp-action="Login" asp-controller="Account" asp-antiforgery="true" method="post">
+        <div class="mb-3">
+            <label class="form-label" asp-for="Email">Email</label>
+            <input class="form-control" type="email" asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Password">Password</label>
+            <input class="form-control" type="password" asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        @Html.HiddenFor(model => model.ReturnUrl)
+        <div class="login-btn-wrapper">
+            <input class="btn bg-primary login-btn" type="submit" value="Confirm" />
+        </div>
+    </form>
+</div>
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-}
-
-<form asp-action="Login" asp-controller="Account" asp-antiforgery="true" method="post">
-    <div class="mb-3">
-        <label class="form-label" asp-for="Email">Email</label>
-        <input class="form-control" type="email" asp-for="Email" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" asp-for="Password">Password</label>
-        <input class="form-control" type="password" asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    @Html.HiddenFor(model => model.ReturnUrl)
-    <div>
-        <input class="btn bg-primary" type="submit" value="Confirm" />
-    </div>
-</form>
 
 @section Scripts
     {

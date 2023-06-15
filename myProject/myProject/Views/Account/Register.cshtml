@@ -1,5 +1,5 @@
 ﻿@model RegisterModel
-
+<div class="container register-page-wrapper">
 <h3 class="register-page-title">Register</h3>
 
 <form class="register-form" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
@@ -27,7 +27,8 @@
             <span asp-validation-for="PasswordConfirmation"></span>
         </div>
     </div>
-    <div>
+ 
+    <div class="form-group">
         <div class="register-input w-100">
             <label class="form-label" asp-for="Avatar">Avatar:</label>
             <input type="file" name="Avatar" class="form-control" asp-for="Avatar" accept="image/*" maxlength="102400" />
@@ -47,7 +48,7 @@
         <input class="btn bg-primary register-button" asp-page-handler="Upload" type="submit" value="Confirm" />
     </div>
 </form>
-
+</div>
 @section Scripts
     {
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
