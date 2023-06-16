@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>myProject.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:myProject.WebAPI.Controllers.ArticleController">
+            <summary>
+            Controller for work with Article resources
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:myProject.WebAPI.Controllers.ArticleController.Get(myProject.WebAPI.Requests.GetArticlesByPagingInfoRequest)" -->
+    </members>
+</doc>

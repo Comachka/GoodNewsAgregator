@@ -1,60 +1,71 @@
 ﻿@model MyAccountModel
-
-<h3>Profile</h3>
+<h3 class="page-title">My account</h3>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" id="errorWindow">@TempData["ErrorMessage"]</div>
+}
 
 <div>
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger" id="errorWindow">@TempData["ErrorMessage"]</div>
-    }
+    <div class="need-hide profile-page">
+        <div class="profile-page-wrapper">
+            <img class="need-hide profile-page-avatar" src="@Model.Avatar" alt="Аватар">
+            <h2 class="need-hide">@Model.Name</h2>
+            <div class="need-hide">
+                <input сlass="btn btn-primary btn-pr profile-page-btn-subscribe" id="btn-start-hide" type="button" value="Settings" />
+            </div>
+        </div>
+        <div class="profile-page-wrapper-info">
+            <p>@Model.Role (@Model.Raiting)</p>
+            <div class="profile-page-likes">
+                <div class="profile-page-likes-img">
+                    <img src="~/img/ForPages/likes.png" width="60" height="60" alt="icon" />
+                </div>
+                <p>Я: @Model.MyLikes</p>
+                <p>Меня: @Model.OnMeLikes</p>
+            </div>
+            <p style="margin-right:auto">О себе:</p>
+            <p class="profile-page-about">@Model.AboutMyself</p>
+        </div>
+    </div>
+
+    <div class="hiden">
     <form class="register-form" asp-action="ChangeProfile" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
-        <h2 class="need-hide">@Model.Name</h2>
-        <h3 class="need-hide">@Model.Role</h3>
-        <h3 class="need-hide">@Model.Raiting</h3>
-        <div class="form-group hiden">
+        <div class="form-group">
             <div class="register-input">
                 <label class="form-label" asp-for="Name" >Name</label>
                 <input class="form-control" type="text" asp-for="Name" value="@Model.Name" />
                 <span asp-validation-for="Name"></span>
             </div>
         </div>
-        <img class="need-hide" src="@Model.Avatar" alt="Аватар">
-        <div class="hiden">
-            <div class="register-input w-100">
+        <div class="form-group">
+            <div class="register-input">
                 <label class="form-label" asp-for="AvatarChange">Avatar:</label>
                 <input type="file" name="AvatarChange" class="form-control" asp-for="AvatarChange" accept="image/*" maxlength="102400" />
                 <span asp-validation-for="AvatarChange"></span>
             </div>
         </div>
-        <p class="need-hide">О себе: @Model.AboutMyself</p>
-        <div class="register-input register-textarea-wrapper hiden">
-            <label class="form-label" asp-for="AboutMyself" >AboutMyself</label>
-            <textarea class="form-control" type="text" value="@Model.AboutMyself" asp-for="AboutMyself"></textarea>
+         <div class="form-group">
+            <div class="register-input">
+                <label class="form-label" asp-for="AboutMyself" >AboutMyself</label>
+                <textarea class="form-control" type="text" value="@Model.AboutMyself" asp-for="AboutMyself"></textarea>
+            </div>
         </div>
-        <p class="need-hide">Похвалил: @Model.MyLikes</p>
-        <p class="need-hide">Похвалили: @Model.OnMeLikes</p>
-        <p class="need-hide">@Model.MailNotification</p>
-        <div class="w-100 align-items-center hiden">
+        <div class="w-100 align-items-center">
             <label class="form-label register-label-checkbox" asp-for="MailNotification">MailNotification</label>
             <input type="checkbox" name="MailNotification" asp-for="MailNotification" checked="@Model.MailNotification">
         </div>
-        <div class="register-button-wrapper hiden">
-            <button сlass="btn btn-subscribe" type="submit">Save</button>
+        <div class="my-account-edit-btns d-flex justify-content-between">
+                <button сlass="btn btn-primary" id="btn-save" type="submit">Save</button>
+                <input сlass="btn btn-primary" id="btn-stop-hide" type="button" value="Back" />
         </div>
         @Html.HiddenFor(model => model.Role)
         @Html.HiddenFor(model => model.Avatar)
-        @Html.HiddenFor(model => model.Raiting)
+        @Html.HiddenFor(model => model.Raiting)  
         @Html.HiddenFor(model => model.MyLikes)
         @Html.HiddenFor(model => model.OnMeLikes)
     </form>
-    <div class="hiden">
-        <input сlass="btn" id="btn-stop-hide" type="button" value="Back" />
-    </div>
-    <div class="need-hide">
-        <input сlass="btn" id="btn-start-hide" type="button" value="Settings" />
     </div>
 </div>
-
 
 @section Scripts
     {

@@ -3,7 +3,7 @@
 
 @if (Model.RoleId == 1)
 {
-    <div>
+    <div class="hiden">
         <form class="article-form" asp-action="Edit" asp-controller="Article" asp-antiforgery="true" method="post">
             @Html.HiddenFor(model => model.ArticleDetails.Id)
             @Html.HiddenFor(model => model.ArticleDetails.ArticleSourceUrl)
@@ -11,68 +11,67 @@
             @Html.HiddenFor(model => model.ArticleDetails.DatePosting)
             @Html.HiddenFor(model => model.ArticleDetails.PositiveRaiting)
             @Html.HiddenFor(model => model.ArticleDetails.SourceName)
-            <div class="form-group hiden">
+            <div class="form-group">
                 <div class="register-input">
                     <label class="form-label" asp-for="ArticleDetails.Title">Title</label>
                     <input class="form-control" type="text" asp-for="ArticleDetails.Title" value="@Model.ArticleDetails.Title" />
                     <span asp-validation-for="ArticleDetails.Title"></span>
                 </div>
             </div>
-            <div class="register-input register-textarea-wrapper hiden">
+            <div class="register-input register-textarea-wrapper">
                 <label class="form-label" asp-for="ArticleDetails.ShortDescription">Short Description</label>
                 <textarea class="form-control" type="text" value="@Model.ArticleDetails.ShortDescription" asp-for="ArticleDetails.ShortDescription"></textarea>
                 <span asp-validation-for="ArticleDetails.ShortDescription"></span>
             </div>
-            <div class="register-input register-textarea-wrapper hiden">
+            <div class="register-input register-textarea-wrapper">
                 <label class="form-label" asp-for="ArticleDetails.Content">Content</label>
                 <textarea class="form-control" type="text" value="@Model.ArticleDetails.Content" asp-for="ArticleDetails.Content"></textarea>
                 <span asp-validation-for="ArticleDetails.Content"></span>
             </div>
-            <div class="register-button-wrapper hiden">
-                <button сlass="btn btn-subscribe" type="submit">Save</button>
+            <div class="d-flex justify-content-between">
+                <button сlass="btn btn-subscribe" id="btn-save" type="submit">Save</button>
+                <div>
+                    <input сlass="btn" id="btn-stop-hide" type="button" value="Back" />
+                </div>
             </div>
         </form>
-        <div class="hiden">
-            <input сlass="btn" id="btn-stop-hide" type="button" value="Back" />
-        </div>
-        <div class="need-hide">
-            <input сlass="btn" id="btn-start-hide" type="button" value="Edit" />
-        </div>
+        
+        
     </div>
 }
-<div class="need-hide">
+<div class="need-hide content-article">
 <div class="row">
-    <div class="col-12">
-        <h2>@Model.ArticleDetails.Title</h2>
+        <div class="col-12 d-flex align-items-center col-12">
+        <h2>@Model.ArticleDetails.Title </h2>
+            <div>
+                <input сlass="btn" id="btn-start-hide" style="background:none; width:auto;" type="button"/>
+                 <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
+            </div>
     </div>
-    <div class="col-12">
-        <h5>@Model.ArticleDetails.SourceName</h5>
-    </div>
-    <div class="col-12">
-        <h5>@Model.ArticleDetails.Category</h5>
-    </div>
+    
     <div class="col-12">
         <h5>@Model.ArticleDetails.DatePosting</h5>
     </div>
+
     <div class="col-12">
         @Html.Raw(Model.ArticleDetails.Content)
-    </div>
-    <div class="col-12">
-        <h5>@Model.ArticleDetails.PositiveRaiting</h5>
     </div>
 </div>
 
 <div class="row">
     <button class="col-12 btn btn-primary commments-toggle-btn-close" id="commments-toggle-btn">Comments</button>
+        
 </div>
 
 <div class="collapse" id="collapsisbleComments" aria-expanded="false">
 
-    <div class="comments">
-        @if ((Model.RoleId == 1) || (Model.RoleId == 2) || (Model.RoleId == 4))
-        {
-            <a class="edit-comment" asp-action="ManageComments" asp-controller="Comment" asp-route-id="@Model.ArticleDetails.Id">Edit Comments</a>
-        }
+        <div class="comments text-center">
+            @if ((Model.RoleId == 1) || (Model.RoleId == 2) || (Model.RoleId == 4))
+            {
+                <a class="edit-comment" asp-action="ManageComments" asp-controller="Comment" asp-route-id="@Model.ArticleDetails.Id">
+                    <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
+                </a>
+            }
     </div>
 
     <form class="add-comment-form" method="post" asp-antiforgery="true">
@@ -82,7 +81,7 @@
             <textarea class="form-control" id="content-area" rows="5" asp-for="@Model.CreateComment.Content"></textarea>
         </div>
         <div>
-            <input class="btn bg-primary" id="add-comment-btn" type="submit" value="Confirm" />
+            <input class="btn btn-primary" id="add-comment-btn" type="submit" value="Confirm" />
         </div>
     </form>
 </div>

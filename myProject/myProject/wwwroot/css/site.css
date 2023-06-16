@@ -118,7 +118,7 @@ header {
     width: 250px;
 }
 
-.card-body a.btn {
+.card-body .btn {
     width: 100%;
     margin-top: 16px;
 }
@@ -136,7 +136,7 @@ header {
 }
 
 main.pb-3 {
-    padding-bottom: 70px !important;
+    padding-bottom: 90px !important;
 }
 
 .card-footer .card-footer-item:last-of-type h5 {
@@ -147,14 +147,65 @@ main.pb-3 {
     font-weight: 600;
 }
 
+.form-aggregator {
+    position: absolute;
+    transform: translate(50%, -50%);
+    top: 50%;
+    right: 50%;
+}
+
+.content-article * {
+    margin-bottom: 8px;
+}
+
+.content-article:last-child {
+    margin-bottom: 0;
+}
+
+#btn-profile {
+    border: none;
+    border-radius: 50%;
+}
+
+#btn-delete, #profile-page-btn-unfollow, #profile-page-btn-subscribe, #btn-start-hide, #btn-save, #btn-stop-hide {
+    border-radius: 10px;
+    background: #0d6efd;
+    color: white;
+    padding: 8px;
+    border: 1px solid;
+    opacity: 1;
+    width: 250px;
+}
+
+.btn_delete:hover, .btn_delete:active, #profile-page-btn-unfollow:hover,
+ #profile-page-btn-unfollow:active, #profile-page-btn-subscribe:hover, #profile-page-btn-subscribe:active,
+#btn-start-hide:hover,#btn-start-hide:active,  #btn-save:hover, #btn-save:active, #btn-stop-hide:hover, #btn-stop-hide:active{
+   background: #0a58ca;
+}
+
+.form-aggregator-btn {
+    width: 250px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 24px;
+    padding: 8px;
+}
+
+.card:hover {
+    scale: 1.05;
+}
+
 .card {
     max-width: 400px;
     padding: 16px 8px;
     width: 100%;
-}
-
-.login-page-wrapper > h3 {
-    margin-bottom: 18px;
+    max-width: 400px;
+    padding: 16px 8px;
+    width: 100%;
+    transition: .3s ease-in-out;
 }
 
 /*.login-page-wrapper, .register-page-wrapper {
@@ -163,6 +214,12 @@ main.pb-3 {
     top: 50%;
     position: absolute;
 }*/
+
+.article-list {
+    justify-content: center;
+    gap: 32px 16px;
+    margin: 32px 0;
+}
 
 .login-page-wrapper .btn {
     color: white;
@@ -204,20 +261,24 @@ main.pb-3 {
 .comment-item {
     display: flex;
     margin-bottom: 16px;
+    border-bottom: 1px solid #00000021;
 }
 
 .comment-item:last-of-type {
     margin-bottom:0;
+    border: none;
 }
 
 .comment-content {
     margin-left: 16px;
+    text-align: initial;
 }
 
 .comment-avatar {
     width: 64px;
     height: 64px;
     border-radius: 50%;
+    background: none;
 }
 
 .comment-title {
@@ -239,10 +300,87 @@ main.pb-3 {
     margin: 0 0px 8px 0px;
 }
 
-/* --- Register ---- */ 
+.btn-admin-panel, .btn-create-article {
+    border: none;
+}
 
-.register-page-title {
-    margin-bottom: 32px
+.btn-admin-panel img, .btn-create-article img {
+    border-radius: 50%;
+    transition: 0.3s;
+    box-shadow: 0px 0px 15px 5px #0d6efd;
+}
+
+.btn-admin-panel:hover img, .btn-create-article:hover img {
+    scale: 1.1;
+}
+
+.supModer-hiden.center, .admin-hiden.center {
+    text-align: center;
+}
+
+/* --- Register ---- */
+.register-page-title, .login-page-wrapper > h3, .dropdown > h4 {
+    margin: 18px 0;
+    padding: 0;
+}
+
+.dropdown > h4 {
+    margin-top: 0;
+}
+
+.profile-page-wrapper > * {
+    margin-bottom: 4px;
+}
+
+.profile-page-wrapper-info > *, .profile-page-likes > * {
+    margin-bottom: 8px;
+}
+
+.profile-page-wrapper-info:last-child, .profile-page-likes:last-child, .profile-page-wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.profile-page-wrapper-info {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 21px;
+}
+
+.profile-page-wrapper-info:before {
+    content: '';
+    border-left: 6px double #022c6936;
+    position: absolute;
+    height: 100%;
+    left: -100px;
+}
+
+.profile-page-likes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 50px;
+    justify-content: center;
+}
+
+.profile-page-likes-img {
+    width: 100%;
+    text-align: center;
+}
+
+.profile-page-about {
+    width: 500px;
+    height: 400px;
+    border: 1px solid #0c0d68;
+    border-radius: 18px;
+    padding: 8px 16px;
+    overflow-y: scroll;
+}
+
+.profile-page {
+    margin-top: 16px;
 }
 
 .register-form {
@@ -292,9 +430,8 @@ main.pb-3 {
     font-weight: 600;
 }
 
-.register-input.register-textarea-wrapper textarea {
-    max-height: 120px;
-    resize: none;
+.dropdown-menu.show {
+    overflow: auto;
 }
 
 .register-input.register-textarea-wrapper {
@@ -316,6 +453,10 @@ main.pb-3 {
     display: none;
 }
 
+.my-account-edit-btns {
+    width:48%
+}
+
 .emoji h5 {
     display: none;
 }
@@ -323,6 +464,89 @@ main.pb-3 {
     display:none;
     width: 30px;
     height: 30px;
+}
+.profile-page-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 32px 0 16px 0px;
+}
+
+.profile-page-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+}
+
+.profile-page {
+    display: flex;
+    max-width: 1296px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.page-title {
+    margin: 16px 0;
+}
+
+#select-category {
+    width: 250px;
+    height: 50px;
+    border-radius: 4px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    font-size: 18px;
+    padding: 8px;
+    outline: none
+}
+
+#select-category option{
+    padding:8px;
+    border-bottom: 1px solid #0b5ed7;
+}
+
+#select-category option:hover,#select-category option:active,#select-category option:focus{
+    background:#0b5ed7 !important;
+}
+
+@media (max-width: 1400px) {
+    .article-list {
+        gap: 32px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .profile-page-wrapper-info:before {
+        transform: translate(50px, 0);
+    }
+}
+
+@media (max-width: 992px) {
+    .profile-page-wrapper-info:before {
+        content: none;
+    }
+
+    .profile-page-wrapper {
+        width: 100%;
+    }
+
+    .profile-page {
+        gap: 14px 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-page-about {
+        max-width: 500px;
+        width: 100%;
+    }
 }
 
 @media (max-width:576px) {
@@ -341,4 +565,9 @@ main.pb-3 {
     .card-footer .card-footer-item h5 {
         font-size: 14px;
     }
+
+    .card:hover {
+        scale: 1;
+    }
 }
+

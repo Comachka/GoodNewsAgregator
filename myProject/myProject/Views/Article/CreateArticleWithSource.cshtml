@@ -18,12 +18,9 @@
         <textarea class="form-control" rows="10" asp-for="Content"></textarea>
         <span asp-validation-for="Content"></span>
     </div>
-    <div>
-        <input type="submit" value="Confirm" />
-    </div>
     <p>
         @Html.HiddenFor(model => model.Categories)
-        <select name="CategoryId">
+        <select id="select-category" name="CategoryId">
             @foreach (var category in Model.Categories)
             {
                 if (category.Id == Model.Categories.First().Id)
@@ -37,6 +34,10 @@
             }
         </select>
     </p>
+
+    <div>
+        <input class="btn btn-primary mt-3" type="submit" value="Confirm" />
+    </div>
 </form>
 
 @section Scripts

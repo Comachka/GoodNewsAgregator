@@ -1,14 +1,22 @@
 ﻿@model ProfileModel
 
 <div class="card card-with-margin col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <form action="@($"https://localhost:7245/Account/Profile/{Model.Id}")"><button сlass="btn_profile" type="submit"><img class="comment-avatar" src="@Model.Avatar" alt="Аватар" /></button></form>
+    <form class="text-center" action="@($"https://localhost:7245/Account/Profile/{Model.Id}")">
+        <button сlass="btn-profile" id="btn-profile" type="submit">
+            <img class="comment-avatar" src="@Model.Avatar" alt="Аватар"/>
+        </button>
+    </form>
     <div class="card-body">
         <h5 class="card-title"> @Model.Name</h5>
         <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">@Model.AboutMyself</p>
     </div>
     <div class="card-footer">
+        <div class="card-footer-item">
         <h5>@Model.Role</h5>
         <h5>@Model.Raiting</h5>
+        </div>
     </div>
-    <form asp-action="DeleteUser" asp-controller="Account" asp-route-id="@Model.Id" asp-antiforgery="true" method="post"><button сlass="btn_delete" type="submit">Delete</button></form>
+    <form class="text-center" asp-action="DeleteUser" asp-controller="Account" asp-route-id="@Model.Id" asp-antiforgery="true" method="post">
+        <button сlass="btn-delete" id="btn-delete" type="submit">Delete</button>
+    </form>
 </div>

@@ -1,13 +1,17 @@
 ﻿@model ArticlesWithPaginationModel
 
-<div class="gx-2 supModer-hiden">
-    <a class="btn btn-info" asp-action="CreateArticleWithSource" asp-controller="Article">Create with source</a>
+<div class="gx-2 supModer-hiden center">
+    <a class="btn btn-create-article" asp-action="CreateArticleWithSource" asp-controller="Article">
+        <img src="~/img/ForPages/create.png" width="50" height="50" alt="icon" />
+    </a>
 </div>
-<div class="gx-2 admin-hiden">
-    <a class="btn btn-info" asp-action="ManageArticles" asp-controller="Article">Admin panel</a>
+<div class="gx-2 admin-hiden center">
+    <a class="btn btn-admin-panel" asp-action="ManageArticles" asp-controller="Article">
+        <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
+    </a>
 </div>
 
-<div class="row">
+<div>
     <h4>Search</h4>
     <input type="text" id="article-search" class="form-control col col-12" placeholder="Type article name" />
 </div>

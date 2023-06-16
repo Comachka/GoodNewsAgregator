@@ -1,25 +1,35 @@
 ﻿@model ProfileModel
 
-<h3>Profile</h3>
+<h3 class="page-title">Profile</h3>
 
-<div>
-    <img src="@Model.Avatar" alt="Аватар"></img>
-    <form asp-action="Subscribe" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path" asp-antiforgery="true" method="post">
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.Subscribe)
-        @if (!Model.Subscribe)
-        {
-            <button сlass="btn btn-subscribe" type="submit"> Subscribe</button>
-        }
-        else
-        {
-            <button сlass="btn btn-subscribe" type="submit"> Unfollow</button>
-        }
-    </form>
-    <p>Роль: @Model.Role</p>
-    <p>Рейтинг: @Model.Raiting</p>
-    <h2>@Model.Name</h2>
-    <p>О себе: @Model.AboutMyself</p>
-    <p>Похвалил: @Model.MyLikes</p>
-    <p>Похвалили: @Model.OnMeLikes</p>
+<div class="profile-page">
+    <div class="profile-page-wrapper">
+        
+        <img class="profile-page-avatar" src="@Model.Avatar" alt="Аватар"></img>
+        <h2>@Model.Name</h2>
+        <form asp-action="Subscribe" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path" asp-antiforgery="true" method="post">
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.Subscribe)
+            @if (!Model.Subscribe)
+            {
+                <button id="profile-page-btn-subscribe" сlass="btn btn-subscribe" type="submit"> Subscribe</button>
+            }
+            else
+            {
+                <button id="profile-page-btn-unfollow" сlass="btn btn-subscribe" type="submit"> Unfollow</button>
+            }
+        </form>
+    </div>
+    <div class="profile-page-wrapper-info">
+        <p>@Model.Role (@Model.Raiting)</p>
+        <div class="profile-page-likes">
+            <div class="profile-page-likes-img">
+                <img src="~/img/ForPages/likes.png" width="60" height="60" alt="icon" />
+            </div>
+            <p>Я: @Model.MyLikes</p>
+            <p>Меня: @Model.OnMeLikes</p>
+        </div>
+        <p style="margin-right:auto">О себе:</p>
+        <p class="profile-page-about">@Model.AboutMyself</p>
+    </div>
 </div>

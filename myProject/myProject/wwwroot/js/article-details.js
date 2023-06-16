@@ -20,9 +20,9 @@ function addCommentsHtml(resp, commentBlock) {
         let time = dateTime.toLocaleTimeString();
         let div = document.createElement("div");
         div.classList.add('comment-item');
-        div.innerHTML = `<form action="https://localhost:7245/Account/Profile/${comment.userId}"><button сlass="btn_profile" type="submit"><img class="comment-avatar" src="${comment.avatar}" alt="Аватар"/></button></form>
+        div.innerHTML = `<form action="https://localhost:7245/Account/Profile/${comment.userId}"><button style="border:none; height: 64px; background: none;" сlass="btn-profile" type="submit"><img class="comment-avatar" src="${comment.avatar}" alt="Аватар"/></button></form>
                 <div class="comment-content">
-                    <h5 class="comment-title">${comment.user}</h5> <p>${comment.content}</p> <p class="comment-date">${date}  ${time}</p>
+                    <h5 class="comment-title">${comment.user}</h5> <p style="word-break: break-word;">${comment.content}</p> <p class="comment-date">${date}  ${time}</p>
                 </div>`
         commentBlock.appendChild(div);
     }

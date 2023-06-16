@@ -10,9 +10,9 @@ hubConnection.on("ReceiveMessage", function (content, avatar, user, dateCreated,
     let time = dateTime.toLocaleTimeString();
     let div = document.createElement("div");
     div.classList.add('comment-item');
-    div.innerHTML = `<form action="https://localhost:7245/Account/Profile/${userId}"><button сlass="btn_profile" type="submit"><img class="comment-avatar" src="${avatar}" alt="Аватар"/></button></form>
+    div.innerHTML = `<form action="https://localhost:7245/Account/Profile/${userId}"><button style="border:none; height: 64px; background: none;" сlass="btn-profile" type="submit"><img class="comment-avatar" src="${avatar}" alt="Аватар"/></button></form>
                 <div class="comment-content">
-                    <h5 class="comment-title">${user}</h5> <p>${content}</p> <p class="comment-date">${date}  ${time}</p>
+                    <h5 class="comment-title">${user}</h5> <p style="word-break: break-word;">${content}</p> <p class="comment-date">${date}  ${time}</p>
                 </div>`
     commentBlock.appendChild(div);
 });

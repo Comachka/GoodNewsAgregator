@@ -7,6 +7,6 @@ document.getElementById('btn-start-hide').addEventListener('click', () => {
 })
 
 document.getElementById('btn-stop-hide').addEventListener('click', () => {
-    needHiden.forEach(e => { e.style.display = 'block' })
+    needHiden.forEach(e => { e.style.display = 'flex' })
     hiden.forEach(e => { e.style.display = 'none' })
 })
