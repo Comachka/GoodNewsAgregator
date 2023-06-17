@@ -13,7 +13,7 @@ emoji.forEach(e => {
     else if (count > 50 && count <= 75) {
         svgArray[2].style.display = 'block';
     }
-    else if (count > 75 && count <= 100) {
+    else if (count > 75) {
         svgArray[3].style.display = 'block';
     }
 })

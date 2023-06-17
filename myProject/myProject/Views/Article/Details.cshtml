@@ -12,23 +12,27 @@
             @Html.HiddenFor(model => model.ArticleDetails.PositiveRaiting)
             @Html.HiddenFor(model => model.ArticleDetails.SourceName)
             <div class="form-group">
-                <div class="register-input">
+                <div style="padding-right:0;" class="register-input register-textarea-wrapper">
                     <label class="form-label" asp-for="ArticleDetails.Title">Title</label>
                     <input class="form-control" type="text" asp-for="ArticleDetails.Title" value="@Model.ArticleDetails.Title" />
                     <span asp-validation-for="ArticleDetails.Title"></span>
                 </div>
             </div>
-            <div class="register-input register-textarea-wrapper">
+            <div class="form-group">
+                <div style="padding-right:0;" class="register-input register-textarea-wrapper">
                 <label class="form-label" asp-for="ArticleDetails.ShortDescription">Short Description</label>
                 <textarea class="form-control" type="text" value="@Model.ArticleDetails.ShortDescription" asp-for="ArticleDetails.ShortDescription"></textarea>
                 <span asp-validation-for="ArticleDetails.ShortDescription"></span>
             </div>
-            <div class="register-input register-textarea-wrapper">
+            </div>
+            <div class="form-group">
+                <div style="max-height: 250px; padding-right:0;" class="register-input register-textarea-wrapper">
                 <label class="form-label" asp-for="ArticleDetails.Content">Content</label>
-                <textarea class="form-control" type="text" value="@Model.ArticleDetails.Content" asp-for="ArticleDetails.Content"></textarea>
+                <textarea style="min-height: 200px;" class="form-control" type="text" value="@Model.ArticleDetails.Content" asp-for="ArticleDetails.Content"></textarea>
                 <span asp-validation-for="ArticleDetails.Content"></span>
             </div>
-            <div class="d-flex justify-content-between">
+            </div>
+            <div class="btns-edit-article">
                 <button сlass="btn btn-subscribe" id="btn-save" type="submit">Save</button>
                 <div>
                     <input сlass="btn" id="btn-stop-hide" type="button" value="Back" />
@@ -44,8 +48,9 @@
         <div class="col-12 d-flex align-items-center col-12">
         <h2>@Model.ArticleDetails.Title </h2>
             <div>
-                <input сlass="btn" id="btn-start-hide" style="background:none; width:auto;" type="button"/>
+                <button id="btn-start-hide" style="background:none; width:auto;" type="button">
                  <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
+                 </button>
             </div>
     </div>
     
@@ -53,7 +58,7 @@
         <h5>@Model.ArticleDetails.DatePosting</h5>
     </div>
 
-    <div class="col-12">
+    <div class="col-12 content-news">
         @Html.Raw(Model.ArticleDetails.Content)
     </div>
 </div>
@@ -63,24 +68,25 @@
         
 </div>
 
-<div class="collapse" id="collapsisbleComments" aria-expanded="false">
+    <div class="collapse text-center" id="collapsisbleComments" aria-expanded="false">
+        @if ((Model.RoleId == 1) || (Model.RoleId == 2) || (Model.RoleId == 4))
+        {
+            <a class="edit-comment" asp-action="ManageComments" asp-controller="Comment" asp-route-id="@Model.ArticleDetails.Id">
+                <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
+            </a>
+        }
 
-        <div class="comments text-center">
-            @if ((Model.RoleId == 1) || (Model.RoleId == 2) || (Model.RoleId == 4))
-            {
-                <a class="edit-comment" asp-action="ManageComments" asp-controller="Comment" asp-route-id="@Model.ArticleDetails.Id">
-                    <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
-                </a>
-            }
-    </div>
+        <div class="comments">
+            
+        </div>
 
     <form class="add-comment-form" method="post" asp-antiforgery="true">
         <input id="article-id" type="hidden" asp-for="@Model.CreateComment.ArticleId" />
-        <div class="mb-3">
+        <div class="mb-3" style="text-align:initial;">
             <label class="form-label" asp-for="@Model.CreateComment.Content">Comment Text</label>
             <textarea class="form-control" id="content-area" rows="5" asp-for="@Model.CreateComment.Content"></textarea>
         </div>
-        <div>
+        <div style="text-align:initial;">
             <input class="btn btn-primary" id="add-comment-btn" type="submit" value="Confirm" />
         </div>
     </form>
@@ -89,7 +95,7 @@
 
 @section Scripts
     {
-    <script src="/js/myAccount-settings.js"></script>
+    <script src="/js/myAccount-settings.js" defer></script>
     <script src="/js/article-details.js"></script>
     <script src="/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="/js/signalr/dist/browser/comments.js"></script>

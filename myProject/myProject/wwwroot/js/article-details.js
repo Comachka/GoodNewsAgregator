@@ -7,8 +7,6 @@
         }
     });
 
-
-
 document.getElementById('commments-toggle-btn')
     .addEventListener('click', (e) => collapseCommentsWithJsonData(e));
 
@@ -37,7 +35,10 @@ async function collapseCommentsWithJsonData(e) {
     const btn = e.currentTarget;
     const commentBlock = document.getElementsByClassName('comments')[0];
     if (btn.classList.contains('commments-toggle-btn-close')) {
-        const url = window.location.href;
+        let url = window.location.href;
+        if (url.lastIndexOf('?') != -1) {
+            url = url.substring(0, url.lastIndexOf('?'));
+        }
         const articleId = url.substring(url.lastIndexOf('/') + 1);
         let commentsViewResponse = await fetch(
             `https://localhost:7245/Comment/GetFakeComments/?articleId=${articleId}`);
@@ -57,3 +58,7 @@ async function collapseCommentsWithJsonData(e) {
 let html = document.querySelector('.row').innerHTML;
 html = html.replaceAll('amp-img', 'img');
 document.querySelector('.row').innerHTML = html;
+
+let dataImg = document.querySelector('.content-news').innerHTML;
+dataImg = dataImg.replaceAll('data-src', 'src');
+document.querySelector('.content-news').innerHTML = dataImg;

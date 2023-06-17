@@ -1,9 +1,11 @@
 ﻿@model CommentModel
 
-<div class="comment-item">
-    <form action="@($"https://localhost:7245/Account/Profile/{Model.UserId}")"><button сlass="btn_profile" type="submit"><img class="comment-avatar" src="@Model.Avatar" alt="Аватар" /></button></form>
-    <div class="comment-content">
-        <h5 class="comment-title">@Model.User</h5> <p>@Model.Content</p> <p class="comment-date">@Model.DateCreated</p>
+<div class="comment-item mt-3">
+    <div class="d-flex flex-wrap justify-content-center mb-2" style="min-width:128px;">
+        <form action="@($"https://localhost:7245/Account/Profile/{Model.UserId}")"><button style="border:none; height: 64px; background: none;" сlass="btn_profile" type="submit"><img class="comment-avatar" src="@Model.Avatar" alt="Аватар" /></button></form>
+        <form class="w-100 mt-2 text-center" asp-action="DeleteComment" asp-controller="Comment" asp-route-id="@Model.Id" asp-antiforgery="true" method="post"><input class="btn btn-primary" type="submit" value="Delete"></input></form>
     </div>
-    <form asp-action="DeleteComment" asp-controller="Comment" asp-route-id="@Model.Id" asp-antiforgery="true" method="post"><button сlass="btn_delete" type="submit">Delete</button></form>
+    <div class="comment-content">
+        <h5 class="comment-title">@Model.User</h5> <p style="word-break: break-word;">@Model.Content</p> <p class="comment-date">@Model.DateCreated</p>
+    </div>
 </div>
