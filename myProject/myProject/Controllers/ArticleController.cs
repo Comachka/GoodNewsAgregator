@@ -7,6 +7,7 @@ using ILogger = Serilog.ILogger;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Hangfire;
 
 namespace myProject.Controllers
 {
@@ -344,9 +345,21 @@ namespace myProject.Controllers
         {
             try
             {
-                await _articleService.AggregateArticlesDataFromRssAsync(new CancellationToken());
-                await _articleService.AddFullContentForArticlesAsync(new CancellationToken());
-                await _articleService.AddRaitingForArticlesAsync(new CancellationToken());
+                RecurringJob.AddOrUpdate(
+                    "GetAllArticleDataMVC",
+                    () => _articleService.AggregateArticlesDataFromRssAsync(new CancellationToken()),
+                    "0,20,40 * * * *");
+
+                RecurringJob.AddOrUpdate(
+                    "UpdateArticleTextMVC",
+                    () => _articleService.AddFullContentForArticlesAsync(new CancellationToken()),
+                    "5,30 * * * *");
+
+                RecurringJob.AddOrUpdate(
+                    "AddArticleRaitingMVC",
+                    () => _articleService.AddRaitingForArticlesAsync(new CancellationToken()),
+                    "10,35 * * * *");
+
                 return RedirectToAction("Index", "Article");
             }
             catch (Exception ex)

@@ -4905,11 +4905,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
+      "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
       "projectName": "myProject.WebAPI",
-      "projectPath": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
+      "projectPath": "F:\\courses\\q\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
       "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-      "outputPath": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\obj\\",
+      "outputPath": "F:\\courses\\q\\myProject\\myProject.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4927,17 +4927,17 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
-              "projectPath": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+            "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+              "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
             },
-            "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj": {
-              "projectPath": "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj"
+            "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj": {
+              "projectPath": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj"
             },
-            "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
-              "projectPath": "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
+            "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+              "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
             },
-            "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
-              "projectPath": "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj"
+            "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
+              "projectPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj"
             }
           }
         }

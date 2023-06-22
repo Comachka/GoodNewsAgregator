@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\courses\\rh\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj": {}
+    "F:\\courses\\q\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj": {}
   },
   "projects": {
-    "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj",
         "projectName": "myProject.Abstractions",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -29,11 +29,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
               }
             }
           }
@@ -67,14 +67,14 @@
         }
       }
     },
-    "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj",
         "projectName": "myProject.Business",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.Business\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Business\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -92,11 +92,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
+              "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
               }
             }
           }
@@ -168,14 +168,14 @@
         }
       }
     },
-    "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj",
         "projectName": "myProject.Core",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.Core\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -224,14 +224,14 @@
         }
       }
     },
-    "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj",
         "projectName": "myProject.DataCQS",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.DataCQS\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -249,11 +249,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
               }
             }
           }
@@ -301,14 +301,14 @@
         }
       }
     },
-    "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj",
         "projectName": "myProject.Data",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.Data\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -326,8 +326,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
               }
             }
           }
@@ -383,14 +383,14 @@
         }
       }
     },
-    "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj",
         "projectName": "myProject.Repositories",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.Repositories\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -408,14 +408,14 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Core\\myProject.Core.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Data\\myProject.Data.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
               }
             }
           }
@@ -449,14 +449,14 @@
         }
       }
     },
-    "F:\\courses\\rh\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj": {
+    "F:\\courses\\q\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
         "projectName": "myProject.WebAPI",
-        "projectPath": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.WebAPI\\myProject.WebAPI.csproj",
         "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
-        "outputPath": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\obj\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -474,17 +474,17 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Business\\myProject.Business.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
+              "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
               },
-              "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
-                "projectPath": "F:\\courses\\rh\\myProject\\myProject.Repositories\\myProject.Repositories.csproj"
+              "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj"
               }
             }
           }

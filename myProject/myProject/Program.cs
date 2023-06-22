@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using myProject.Data;
 using myProject.Abstractions.Services;
 using myProject.Business;
-using Microsoft.EntityFrameworkCore.Metadata;
 using myProject.Abstractions;
 using myProject.Repositories;
 using myProject.Repositories.Implementations;
@@ -11,10 +10,10 @@ using myProject.Data.Entities;
 using myProject.DataCQS.QueriesHandlers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
-using MediatR;
+using Hangfire;
 using Serilog.Events;
 using myProject.Mvc.SignalR;
-
+using HangfireBasicAuthenticationFilter;
 
 namespace myProject
 {
@@ -71,6 +70,17 @@ namespace myProject
 
             builder.Services.AddAutoMapper(typeof(Program));
 
+
+            builder.Services.AddHangfire(config =>
+               config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                   .UseSimpleAssemblyNameTypeSerializer()
+                   .UseRecommendedSerializerSettings()
+                   .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddHangfireServer();
+
+
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(option =>
             {
@@ -98,6 +108,16 @@ namespace myProject
 
             app.UseRouting();
 
+            app.UseHangfireDashboard("/Hangfire", new DashboardOptions
+            {
+                Authorization = new[] {new HangfireCustomBasicAuthenticationFilter
+                {
+                    User = builder.Configuration.GetSection("HangfireSettings:UserName").Value,
+                    Pass = builder.Configuration.GetSection("HangfireSettings:Password").Value
+                }
+            }
+            });
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -107,6 +127,8 @@ namespace myProject
             app.MapHub<CommentsHub>("/commentsHub");
 
             app.Run();
+
+            
         }
     }
 }
