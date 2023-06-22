@@ -1,28 +1,28 @@
 ﻿@model RegisterModel
 <div class="container register-page-wrapper">
-<h3 class="register-page-title">Register</h3>
+<h3 class="register-page-title">Регистрация</h3>
 
 <form class="register-form" asp-action="Register" asp-controller="Account" asp-antiforgery="true" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <div class="register-input">
-            <label class="form-label" asp-for="Email">Email</label>
+            <label class="form-label" asp-for="Email">Email:</label>
             <input class="form-control" type="email" asp-for="Email" />
             <span asp-validation-for="Email"></span>
         </div>
         <div class="register-input">
-            <label class="form-label" asp-for="Name">Name</label>
+            <label class="form-label" asp-for="Name">Имя:</label>
             <input class="form-control" type="text" asp-for="Name" />
             <span asp-validation-for="Name"></span>
         </div>
     </div>
     <div class="form-group">
         <div class="register-input">
-            <label class="form-label" asp-for="Password">Password</label>
+            <label class="form-label" asp-for="Password">Пароль:</label>
             <input class="form-control" type="password" asp-for="Password" />
             <span asp-validation-for="Password"></span>
         </div>
         <div class="register-input">
-            <label class="form-label" asp-for="PasswordConfirmation">PasswordConfirmation</label>
+            <label class="form-label" asp-for="PasswordConfirmation">Подтверждение пароля:</label>
             <input class="form-control" type="password" asp-for="PasswordConfirmation" />
             <span asp-validation-for="PasswordConfirmation"></span>
         </div>
@@ -30,22 +30,22 @@
  
     <div class="form-group">
         <div class="register-input w-100">
-            <label class="form-label" asp-for="Avatar">Avatar:</label>
+            <label class="form-label" asp-for="Avatar">Аватар:</label>
             <input type="file" name="Avatar" class="form-control" asp-for="Avatar" accept="image/*" maxlength="102400" />
             <span asp-validation-for="Avatar"></span>
         </div>
     </div>
     <div class="register-input register-textarea-wrapper">
-        <label class="form-label" asp-for="AboutMyself">AboutMyself</label>
+        <label class="form-label" asp-for="AboutMyself">О себе:</label>
         <textarea class="form-control" type="text" asp-for="AboutMyself"></textarea>
     </div>
     
     <div class="w-100 d-flex align-items-center">
-        <label class="form-label register-label-checkbox" asp-for="MailNotification">MailNotification</label>
+        <label class="form-label register-label-checkbox" asp-for="MailNotification">Согласие на получение уведомлений:</label>
         <input type="checkbox" name="MailNotification" asp-for="MailNotification">
     </div>
     <div class="register-button-wrapper">
-        <input class="btn bg-primary register-button" asp-page-handler="Upload" type="submit" value="Confirm" />
+        <input class="btn bg-primary register-button" asp-page-handler="Upload" type="submit" value="Зарегистрироваться" />
     </div>
 </form>
 </div>

@@ -87,7 +87,7 @@ namespace myProject.Mvc.Controllers
                 }
                 if (!(ModelState.GetFieldValidationState("AvatarChange") == ModelValidationState.Valid))
                 {
-                    TempData["ErrorMessage"] = "Please select a PNG or JPEG/JPG image smaller than 200kb";
+                    TempData["ErrorMessage"] = "Пожалуйства выберите аватар формата PNG или JPEG/JPG размером до 200кб";
                 }
                 return RedirectToAction("MyAccount", "Account", model);
             }
@@ -99,7 +99,7 @@ namespace myProject.Mvc.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try
@@ -154,8 +154,6 @@ namespace myProject.Mvc.Controllers
                     }
                     modelAvatar = Path.Combine($"\\img\\Avatars\\{model.Email}", fileName);
                 }
-                if (model.MailNotification)
-                {
                     try
                     {
                         var message = new MailMessage();
@@ -175,10 +173,9 @@ namespace myProject.Mvc.Controllers
                     {
                         Log.Error(ex, ex.Message);
                         ModelState.AddModelError("Email", "Такого mail не существует.");
-                        ModelState.AddModelError("", "Register error");
+                        ModelState.AddModelError("", "Ошибка регистрации");
                         return View(model);
                     }
-                }
                 var user = await _userService.RegisterAsync(model.Email,
                     model.Password,
                     model.AboutMyself,
@@ -190,7 +187,7 @@ namespace myProject.Mvc.Controllers
                     await AuthenticateAsync(user);
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Register error");
+                ModelState.AddModelError("", "Ошибка регистрации");
             }
             return View(model);
         }
@@ -233,18 +230,19 @@ namespace myProject.Mvc.Controllers
                 try
                 {
                     var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                    var role = await _roleService.GetUserRole(user.Id);
                     if (!profile.Subscribe)
                     {
                         await _subscriptionService.AddSubscriptionByIdAsync(user.Id, profile.Id);
-                        switch (user.RoleId)
+                        switch (role)
                         {
-                            case 1:
+                            case "Администратор":
                                 await _userService.ChangeRaiting(profile.Id, 10);
                                 break;
-                            case 2:
+                            case "Модератор":
                                 await _userService.ChangeRaiting(profile.Id, 3);
                                 break;
-                            case 4:
+                            case "Главный модератор":
                                 await _userService.ChangeRaiting(profile.Id, 5);
                                 break;
                             default:
@@ -255,15 +253,15 @@ namespace myProject.Mvc.Controllers
                     else
                     {
                         await _subscriptionService.DeleteSubscriptionByIdAsync(user.Id, profile.Id);
-                        switch (user.RoleId)
+                        switch (role)
                         {
-                            case 1:
+                            case "Администратор":
                                 await _userService.ChangeRaiting(profile.Id, -10);
                                 break;
-                            case 2:
+                            case "Модератор":
                                 await _userService.ChangeRaiting(profile.Id, -3);
                                 break;
-                            case 4:
+                            case "Главный модератор":
                                 await _userService.ChangeRaiting(profile.Id, -5);
                                 break;
                             default:
@@ -304,7 +302,7 @@ namespace myProject.Mvc.Controllers
 
                 return RedirectToAction("MyAccount", "Account");
             }
-                TempData["ErrorMessage"] = "Такой аккаунт не существует";
+                TempData["ErrorMessage"] = "Почта либо пароль указаны неверно";
                 return RedirectToAction("Login", "Account", new { returnUrl = model.ReturnUrl });
         }
 
@@ -315,7 +313,7 @@ namespace myProject.Mvc.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> ManageUsers()
         {
             var users = await _userService.GetUsersAsync();
@@ -334,21 +332,6 @@ namespace myProject.Mvc.Controllers
             return View(model);
         }
         
-        [HttpGet]
-        public async Task<IActionResult> GetRole()
-        {
-            if (User.Identity.IsAuthenticated)
-            { 
-                var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-                var role = user.RoleId;
-                return Ok(role);
-            }
-            else
-            {
-                return Ok(null);
-            }
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> MyAccount()
@@ -422,17 +405,7 @@ namespace myProject.Mvc.Controllers
             try
             {
                 const string authType = "Application Cookie";
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, dto.Email),
-                };
-                var role = await _roleService.GetUserRole(dto.Id);
-                if (string.IsNullOrEmpty(role))
-                {
-                    throw new ArgumentException("Incorrect user or role", nameof(dto));
-                }
-                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
-
+                var claims = await _userService.GetUserClamsAsync(dto);
                 var identity = new ClaimsIdentity(claims,
                     authType,
                     ClaimsIdentity.DefaultNameClaimType,

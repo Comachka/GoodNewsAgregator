@@ -1,6 +1,6 @@
 ﻿@model ProfileModel
 
-<h3 class="page-title">Profile</h3>
+<h3 class="page-title">Профиль</h3>
 
 <div class="profile-page">
     <div class="profile-page-wrapper">
@@ -12,11 +12,11 @@
             @Html.HiddenFor(model => model.Subscribe)
             @if (!Model.Subscribe)
             {
-                <button id="profile-page-btn-subscribe" сlass="btn btn-subscribe" type="submit"> Subscribe</button>
+                <button id="profile-page-btn-subscribe" сlass="btn btn-subscribe" type="submit">Похвалить</button>
             }
             else
             {
-                <button id="profile-page-btn-unfollow" сlass="btn btn-subscribe" type="submit"> Unfollow</button>
+                <button id="profile-page-btn-unfollow" сlass="btn btn-subscribe" type="submit">Забрать похвалу</button>
             }
         </form>
     </div>

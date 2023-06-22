@@ -7,7 +7,7 @@ namespace myProject.Models
         public ArticleDetailsModel ArticleDetails { get; set; }
        // public List<CommentModel> Comments { get; set; }
         public CommentModel CreateComment { get; set; }
-        public int RoleId { get; set; }
+        public string Role { get; set; }
 
     }
 }

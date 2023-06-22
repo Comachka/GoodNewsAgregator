@@ -22,6 +22,57 @@ namespace myProject.Business
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        private async Task<bool> IsCategoryExistsAsync(string name)
+        {
+            return await _unitOfWork.Categories
+                .GetAsQueryable()
+                .AnyAsync(cat => cat.Name.Equals(name));
+        }
+
+        public async Task InitiateDefaultCategorysAsync()
+        {
+            var isAnyCategoryNeedToBeInserted = false;
+            if (!await IsCategoryExistsAsync("Культура"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Культура" });
+            }
+            if (!await IsCategoryExistsAsync("Наука и технологии"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Наука и технологии" });
+            }
+            if (!await IsCategoryExistsAsync("Политика"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Политика" });
+            }
+            if (!await IsCategoryExistsAsync("Спорт"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Спорт" });
+            }
+            if (!await IsCategoryExistsAsync("Экономика"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Экономика" });
+            }
+            if (!await IsCategoryExistsAsync("Общество"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Общество" });
+            }
+            if (!await IsCategoryExistsAsync("Разное"))
+            {
+                isAnyCategoryNeedToBeInserted = true;
+                await _unitOfWork.Categories.AddAsync(new Category() { Name = "Разное" });
+            }
+
+            if (isAnyCategoryNeedToBeInserted)
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+        }
 
         public async Task<List<CategoryDto>> GetCategoriesAsync()
         {

@@ -15,8 +15,7 @@ public class Article : IBaseEntity
     [Required]
     public string Title { get; set; }
     public string ShortDescription { get; set; }
-    [Required]
-    public string Content { get; set; }
+    public string? Content { get; set; }
     public double? PositiveRaiting { get; set; }
     [Required]
     public DateTime DatePosting { get; set; }

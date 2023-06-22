@@ -14,21 +14,32 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Xml;
 using System.Web;
-using Azure;
+using myProject.DataCQS.Commands;
+using myProject.DataCQS.Queries;
+using MediatR;
 
 namespace myProject.Business
 {
     public class ArticleService : IArticleService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper; // Convert(article) => _mapper.Map<ArticleDto>(article);
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+        private readonly ISourceService _sourceService;
+        private readonly ICategoryService _categoryService;
 
 
         public ArticleService(IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMediator mediator,
+            IMapper mapper,
+            ISourceService sourceService,
+            ICategoryService categoryService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _mediator = mediator;
+            _sourceService = sourceService;
+            _categoryService = categoryService;
         }
 
         public async Task EditArticleAsync(ArticleDto article)
@@ -88,7 +99,7 @@ namespace myProject.Business
         public async Task UpRaitingAsync(int id)
         {
             var article = await _unitOfWork.Articles.GetByIdAsync(id);
-            var rate = article.PositiveRaiting + 0.003; 
+            var rate = article.PositiveRaiting + 0.005; 
             await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
             {
                 new PatchDto()
@@ -109,18 +120,10 @@ namespace myProject.Business
             return;
         }
 
-        public async Task<int> GetTotalArticlesCountAsync()
+        public async Task<int> GetTotalArticlesCountAsync(double raiting)
         {
-            var count = await _unitOfWork.Articles.CountAsync();
-            return count;
-        }
-
-        public async Task<IEnumerable<CategoryDto>> GetListCategoriesAsync()
-        {
-            return await _unitOfWork.Categories
-                .GetAsQueryable()
-                .Select(category => _mapper.Map<CategoryDto>(category))
-                .ToListAsync();
+            var articles = await _unitOfWork.Articles.FindBy(a => a.PositiveRaiting > raiting).ToListAsync();
+            return articles.Count;
         }
 
         public async Task<List<ArticleDto>> GetArticlesByPageAsync(int page, int pageSize, double positivity)
@@ -191,9 +194,21 @@ namespace myProject.Business
             return articles;
 
         }
+        public async Task<int> GetIdOfArticleASync(ArticleDto article)
+        {
+            var ent = await _unitOfWork.Articles.FindBy(a => ((a.Title == article.Title) && (a.DatePosting == article.DatePosting))).FirstOrDefaultAsync();
+            if (ent != null)
+            {
+                return ent.Id;
+            }
+            else
+            {
+                throw new Exception("This article is not exist");
+            }
+        }
 
         public async Task AddAsync(ArticleDto dto)
-        {
+        { 
             await _unitOfWork.Articles.AddAsync(_mapper.Map<Article>(dto));
             await _unitOfWork.SaveChangesAsync();
         }
@@ -208,40 +223,104 @@ namespace myProject.Business
         }
 
         //aggregator
-        public async Task<List<ArticleDto>> AggregateArticlesDataFromRssSourceAsync(NewsResourceDto source, CancellationToken cancellationToken)
+        public async Task AggregateArticlesDataFromRssAsync(CancellationToken cancellationToken)
         {
-            var articles = new ConcurrentBag<ArticleDto>();
-            var urls = await GetContainsArticleUrlsBySourceAsync(source.Id);
-            using (var reader = XmlReader.Create(source.RssFeedUrl))
+            await _categoryService.InitiateDefaultCategorysAsync();
+            await _sourceService.InitDefaultSourceAsync();
+            var sources = await _sourceService.GetSourcesAsync();
+            if (sources == null)
             {
-                var feed = SyndicationFeed.Load(reader);
-
-                await Parallel.ForEachAsync(feed.Items
-                        .Where(item => !urls.Contains(item.Links[0].Uri.AbsoluteUri)).ToArray(), cancellationToken,
-                    (item, token) =>
-                    {
-                        articles.Add(new ArticleDto()
-                        {
-                            ArticleSourceUrl = item.Links[0].Uri.AbsoluteUri,
-                            NewsResourceId = source.Id,
-                            SourceName = source.Name,
-                            Title = item.Title.Text,
-                            ShortDescription = item.Summary.Text,
-                            DatePosting = item.PublishDate.DateTime,
-                            CategoryId = CategoryCheck(item.Categories[0].Name)
-                        });
-                        return ValueTask.CompletedTask;
-                    });
-
-                reader.Close();
+                throw new Exception("Cant find any sources");
+            }
+            else
+            {
+                sources.Remove(sources.FirstOrDefault(s => s.Name == "Admin"));
+                sources.Remove(sources.FirstOrDefault(s => s.Name == "Community"));
             }
 
-            return articles.ToList();
+            var articles = new ConcurrentBag<ArticleDto>();
+            var urls = await GetContainsArticleUrlsBySourceAsync();
+            var categorys = await _categoryService.GetCategoriesAsync();
+            Parallel.ForEach(sources, async source =>
+            {
+                using (var reader = XmlReader.Create(source.RssFeedUrl))
+                {
+                    var feed = SyndicationFeed.Load(reader);
+
+                    await Parallel.ForEachAsync(feed.Items
+                            .Where(item => !urls.Contains(item.Links[0].Uri.AbsoluteUri)).ToArray(), cancellationToken,
+                        (item, token) =>
+                        {
+                            articles.Add(new ArticleDto()
+                            {
+                                ArticleSourceUrl = item.Links[0].Uri.AbsoluteUri,
+                                NewsResourceId = source.Id,
+                                SourceName = source.Name,
+                                Title = item.Title.Text,
+                                ShortDescription = item.Summary.Text,
+                                DatePosting = item.PublishDate.DateTime,
+                                CategoryId = CategoryCheck(item.Categories[0].Name, categorys)
+                            });
+                            return ValueTask.CompletedTask;
+                        });
+                    reader.Close();
+                }
+            });
+            await _mediator.Send(new AddArticlesCommand() { Articles = articles }, cancellationToken);
         }
 
-        private int CategoryCheck(string category)
+        public async Task AddFullContentForArticlesAsync(CancellationToken cancellationToken)
         {
-            int id = 0;
+            var articlesWithoutContent = await _mediator.Send(new GetAllArticlesWithoutContentQuery());
+
+            var concBag = new ConcurrentBag<ArticleDto>();
+            var onDelete = new List<int>();
+            await Parallel.ForEachAsync(articlesWithoutContent, async (dto, token) =>
+            {
+                var content = await GetArticleContentAsync(dto.ArticleSourceUrl);
+                if (content != "")
+                {
+                    dto.Content = content;
+                    concBag.Add(dto);
+                }
+                else
+                {
+                    onDelete.Add(dto.Id);
+                }
+            });
+
+            if (onDelete.Count > 0)
+            {
+                await _mediator.Send(new RemoveRangeArticlesCommand() { ArticlesId = onDelete }, cancellationToken);
+            }
+
+            await _mediator.Send(new AddArticlesFullContentCommand() { Articles = concBag }, cancellationToken);
+        }
+
+
+        public async Task AddRaitingForArticlesAsync(CancellationToken cancellationToken)
+        {
+            var unratedArticles = await _mediator.Send(new GetUnratedArticlesQuery(), cancellationToken);
+
+            if (unratedArticles == null)
+            {
+                throw new Exception("Cant find any unrated article after their creation");
+            }
+
+            foreach (var unratedArticle in unratedArticles)
+            {
+                unratedArticle.PositiveRaiting = await GetArticleRateAsync(unratedArticle.Id);
+            }
+            await _mediator.Send(new RateArticlesCommand() { Articles = unratedArticles }, cancellationToken);
+        }
+
+
+        //
+
+        private int CategoryCheck(string category, List<CategoryDto> categorys)
+        {
+
+            string categoryName = "";
             if (category.IndexOf(':') > 0)
             {
                 category = category.Substring(0, category.IndexOf(':'));
@@ -251,50 +330,37 @@ namespace myProject.Business
             {
                 case "ЗРОБЛЕНА БЕЛАРУСАМI":
                 case "КУЛЬТУРА":
-                    id = 1; // культура
+                    categoryName = "Культура"; // культура
                     break;
                 case "ЛАЙФСТАЙЛ":
                 case "ОБЩЕСТВО":
-                    id = 1002; // общество
+                    categoryName = "Общество"; // общество
                     break;
                 case "ПОЛИТИКА":
-                    id = 3; // политика
+                    categoryName = "Политика"; // политика
                     break;
                 case "СПОРТ":
-                    id = 4; //спорт
+                    categoryName = "Спорт"; //спорт
                     break;
                 case "АВТО":
                 case "ТЕХНОЛОГИИ":
                 case "НАУКА":
-                    id = 2; // технологии и наука
+                    categoryName = "Наука и технологии"; // технологии и наука
                     break;
                 case "КОШЕЛЕК":
                 case "НЕДВИЖИМОСТЬ":
                 case "ЭКОНОМИКА":
-                    id = 5; // экономика
+                    categoryName = "Экономика"; // экономика
                     break;
                 default:
-                    id = 1003; // другое
+                    categoryName = "Разное"; // другое
                     break;
             }
-            return id;
+            var cat = categorys.FirstOrDefault(c => c.Name == categoryName);
+            return cat.Id ;
         }
 
-        public async Task<List<ArticleDto>> GetFullContentArticlesAsync(List<ArticleDto> articlesDataFromRss)
-        {
-            var concBag = new ConcurrentBag<ArticleDto>();
-
-            await Parallel.ForEachAsync(articlesDataFromRss, async (dto, token) =>
-            {
-                var content = await GetArticleContentAsync(dto.ArticleSourceUrl);
-                if (content != "")
-                {
-                    dto.Content = content;
-                    concBag.Add(dto);
-                }
-            });
-            return concBag.ToList();
-        }
+        
 
         public async Task<double?> GetArticleRateAsync(int articleId)
         {
@@ -362,29 +428,16 @@ namespace myProject.Business
             articleText = articleText.Trim();
 
             articleText = HttpUtility.HtmlDecode(articleText);
-            articleText = Regex.Replace(articleText, "<.*?>|\n|\r|\"", string.Empty);
+            articleText = Regex.Replace(articleText, "<.*?>|\n|\r|\"|\\d|\\W", " ");
 
             return articleText.Trim();
         }
 
-        public async Task<List<ArticleDto>> GetUnratedArticlesAsync()
-        {
-            var unratedArticles = await _unitOfWork.Articles
-                .GetAsQueryable()
-                .AsNoTracking()
-                .Where(article => article.PositiveRaiting == null)
-                .Select(article => _mapper.Map<ArticleDto>(article))
-                .ToListAsync();
-
-            return unratedArticles;
-        }
-
-        private async Task<string[]> GetContainsArticleUrlsBySourceAsync(int sourceId)
+        private async Task<string[]> GetContainsArticleUrlsBySourceAsync()
         {
             var articleUrls = await _unitOfWork.Articles.GetAsQueryable()
-                .Where(article => article.NewsResourceId.Equals(sourceId))
-                .Select(article => article.ArticleSourceUrl)
-                .ToArrayAsync();
+                        .Select(article => article.ArticleSourceUrl)
+                        .ToArrayAsync();
             return articleUrls;
         }
 

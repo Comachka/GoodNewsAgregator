@@ -8,5 +8,6 @@ namespace myProject.Abstractions.Services
         Task<List<SubscriptionDto>> GetOnMeSubscriptionAsync(int myId);
         Task DeleteSubscriptionByIdAsync(int myId, int subId);
         Task AddSubscriptionByIdAsync(int myId, int subId);
+        Task<List<SubscriptionDto>> GetSubscriptionsAsync();
     }
 }

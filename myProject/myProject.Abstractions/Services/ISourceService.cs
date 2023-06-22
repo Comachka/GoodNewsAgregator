@@ -1,4 +1,5 @@
 ﻿using myProject.Core.DTOs;
+using myProject.Data.Entities;
 
 namespace myProject.Abstractions.Services
 {
@@ -6,6 +7,7 @@ namespace myProject.Abstractions.Services
     {
         Task<List<NewsResourceDto>> GetSourcesAsync();
         Task<NewsResourceDto?> GetSourceIdsAsync(int id);
-        Task<int> AddSourceAsync(NewsResourceDto dto);
+        Task InitDefaultSourceAsync();
+        Task<int> GetSourceIdByNameAsync(string source);
     }
 }

@@ -14,11 +14,13 @@ namespace myProject.Data
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserCategory> UserCategories { get; set; }
-       
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         public MyProjectContext(DbContextOptions<MyProjectContext> options) 
             : base (options)
         {
         }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

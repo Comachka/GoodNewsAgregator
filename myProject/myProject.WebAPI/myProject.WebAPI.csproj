@@ -10,6 +10,15 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.2" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.2" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.2" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
@@ -19,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\myProject.Abstractions\myProject.Abstractions.csproj" />
     <ProjectReference Include="..\myProject.Business\myProject.Business.csproj" />
+    <ProjectReference Include="..\myProject.DataCQS\myProject.DataCQS.csproj" />
     <ProjectReference Include="..\myProject.Repositories\myProject.Repositories.csproj" />
   </ItemGroup>
 

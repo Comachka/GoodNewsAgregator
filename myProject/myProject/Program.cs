@@ -8,8 +8,10 @@ using myProject.Repositories;
 using myProject.Repositories.Implementations;
 using myProject.Abstractions.Data.Repositories;
 using myProject.Data.Entities;
+using myProject.DataCQS.QueriesHandlers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Serilog;
+using MediatR;
 using Serilog.Events;
 using myProject.Mvc.SignalR;
 
@@ -46,10 +48,10 @@ namespace myProject
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
             builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
-            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IRepository<Comment>, Repository<Comment>>();
             builder.Services.AddScoped<IRepository<NewsResource>, Repository<NewsResource>>();
             builder.Services.AddScoped<IRepository<Role>, Repository<Role>>();
-            builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            builder.Services.AddScoped<IRepository<Subscription>, Repository<Subscription>>();
             builder.Services.AddScoped<IRepository<UserCategory>, Repository<UserCategory>>();
             builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 
@@ -61,6 +63,12 @@ namespace myProject
             builder.Services.AddTransient<ISourceService, SourceService>();
             builder.Services.AddTransient<ISubscriptionService, SubscriptionService>();
             // Add services to the container.
+
+            builder.Services.AddMediatR(
+                cfg =>
+                    cfg.RegisterServicesFromAssemblyContaining<GetUserByRefreshTokenQueryHandler>());
+
+
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

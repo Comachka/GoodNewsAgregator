@@ -15,12 +15,12 @@ namespace myProject.Mvc.MappingProfiles
                     => opt.MapFrom(
                         article
                             => article.NewsResource.Name));
-                //.ForMember(dto => dto.ArticleSourceUrl,
-                //opt
-                //    => opt.MapFrom(
-                //        article
-                //            => article.NewsResource.OriginUrl));
-            
+            //.ForMember(dto => dto.ArticleSourceUrl,
+            //opt
+            //    => opt.MapFrom(
+            //        article
+            //            => article.NewsResource.OriginUrl));
+
             CreateMap<ArticleDto, Article>();
             CreateMap<ArticleDto, ArticlePreviewModel>();
             CreateMap<ArticleDto, ArticleDetailsModel>();

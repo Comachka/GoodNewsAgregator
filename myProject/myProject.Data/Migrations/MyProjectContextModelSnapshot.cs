@@ -38,7 +38,6 @@ namespace myProject.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DatePosting")
@@ -140,6 +139,27 @@ namespace myProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NewsResources");
+                });
+
+            modelBuilder.Entity("myProject.Data.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("Value")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("myProject.Data.Entities.Role", b =>
@@ -279,6 +299,17 @@ namespace myProject.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Article");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("myProject.Data.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("myProject.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

@@ -1,4 +1,5 @@
 ﻿using myProject.Core.DTOs;
+using System.Security.Claims;
 
 namespace myProject.Abstractions.Services
 {
@@ -13,5 +14,7 @@ namespace myProject.Abstractions.Services
         Task ChangeRaiting(int id, int raiting);
         Task ChangeProfileAsync(string modelAvatar, string? aboutMyself, string name, bool mailNotification, int id);
         Task DeleteUserByIdAsync(int id);
+
+        Task<List<Claim>> GetUserClamsAsync(UserDto dto);
     }
 }

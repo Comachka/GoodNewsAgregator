@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using myProject.Core.DTOs;
 using myProject.Models;
 using myProject.Abstractions.Services;
 using Serilog;
 using ILogger = Serilog.ILogger;
 using AutoMapper;
-using myProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 
@@ -16,31 +14,31 @@ namespace myProject.Controllers
     public class ArticleController : Controller
     {
         private readonly IArticleService _articleService;
-        private readonly ICommentService _commentService;
         private readonly IUserService _userService;
         private readonly ISourceService _sourceService;
         private readonly ICategoryService _categoryService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly ILogger<ArticleController> _logger;
+        private readonly IRoleService _roleService;
 
         public ArticleController (IArticleService articleService,
-            ICommentService commentService,
             IConfiguration configuration,
             IUserService userService,
             ISourceService sourceService,
             ICategoryService categoryService,
+            IRoleService roleService,
             IMapper mapper,
             ILogger<ArticleController> logger)
         {
             _articleService = articleService;
-            _commentService = commentService;
             _userService = userService;
             _sourceService = sourceService;
             _categoryService = categoryService;
             _configuration = configuration;
             _mapper = mapper;
             _logger = logger;
+            _roleService = roleService;
         }
 
         [HttpGet]
@@ -49,7 +47,7 @@ namespace myProject.Controllers
             //Log.Information("Hello there");
             try
             {
-                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync();
+                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync(0.015);
                 //Log.Debug("Count of articles was gotten successfully");
                 if (int.TryParse(_configuration["Pagination:Articles:DefaultPageSize"], out var pageSize))
                 {
@@ -69,11 +67,22 @@ namespace myProject.Controllers
                         .Select(dto =>
                             _mapper.Map<ArticlePreviewModel>(dto))
                         .ToList();
-
+                    var roleName = "";
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
+                        roleName = await _roleService.GetUserRole(user.Id);
+                    }
+                    else
+                    {
+                        roleName = "Аноним";
+                    }
+                    
                     return View(new ArticlesWithPaginationModel()
                     {
                         ArticlePreviews = articles,
-                        PageInfo = pageInfo
+                        PageInfo = pageInfo,
+                        Role = roleName
                     });
                 }
 
@@ -98,7 +107,7 @@ namespace myProject.Controllers
         {
             try
             {
-                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync();
+                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync(0.015);
                 if (int.TryParse(_configuration["Pagination:Articles:DefaultPageSize"], out var pageSize))
                 {
                     var pageInfo = new PageInfo()
@@ -139,9 +148,10 @@ namespace myProject.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Super Moderator")]
+        [Authorize(Roles = "Администратор, Главный модератор")]
         public async Task<IActionResult> CreateArticleWithSource()
         {
+            await _categoryService.InitiateDefaultCategorysAsync();
             var model = new CreateArticleWithSourceModel()
             {
                 Categories = await _categoryService.GetCategoriesAsync()
@@ -150,21 +160,24 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Super Moderator")]
+        [Authorize(Roles = "Администратор, Главный модератор")]
         public async Task<IActionResult> CreateArticleWithSource(CreateArticleWithSourceModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userService.GetUserByEmailAsync(HttpContext.User.Identity.Name);
-                var role = "";
-                if (user.RoleId == 1)
+                var role = await _roleService.GetUserRole(user.Id);
+                if (role == "Администратор")
                 {
                     role = "Admin";
                 }
                 else
                 {
-                    role = "Super Moderator";
+                    role = "Community";
                 }
+
+                await _sourceService.InitDefaultSourceAsync();
+                var sourceId = await _sourceService.GetSourceIdByNameAsync(role);
 
                 var articleDto = new ArticleDto()
                 {
@@ -173,7 +186,7 @@ namespace myProject.Controllers
                     Content = model.Content,
                     PositiveRaiting = 0.016,
                     DatePosting = DateTime.Now,
-                    NewsResourceId = 6,
+                    NewsResourceId = sourceId,
                     ArticleSourceUrl = role,
                     SourceName = role,
                     CategoryId = model.CategoryId
@@ -187,12 +200,12 @@ namespace myProject.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> ManageArticles(int page = 1)
         {
             try
             {
-                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync();
+                var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync(double.MinValue);
                 if (int.TryParse(_configuration["Pagination:Articles:DefaultPageSize"], out var pageSize))
                 {
                     var pageInfo = new PageInfo()
@@ -230,7 +243,7 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> DeleteArticles(int id)
         {
             try
@@ -262,6 +275,7 @@ namespace myProject.Controllers
                     if (User.Identity.IsAuthenticated)
                     {
                         var category = await _categoryService.GetCategoryByIdAsync(articleDto.CategoryId);
+                        var roleName = await _roleService.GetUserRole(user.Id);
                         var model = new ArticleDetailsWithCreateCommentModel()
                         {
                             ArticleDetails = _mapper.Map<ArticleDetailsModel>(articleDto),
@@ -269,7 +283,7 @@ namespace myProject.Controllers
                             {
                                 ArticleId = articleDto.Id
                             },
-                            RoleId = user.RoleId
+                            Role = roleName
                         };
                         model.ArticleDetails.Category = category;
                         return View(model);
@@ -302,14 +316,14 @@ namespace myProject.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Aggregator()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(ArticleDetailsWithCreateCommentModel article)
         {
             try
@@ -325,47 +339,14 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> AggregateNews()
         {
             try
             {
-                var sources = (await _sourceService.GetSourcesAsync())
-                .Where(s => !string.IsNullOrEmpty(s.RssFeedUrl))
-                .ToArray();
-
-                if (sources == null)
-                {
-                    throw new Exception("Cant find any sources");
-                }
-
-                foreach (var sourceDto in sources)
-                {
-                    if (sourceDto.Name == "Admin")
-                    {
-                        continue;
-                    }
-                    var articlesDataFromRss = (await _articleService
-                        .AggregateArticlesDataFromRssSourceAsync(sourceDto, CancellationToken.None));
-
-                    var fullContentArticles = await _articleService.GetFullContentArticlesAsync(articlesDataFromRss);
-
-                    await _articleService.AddArticlesAsync(fullContentArticles);
-                }
-
-                var unratedArticles = await _articleService.GetUnratedArticlesAsync();
-
-                if (unratedArticles == null)
-                {
-                    throw new Exception("Cant find any unrated article after their creation");
-                }
-
-                foreach (var unratedArticle in unratedArticles)
-                {
-                    var rate = await _articleService.GetArticleRateAsync(unratedArticle.Id);
-                    await _articleService.RateArticleAsync(unratedArticle.Id, rate);
-                }
-
+                await _articleService.AggregateArticlesDataFromRssAsync(new CancellationToken());
+                await _articleService.AddFullContentForArticlesAsync(new CancellationToken());
+                await _articleService.AddRaitingForArticlesAsync(new CancellationToken());
                 return RedirectToAction("Index", "Article");
             }
             catch (Exception ex)

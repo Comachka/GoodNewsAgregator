@@ -4,7 +4,7 @@
     {
         <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
     }
-    <h3>Login</h3>
+    <h3>Вход</h3>
 
     <form asp-action="Login" asp-controller="Account" asp-antiforgery="true" method="post">
         <div class="mb-3">
@@ -13,13 +13,13 @@
             <span asp-validation-for="Email"></span>
         </div>
         <div class="mb-3">
-            <label class="form-label" asp-for="Password">Password</label>
+            <label class="form-label" asp-for="Password">Пароль</label>
             <input class="form-control" type="password" asp-for="Password" />
             <span asp-validation-for="Password"></span>
         </div>
         @Html.HiddenFor(model => model.ReturnUrl)
         <div class="login-btn-wrapper">
-            <input class="btn bg-primary login-btn" type="submit" value="Confirm" />
+            <input class="btn bg-primary login-btn" type="submit" value="Принять" />
         </div>
     </form>
 </div>

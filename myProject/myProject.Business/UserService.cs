@@ -8,6 +8,7 @@ using myProject.Data.Entities;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace myProject.Business
 {
@@ -39,6 +40,11 @@ namespace myProject.Business
         public async Task ChangeRaiting(int id, int raiting)
         {
             var user = await _unitOfWork.Users.FindBy(user => user.Id.Equals(id)).FirstOrDefaultAsync();
+            var roles = await _unitOfWork.Roles.GetAsQueryable().ToListAsync();
+            var adminRole = roles.FirstOrDefault(r => r.Name == "Администратор");
+            var userRole = roles.FirstOrDefault(r => r.Name == "Пользователь");
+            var moderRole = roles.FirstOrDefault(r => r.Name == "Модератор");
+            var supModerRole = roles.FirstOrDefault(r => r.Name == "Главный модератор");
             await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
             {
                 new PatchDto()
@@ -47,40 +53,49 @@ namespace myProject.Business
                     PropertyValue = user.Raiting + raiting
                 }
             });
-            if (user.RoleId != 1)
+            if (user.RoleId != adminRole.Id)
             {
                 if (((user.Raiting + raiting) >= 10000) && ((user.Raiting + raiting) < 100000))
                 {
-                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                    if (user.RoleId != moderRole.Id)
+                    {
+                        await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
                     {
                         new PatchDto()
                         {
                         PropertyName = nameof(UserDto.RoleId),
-                        PropertyValue = 2
+                        PropertyValue = moderRole.Id
                         }
                     });
+                    }
                 }
                 else if (((user.Raiting + raiting) >= 100000))
                 {
-                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                    if (user.RoleId != supModerRole.Id)
+                    {
+                        await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
                     {
                         new PatchDto()
                         {
                         PropertyName = nameof(UserDto.RoleId),
-                        PropertyValue = 4
+                        PropertyValue = supModerRole.Id
                         }
                     });
+                    }
                 }
                 else if (((user.Raiting + raiting) < 10000))
                 {
-                    await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
+                    if (user.RoleId != userRole.Id)
+                    {
+                        await _unitOfWork.Users.PatchAsync(id, new List<PatchDto>()
                     {
                         new PatchDto()
                         {
                         PropertyName = nameof(UserDto.RoleId),
-                        PropertyValue = 3
+                        PropertyValue = userRole.Id
                         }
                     });
+                    }
                 }
             }
             await _unitOfWork.SaveChangesAsync();
@@ -115,10 +130,9 @@ namespace myProject.Business
         {
             if (!await IsUserExistsAsync(email))
             {
-                var userRoleId = await _roleService.GetRoleIdByName("User");
+                var userRoleId = await _roleService.GetRoleIdByName("Пользователь");
                 if (userRoleId == 0)
                 {
-                    //throw new DataException("Role User does not exist");
                     await _roleService.InitiateDefaultRolesAsync();
                 }
 
@@ -278,5 +292,24 @@ namespace myProject.Business
             await _unitOfWork.SaveChangesAsync();
         }
 
+
+
+        public async Task<List<Claim>> GetUserClamsAsync(UserDto user)
+        {
+            var role = await _roleService.GetUserRole(user.Id);
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+            };
+            if (string.IsNullOrEmpty(role))
+            {
+                throw new ArgumentException("Incorrect user or role", nameof(user));
+            }
+            claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+
+
+            return claims;
+        }
     }
 }

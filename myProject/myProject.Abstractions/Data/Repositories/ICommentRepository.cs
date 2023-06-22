@@ -10,6 +10,5 @@ namespace myProject.Abstractions.Data.Repositories
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        public Task<List<Comment>> GetCommentsForPageAsync(int page, int pageSize);
     }
 }

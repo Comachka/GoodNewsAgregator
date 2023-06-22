@@ -12,10 +12,10 @@ namespace myProject.Abstractions
     {
         public IArticleRepository Articles { get; }
         public IRepository<Category> Categories { get; }
-        public ICommentRepository Comments { get; }
+        public IRepository<Comment> Comments { get; }
         public IRepository<NewsResource> NewsResources { get; }
         public IRepository<Role> Roles { get; }
-        public ISubscriptionRepository Subscriptions { get; }
+        public IRepository<Subscription> Subscriptions { get; }
         public IRepository<UserCategory> UserCategories { get; }
         public IRepository<User> Users { get; }
 

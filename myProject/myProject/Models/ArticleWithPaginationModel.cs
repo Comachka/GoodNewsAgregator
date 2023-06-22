@@ -4,5 +4,6 @@ namespace myProject.Models
     {
         public List<ArticlePreviewModel> ArticlePreviews { get; set; }
         public PageInfo PageInfo { get; set; }
+        public string Role { get; set; }
     }
 }

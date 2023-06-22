@@ -7,6 +7,8 @@ using myProject.Abstractions;
 using myProject.Data;
 using myProject.Abstractions.Data.Repositories;
 using myProject.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using myProject.Repositories.Implementations;
 
 namespace myProject.Repositories
 {
@@ -16,10 +18,10 @@ namespace myProject.Repositories
 
         private readonly IArticleRepository _articleRepository;
         private readonly IRepository<Category> _categoryRepository;
-        private readonly ICommentRepository _commentRepository;
+        private readonly IRepository<Comment> _commentRepository;
         private readonly IRepository<NewsResource> _newsResourceRepository;
         private readonly IRepository<Role> _roleRepository;
-        private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly IRepository<Subscription> _subscriptionRepository;
         private readonly IRepository<UserCategory> _userCategoryRepository;
         private readonly IRepository<User> _userRepository;
 
@@ -27,10 +29,10 @@ namespace myProject.Repositories
         public UnitOfWork(MyProjectContext dbContext,
             IArticleRepository articleRepository,
             IRepository<Category> categoryRepository,
-            ICommentRepository commentRepository,
+            IRepository<Comment> commentRepository,
             IRepository<NewsResource> newsResourceRepository,
             IRepository<Role> roleRepository,
-            ISubscriptionRepository subscriptionRepository,
+            IRepository<Subscription> subscriptionRepository,
             IRepository<UserCategory> userCategoryRepository,
             IRepository<User> userRepository)
         {
@@ -47,10 +49,10 @@ namespace myProject.Repositories
 
         public IArticleRepository Articles => _articleRepository;
         public IRepository<Category> Categories => _categoryRepository;
-        public ICommentRepository Comments => _commentRepository;
+        public IRepository<Comment> Comments => _commentRepository;
         public IRepository<NewsResource> NewsResources => _newsResourceRepository;
         public IRepository<Role> Roles => _roleRepository;
-        public ISubscriptionRepository Subscriptions => _subscriptionRepository;
+        public IRepository<Subscription> Subscriptions => _subscriptionRepository;
         public IRepository<UserCategory> UserCategories => _userCategoryRepository;
         public IRepository<User> Users => _userRepository;
 

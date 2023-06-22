@@ -5,13 +5,11 @@ using myProject.Abstractions.Services;
 using AutoMapper;
 using Serilog;
 using myProject.Core.DTOs;
+using Microsoft.AspNetCore.Authorization;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace myProject.WebAPI.Controllers
 {
-    /// <summary>
-    /// Controller for work with Article resources
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ArticleController : ControllerBase
@@ -28,21 +26,17 @@ namespace myProject.WebAPI.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Get Collection of articles by page size and page number
-        /// </summary>
-        /// <param name="request">Model which contains PageSize & Page number </param>
-        /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(ArticleResponse[]), StatusCodes.Status200OK)]
+        //[Authorize]
+        [ProducesResponseType(typeof(ArticleResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetArticlesByPagingInfoRequest request)
         {
             try
             {
-                var articles = (await _articleService.GetArticlesByPageAsync(request.Page, request.PageSize, double.MinValue))
+                var articles = (await _articleService.GetArticlesByPageAsync(request.Page, request.PageSize, request.MinRaiting))
                     .Select(dto => _mapper.Map<ArticleResponse>(dto));
                 if (articles == null)
                 {
@@ -57,13 +51,17 @@ namespace myProject.WebAPI.Controllers
             }
         }
 
-        // GET api/<ArticleController>/5
         [HttpGet("{id}")]
+        //[Authorize]
+        [ProducesResponseType(typeof(ArticleResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var article = _articleService.GetArticleByIdWithSourceNameAsync(id);
+                var article = await _articleService.GetArticleByIdWithSourceNameAsync(id);
                 if (article == null)
                 {
                     return NotFound();
@@ -77,35 +75,92 @@ namespace myProject.WebAPI.Controllers
             }
         }
 
-        // POST api/<ArticleController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateOrUpdateArticleRequest request)
+        //[Authorize]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Post([FromBody] CreateArticleRequest request)
         {
-            var articleDto = _mapper.Map<ArticleDto>(request);
-            await _articleService.AddAsync(articleDto);
-            //response should contain id of created resource
-            return Created("/Article/1", null);
-        }
-
-        // PUT api/<ArticleController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromBody] CreateOrUpdateArticleRequest request)
-        {
-            var articleDto = await _articleService.GetArticleByIdWithSourceNameAsync(request.Id);
-
-            if (articleDto != null)
+            try
             {
-                await _articleService.EditArticleAsync(_mapper.Map<ArticleDto>(request));
+                if (string.IsNullOrWhiteSpace(request.Content))
+                    ModelState.AddModelError("request.Content", "Content is null");
+
+                if (string.IsNullOrWhiteSpace(request.Title))
+                    ModelState.AddModelError("request.Title", "Title is null");
+
+                if (string.IsNullOrWhiteSpace(request.ShortDescription))
+                    ModelState.AddModelError("request.ShortDescription", "ShortDescription is null");
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var articleDto = _mapper.Map<ArticleDto>(request);
+                articleDto.DatePosting = DateTime.Now;
+                await _articleService.AddAsync(articleDto);
+                var id = await _articleService.GetIdOfArticleASync(articleDto);
+                return Created($"/Article/{id}", null);
             }
-            return Ok();
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new ErrorResponse() { Message = ex.Message });
+            }
+            
         }
 
-        // DELETE api/<ArticleController>/5
+        // Edit article
+        [HttpPut("{id}")]
+        //[Authorize]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] UpdateArticleRequest request)
+        {
+            try
+            {
+                var articleDto = await _articleService.GetArticleByIdWithSourceNameAsync(request.Id);
+
+                if (articleDto != null)
+                {
+                    await _articleService.EditArticleAsync(_mapper.Map<ArticleDto>(request));
+                }
+                else
+                {
+                    
+                      return NotFound();
+                    
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new ErrorResponse() { Message = ex.Message });
+            }
+            
+        }
+
+        // Delete article
         [HttpDelete("{id}")]
+        //[Authorize]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
-            await _articleService.DeleteArticleByIdAsync(id);
-            return Ok();
+            try
+            {
+                await _articleService.DeleteArticleByIdAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+                return StatusCode(500, new ErrorResponse() { Message = ex.Message });
+            }
+            
         }
     }
 }

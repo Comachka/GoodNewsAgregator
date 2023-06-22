@@ -10,6 +10,5 @@ namespace myProject.Abstractions.Data.Repositories
 {
     public interface ISubscriptionRepository : IRepository<Subscription>
     {
-        public Task<List<Subscription>> GetSubscriptionsForPageAsync(int page, int pageSize);
     }
 }

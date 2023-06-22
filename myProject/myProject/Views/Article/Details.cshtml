@@ -1,7 +1,7 @@
 ﻿@model ArticleDetailsWithCreateCommentModel
 
 
-@if (Model.RoleId == 1)
+@if ((Model.Role == "Администратор") || (Model.Role == "Главный модератор"))
 {
     <div class="hiden">
         <form class="article-form" asp-action="Edit" asp-controller="Article" asp-antiforgery="true" method="post">
@@ -13,29 +13,29 @@
             @Html.HiddenFor(model => model.ArticleDetails.SourceName)
             <div class="form-group">
                 <div style="padding-right:0;" class="register-input register-textarea-wrapper">
-                    <label class="form-label" asp-for="ArticleDetails.Title">Title</label>
+                    <label class="form-label" asp-for="ArticleDetails.Title">Заголовок:</label>
                     <input class="form-control" type="text" asp-for="ArticleDetails.Title" value="@Model.ArticleDetails.Title" />
                     <span asp-validation-for="ArticleDetails.Title"></span>
                 </div>
             </div>
             <div class="form-group">
                 <div style="padding-right:0;" class="register-input register-textarea-wrapper">
-                <label class="form-label" asp-for="ArticleDetails.ShortDescription">Short Description</label>
+                <label class="form-label" asp-for="ArticleDetails.ShortDescription">Краткое описание:</label>
                 <textarea class="form-control" type="text" value="@Model.ArticleDetails.ShortDescription" asp-for="ArticleDetails.ShortDescription"></textarea>
                 <span asp-validation-for="ArticleDetails.ShortDescription"></span>
             </div>
             </div>
             <div class="form-group">
                 <div style="max-height: 250px; padding-right:0;" class="register-input register-textarea-wrapper">
-                <label class="form-label" asp-for="ArticleDetails.Content">Content</label>
+                <label class="form-label" asp-for="ArticleDetails.Content">Содержимое:</label>
                 <textarea style="min-height: 200px;" class="form-control" type="text" value="@Model.ArticleDetails.Content" asp-for="ArticleDetails.Content"></textarea>
                 <span asp-validation-for="ArticleDetails.Content"></span>
             </div>
             </div>
             <div class="btns-edit-article">
-                <button сlass="btn btn-subscribe" id="btn-save" type="submit">Save</button>
+                <button сlass="btn btn-subscribe" id="btn-save" type="submit">Сохранить</button>
                 <div>
-                    <input сlass="btn" id="btn-stop-hide" type="button" value="Back" />
+                    <input сlass="btn" id="btn-stop-hide" type="button" value="Назад" />
                 </div>
             </div>
         </form>
@@ -47,11 +47,14 @@
 <div class="row">
         <div class="col-12 d-flex align-items-center col-12">
         <h2>@Model.ArticleDetails.Title </h2>
+            @if ((Model.Role == "Администратор") || (Model.Role == "Главный модератор"))
+{
             <div>
                 <button id="btn-start-hide" style="background:none; width:auto;" type="button">
                  <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
                  </button>
             </div>
+}
     </div>
     
     <div class="col-12">
@@ -64,12 +67,12 @@
 </div>
 
 <div class="row">
-    <button class="col-12 btn btn-primary commments-toggle-btn-close" id="commments-toggle-btn">Comments</button>
+    <button class="col-12 btn btn-primary commments-toggle-btn-close" id="commments-toggle-btn">Комментарии</button>
         
 </div>
 
     <div class="collapse text-center" id="collapsisbleComments" aria-expanded="false">
-        @if ((Model.RoleId == 1) || (Model.RoleId == 2) || (Model.RoleId == 4))
+        @if ((Model.Role == "Администратор") || (Model.Role == "Главный модератор") || (Model.Role == "Модератор"))
         {
             <a class="edit-comment" asp-action="ManageComments" asp-controller="Comment" asp-route-id="@Model.ArticleDetails.Id">
                 <img src="~/img/ForPages/admin.png" width="50" height="50" alt="icon" />
@@ -83,11 +86,11 @@
     <form class="add-comment-form" method="post" asp-antiforgery="true">
         <input id="article-id" type="hidden" asp-for="@Model.CreateComment.ArticleId" />
         <div class="mb-3" style="text-align:initial;">
-            <label class="form-label" asp-for="@Model.CreateComment.Content">Comment Text</label>
+            <label class="form-label" asp-for="@Model.CreateComment.Content">Текст комментария:</label>
             <textarea class="form-control" id="content-area" rows="5" asp-for="@Model.CreateComment.Content"></textarea>
         </div>
         <div style="text-align:initial;">
-            <input class="btn btn-primary" id="add-comment-btn" type="submit" value="Confirm" />
+            <input class="btn btn-primary" id="add-comment-btn" type="submit" value="Опубликовать" />
         </div>
     </form>
 </div>

@@ -8,7 +8,7 @@
         <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">@Html.Raw(Model.ShortDescription)</p>
         <form asp-action="DeleteArticles" asp-controller="Article" asp-route-id="@Model.Id" asp-antiforgery="true" method="post">
             <div>
-                <input class="btn btn-primary" type="submit" value="Delete"></input>
+                <input class="btn btn-primary" type="submit" value="Удалить"></input>
             </div>
         </form>
     </div>

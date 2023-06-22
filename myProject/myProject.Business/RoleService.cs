@@ -10,17 +10,26 @@ namespace myProject.Business
     public class RoleService : IRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public RoleService(IUnitOfWork unitOfWork)
+        public RoleService(IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<bool> IsRoleExistsAsync(string name)
+        private async Task<bool> IsRoleExistsAsync(string name)
         {
             return await _unitOfWork.Roles
                 .GetAsQueryable()
                 .AnyAsync(role => role.Name.Equals(name));
+        }
+
+        public async Task<List<RoleDto>> GetRolesAsync()
+        {
+            return await _unitOfWork.Roles.GetAsQueryable().
+                Select(role => _mapper.Map<RoleDto>(role)).ToListAsync();
         }
 
         public async Task<int> GetRoleIdByName(string name)
@@ -36,15 +45,25 @@ namespace myProject.Business
         public async Task InitiateDefaultRolesAsync()
         {
             var isAnyRoleNeedToBeInserted = false;
-            if (!await IsRoleExistsAsync("User"))
+            if (!await IsRoleExistsAsync("Пользователь"))
             {
                 isAnyRoleNeedToBeInserted = true;
-                await _unitOfWork.Roles.AddAsync(new Role() { Name = "User" });
+                await _unitOfWork.Roles.AddAsync(new Role() { Name = "Пользователь" });
             }
-            if (!await IsRoleExistsAsync("Admin"))
+            if (!await IsRoleExistsAsync("Администратор"))
             {
                 isAnyRoleNeedToBeInserted = true;
-                await _unitOfWork.Roles.AddAsync(new Role() { Name = "Admin" });
+                await _unitOfWork.Roles.AddAsync(new Role() { Name = "Администратор" });
+            }
+            if (!await IsRoleExistsAsync("Модератор"))
+            {
+                isAnyRoleNeedToBeInserted = true;
+                await _unitOfWork.Roles.AddAsync(new Role() { Name = "Модератор" });
+            }
+            if (!await IsRoleExistsAsync("Главный модератор"))
+            {
+                isAnyRoleNeedToBeInserted = true;
+                await _unitOfWork.Roles.AddAsync(new Role() { Name = "Главный модератор" });
             }
 
             if (isAnyRoleNeedToBeInserted)

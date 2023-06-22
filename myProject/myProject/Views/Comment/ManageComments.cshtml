@@ -1,6 +1,6 @@
 ﻿@model ManageCommentsModel
 <form asp-action="Details" asp-controller="Article" asp-route-id="@Model.ArticleId" asp-antiforgery="true" method="get">
-    <button сlass="btn-primary" style="width:100px" id="btn-stop-hide" type="submit">Back</button>
+    <button сlass="btn-primary" style="width:100px" id="btn-stop-hide" type="submit">Назад</button>
 </form>
 <div class="row">
     @foreach (var comment in Model.Comments)

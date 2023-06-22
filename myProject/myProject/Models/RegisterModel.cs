@@ -29,7 +29,7 @@ namespace myProject.Models
         [Required]
         public bool MailNotification { get; set; }
 
-        [ImgValidation(ErrorMessage = "Please select a PNG or JPEG/JPG image smaller than 200kb")]
+        [ImgValidation(ErrorMessage = "Пожалуйства выберите аватар формата PNG или JPEG/JPG размером до 200кб")]
         [DataType(DataType.Upload)]
         public IFormFile? Avatar { get; set; }
 

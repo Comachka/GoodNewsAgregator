@@ -22,7 +22,7 @@ namespace myProject.Business
     public class SubscriptionService : ISubscriptionService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper; // Convert(article) => _mapper.Map<ArticleDto>(article);
+        private readonly IMapper _mapper;
 
 
         public SubscriptionService(IUnitOfWork unitOfWork,
@@ -30,6 +30,13 @@ namespace myProject.Business
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+
+        public async Task<List<SubscriptionDto>> GetSubscriptionsAsync()
+        {
+            return await _unitOfWork.Subscriptions.GetAsQueryable().
+                Select(s => _mapper.Map<SubscriptionDto>(s)).ToListAsync();
         }
 
         public async Task<List<SubscriptionDto>> GetOnMeSubscriptionAsync(int myId)

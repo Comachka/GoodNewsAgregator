@@ -11,7 +11,6 @@
         public int NewsResourceId { get; set; }
         public string ArticleSourceUrl { get; set; }
         public string SourceName { get; set; }
-        public string Category { get; set; }
         public int CategoryId { get; set; }
     }
 }

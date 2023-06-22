@@ -60,13 +60,13 @@ namespace myProject.Mvc.Controllers
                     // return Ok(comments);
                     return Ok(comments.FirstOrDefault(c => c.Content == model.Content));
                 }
-                ModelState.AddModelError("", "Cant create comment");
+                ModelState.AddModelError("", "Не получается создать комментарий");
             }
             return Ok(false);
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Super Moderator, Moderator")]
+        [Authorize(Roles = "Администратор, Главный модератор, Модератор")]
         public async Task<IActionResult> ManageComments(int id)
         {
             try
@@ -92,7 +92,7 @@ namespace myProject.Mvc.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Super Moderator, Moderator")]
+        [Authorize(Roles = "Администратор, Главный модератор, Модератор")]
         public async Task<IActionResult> DeleteComment(int id)
         {
             try

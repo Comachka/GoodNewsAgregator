@@ -23,13 +23,14 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
     <PackageReference Include="Serilog" Version="2.12.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\myProject.Abstractions\myProject.Abstractions.csproj" />
     <ProjectReference Include="..\myProject.Business\myProject.Business.csproj" />
+    <ProjectReference Include="..\myProject.DataCQS\myProject.DataCQS.csproj" />
     <ProjectReference Include="..\myProject.Data\myProject.Data.csproj" />
     <ProjectReference Include="..\myProject.Repositories\myProject.Repositories.csproj" />
   </ItemGroup>

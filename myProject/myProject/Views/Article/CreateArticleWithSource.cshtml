@@ -1,20 +1,20 @@
 ﻿@model CreateArticleWithSourceModel
 
-<h3>Create article</h3>
+<h3>Создать новость</h3>
 
 <form asp-action="CreateArticleWithSource" asp-controller="Article" asp-antiforgery="true" method="post">
     <div class="mb-3">
-        <label class="form-label" asp-for="Title">Title</label>
+        <label class="form-label" asp-for="Title">Заголовок:</label>
         <input class="form-control" type="text" asp-for="Title" />
         <span asp-validation-for="Title"></span>
     </div>
     <div class="mb-3">
-        <label class="form-label" asp-for="ShortDescription">Shor tDescription</label>
+        <label class="form-label" asp-for="ShortDescription">Красткое описание:</label>
         <textarea class="form-control" rows="10" asp-for="ShortDescription"></textarea>
         <span asp-validation-for="ShortDescription"></span>
     </div>
     <div class="mb-3">
-        <label class="form-label" asp-for="Content">Content</label>
+        <label class="form-label" asp-for="Content">Содержимое:</label>
         <textarea class="form-control" rows="10" asp-for="Content"></textarea>
         <span asp-validation-for="Content"></span>
     </div>
@@ -36,7 +36,7 @@
     </p>
 
     <div>
-        <input class="btn btn-primary mt-3" type="submit" value="Confirm" />
+        <input class="btn btn-primary mt-3" type="submit" value="Создать" />
     </div>
 </form>
 

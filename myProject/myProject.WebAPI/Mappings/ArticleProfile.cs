@@ -16,10 +16,13 @@ namespace myProject.WebAPI.Mappings
                     => opt.MapFrom(
                         article
                             => article.NewsResource.Name));
+            CreateMap<ArticleDto, Article>();
 
             CreateMap<ArticleDto, ArticleResponse>();
+            CreateMap<ArticleResponse, ArticleDto>();
 
-            CreateMap<CreateOrUpdateArticleRequest, ArticleDto>();
+            CreateMap<CreateArticleRequest, ArticleDto>();
+            CreateMap<UpdateArticleRequest, ArticleDto>();
 
 
         }

@@ -4,9 +4,9 @@ namespace myProject.Abstractions.Services
 {
     public interface ICommentService
     {
-        public Task<List<CommentDto>> GetCommentsByArticleIdAsync(int articleId);
-        public Task<List<CommentDto>> CreateCommentAsync(CommentDto commentDto);
-        public Task<int> DeleteCommentsByIdAsync(int commentId);
+        Task<List<CommentDto>> GetCommentsByArticleIdAsync(int articleId);
+        Task<List<CommentDto>> CreateCommentAsync(CommentDto commentDto);
+        Task<int> DeleteCommentsByIdAsync(int commentId);
 
     }
 }
