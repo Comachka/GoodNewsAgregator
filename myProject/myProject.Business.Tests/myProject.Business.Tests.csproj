@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -20,6 +23,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\myProject.Abstractions\myProject.Abstractions.csproj" />
+    <ProjectReference Include="..\myProject.Business\myProject.Business.csproj" />
+    <ProjectReference Include="..\myProject.Core\myProject.Core.csproj" />
+    <ProjectReference Include="..\myProject.DataCQS\myProject.DataCQS.csproj" />
+    <ProjectReference Include="..\myProject.Data\myProject.Data.csproj" />
+    <ProjectReference Include="..\myProject.Repositories\myProject.Repositories.csproj" />
+    <ProjectReference Include="..\myProject\myProject.Mvc.csproj" />
   </ItemGroup>
 
 </Project>

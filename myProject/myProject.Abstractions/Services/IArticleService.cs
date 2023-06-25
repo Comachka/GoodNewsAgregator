@@ -11,7 +11,6 @@ namespace myProject.Abstractions.Services
         Task<ArticleDto?> GetArticleByIdWithSourceNameAsync(int id);
         Task<List<AutoCompleteDataDto>> GetArticlesNamesByPartNameAsync(string partName);
         Task AddAsync(ArticleDto dto);
-        Task AddArticlesAsync(IEnumerable<ArticleDto> articles);
         Task EditArticleAsync(ArticleDto article);
         Task DeleteArticleByIdAsync(int id);
         Task UpRaitingAsync(int id);
@@ -19,7 +18,5 @@ namespace myProject.Abstractions.Services
         Task AggregateArticlesDataFromRssAsync(CancellationToken cancellationToken);
         Task AddFullContentForArticlesAsync(CancellationToken cancellationToken);
         Task AddRaitingForArticlesAsync(CancellationToken cancellationToken);
-        Task<double?> GetArticleRateAsync(int articleId);
-        Task RateArticleAsync(int id, double? rate);
     }
 }

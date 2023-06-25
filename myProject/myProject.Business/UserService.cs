@@ -39,8 +39,9 @@ namespace myProject.Business
 
         public async Task ChangeRaiting(int id, int raiting)
         {
-            var user = await _unitOfWork.Users.FindBy(user => user.Id.Equals(id)).FirstOrDefaultAsync();
-            var roles = await _unitOfWork.Roles.GetAsQueryable().ToListAsync();
+            var user = await  _unitOfWork.Users.GetByIdAsync(id);
+            //var user = _unitOfWork.Users.FindBy(user => user.Id.Equals(id)).FirstOrDefault();
+            var roles = _unitOfWork.Roles.GetAsQueryable().ToList();
             var adminRole = roles.FirstOrDefault(r => r.Name == "Администратор");
             var userRole = roles.FirstOrDefault(r => r.Name == "Пользователь");
             var moderRole = roles.FirstOrDefault(r => r.Name == "Модератор");
@@ -131,7 +132,7 @@ namespace myProject.Business
             if (!await IsUserExistsAsync(email))
             {
                 var userRoleId = await _roleService.GetRoleIdByName("Пользователь");
-                if (userRoleId == 0)
+                if (!(userRoleId > 0))
                 {
                     await _roleService.InitiateDefaultRolesAsync();
                 }
@@ -171,8 +172,7 @@ namespace myProject.Business
         public async Task<UserDto?> GetUserByIdAsync(int id)
         {
             var user = await _unitOfWork.Users
-                .FindBy(user => user.Id.Equals(id))
-                .FirstOrDefaultAsync();
+                .GetByIdAsync(id);
             return
                 user != null
                     ? _mapper.Map<UserDto>(user)

@@ -45,11 +45,9 @@ namespace myProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1)
         {
-            //Log.Information("Hello there");
             try
             {
                 var totalArticlesCount = await _articleService.GetTotalArticlesCountAsync(0.015);
-                //Log.Debug("Count of articles was gotten successfully");
                 if (int.TryParse(_configuration["Pagination:Articles:DefaultPageSize"], out var pageSize))
                 {
                     var pageInfo = new PageInfo()

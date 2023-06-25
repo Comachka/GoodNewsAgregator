@@ -76,14 +76,18 @@ namespace myProject.Business
 
         public async Task<List<CategoryDto>> GetCategoriesAsync()
         {
-            return await _unitOfWork.Categories.GetAsQueryable().
-                Select(category => _mapper.Map<CategoryDto>(category)).ToListAsync();
+            return _unitOfWork.Categories.GetAsQueryable().
+                Select(category => _mapper.Map<CategoryDto>(category)).ToList();
         }
 
         public async Task<string> GetCategoryByIdAsync(int id)
         {
-            var category = await _unitOfWork.Categories.GetByIdAsync(id);
-            return category.Name;
+            if (id > 0)
+            {
+                var category = await _unitOfWork.Categories.GetByIdAsync(id);
+                return category.Name;
+            }
+            throw new ArgumentException("Invalid page or pageSize");
         }
     }
 }

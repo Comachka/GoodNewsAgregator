@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "iI1oAMOk5I3I+kQetuuzZkI64ogU/DJGu1MjLjjWQKE=",
+  "Hash": "gBnbN0r2gNp3Y0T5AP6NYhvkRyZB6sPQS3oB/UbBkZQ=",
   "Source": "myProject.WebAPI",
   "BasePath": "_content/myProject.WebAPI",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "myProject.WebAPI\\wwwroot",
       "Source": "myProject.WebAPI",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\369666a@gmail.co\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\369666a@gmail.co\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/369666a@gmail.co/low.jpg",
       "AssetKind": "All",
@@ -34,10 +34,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\369666a@gmail.co\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\369666a@gmail.com\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\369666a@gmail.com\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/369666a@gmail.com/low.jpg",
       "AssetKind": "All",
@@ -51,10 +51,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\369666a@gmail.com\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\dzfsdf@wer.dty\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\dzfsdf@wer.dty\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/dzfsdf@wer.dty/low.jpg",
       "AssetKind": "All",
@@ -68,10 +68,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\dzfsdf@wer.dty\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\ererere@rttr.te\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\ererere@rttr.te\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/ererere@rttr.te/low.jpg",
       "AssetKind": "All",
@@ -85,10 +85,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\ererere@rttr.te\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\ererere@rttr.te22\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\ererere@rttr.te22\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/ererere@rttr.te22/low.jpg",
       "AssetKind": "All",
@@ -102,10 +102,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\ererere@rttr.te22\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.rqweu\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.rqweu\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.rqweu/low.jpg",
       "AssetKind": "All",
@@ -119,10 +119,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.rqweu\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ru/low.jpg",
       "AssetKind": "All",
@@ -136,10 +136,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru\\unnamed.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru\\unnamed.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ru/unnamed.jpg",
       "AssetKind": "All",
@@ -153,10 +153,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru\\unnamed.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru1111\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru1111\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ru1111/low.jpg",
       "AssetKind": "All",
@@ -170,10 +170,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru1111\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru123\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru123\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ru123/low.jpg",
       "AssetKind": "All",
@@ -187,10 +187,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru123\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru333\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru333\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ru333/low.jpg",
       "AssetKind": "All",
@@ -204,10 +204,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ru333\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruMANAG\\unnamed.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruMANAG\\unnamed.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ruMANAG/unnamed.jpg",
       "AssetKind": "All",
@@ -221,10 +221,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruMANAG\\unnamed.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruqq\\wqe.txt",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruqq\\wqe.txt",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ruqq/wqe.txt",
       "AssetKind": "All",
@@ -238,10 +238,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruqq\\wqe.txt"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruqqqq\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruqqqq\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ruqqqq/low.jpg",
       "AssetKind": "All",
@@ -255,10 +255,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruqqqq\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruwerwer\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruwerwer\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik2012@mail.ruwerwer/low.jpg",
       "AssetKind": "All",
@@ -272,10 +272,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik2012@mail.ruwerwer\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik203312@mail.ru\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\evdokimchik203312@mail.ru\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/evdokimchik203312@mail.ru/low.jpg",
       "AssetKind": "All",
@@ -289,10 +289,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\evdokimchik203312@mail.ru\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\givemeaccplz21@gmail.com\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\givemeaccplz21@gmail.com\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/givemeaccplz21@gmail.com/low.jpg",
       "AssetKind": "All",
@@ -306,10 +306,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\givemeaccplz21@gmail.com\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/low.jpg",
       "AssetKind": "All",
@@ -323,10 +323,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qqq@qwq.ww\\unnamed.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qqq@qwq.ww\\unnamed.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/qqq@qwq.ww/unnamed.jpg",
       "AssetKind": "All",
@@ -340,10 +340,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\qqq@qwq.ww\\unnamed.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qqq@qwq.ww12121\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qqq@qwq.ww12121\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/qqq@qwq.ww12121/low.jpg",
       "AssetKind": "All",
@@ -357,10 +357,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\qqq@qwq.ww12121\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qqq@qwq.wwr\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qqq@qwq.wwr\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/qqq@qwq.wwr/low.jpg",
       "AssetKind": "All",
@@ -374,10 +374,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\qqq@qwq.wwr\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qwe@qqwe.rg\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qwe@qqwe.rg\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/qwe@qqwe.rg/low.jpg",
       "AssetKind": "All",
@@ -391,10 +391,10 @@
       "OriginalItemSpec": "wwwroot\\img\\Avatars\\qwe@qqwe.rg\\low.jpg"
     },
     {
-      "Identity": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qwe@qwe.rg\\low.jpg",
+      "Identity": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\img\\Avatars\\qwe@qwe.rg\\low.jpg",
       "SourceId": "myProject.WebAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "F:\\courses\\rh\\myProject\\myProject.WebAPI\\wwwroot\\",
+      "ContentRoot": "F:\\courses\\q\\myProject\\myProject.WebAPI\\wwwroot\\",
       "BasePath": "_content/myProject.WebAPI",
       "RelativePath": "img/Avatars/qwe@qwe.rg/low.jpg",
       "AssetKind": "All",

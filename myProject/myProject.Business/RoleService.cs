@@ -28,8 +28,8 @@ namespace myProject.Business
 
         public async Task<List<RoleDto>> GetRolesAsync()
         {
-            return await _unitOfWork.Roles.GetAsQueryable().
-                Select(role => _mapper.Map<RoleDto>(role)).ToListAsync();
+            return _unitOfWork.Roles.GetAsQueryable().
+                Select(role => _mapper.Map<RoleDto>(role)).ToList();
         }
 
         public async Task<int> GetRoleIdByName(string name)
@@ -74,17 +74,25 @@ namespace myProject.Business
 
         public async Task<string?> GetUserRole(int userId)
         {
-            var roleId = (await _unitOfWork.Users.GetByIdAsync(userId))?.RoleId;
-            if (roleId.HasValue)
+            if (userId > 0)
             {
-                var role = await _unitOfWork.Roles.GetByIdAsync(roleId.Value);
-                if (role != null)
+                var roleId = (await _unitOfWork.Users.GetByIdAsync(userId))?.RoleId;
+                if (roleId.HasValue)
                 {
-                    return role.Name;
+                    var role = await _unitOfWork.Roles.GetByIdAsync(roleId.Value);
+                    if (role != null)
+                    {
+                        return role.Name;
+                    }
                 }
-            }
 
-            return null;
+                return null;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid page or pageSize");
+            }
+           
         }
     }
 }

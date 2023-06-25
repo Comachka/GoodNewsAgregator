@@ -18,6 +18,7 @@ using Serilog;
 using Microsoft.Extensions.Logging;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
+
 namespace myProject.Business
 {
     public class TokenService : ITokenService
@@ -64,7 +65,6 @@ namespace myProject.Business
             {
                 RefreshToken = refreshToken
             });
-
             if (user != null)
             {
                 var jwt = await GenerateJwtToken(user);
@@ -81,7 +81,6 @@ namespace myProject.Business
                 };
             }
             throw new ArgumentException("RT not connected with User", nameof(refreshToken));
-
         }
 
 

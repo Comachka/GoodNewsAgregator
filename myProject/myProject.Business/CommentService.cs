@@ -21,17 +21,24 @@ namespace myProject.Business
         }
         public async Task<List<CommentDto>> GetCommentsByArticleIdAsync(int articleId)
         {
-            var dtos = await _unitOfWork.Comments
-                .FindBy(comment => comment.ArticleId == articleId)
-                .Select(comment => _mapper.Map<CommentDto>(comment))
-                .ToListAsync();
-            foreach (var dto in dtos)
+            if (articleId >0)
             {
-                var user = await _unitOfWork.Users.GetByIdAsync(dto.UserId);
-                dto.User = user.Name;
-                dto.Avatar = user.Avatar;
+                var dtos = _unitOfWork.Comments
+                               .FindBy(comment => comment.ArticleId == articleId)
+                               .Select(comment => _mapper.Map<CommentDto>(comment))
+                               .ToList();
+                foreach (var dto in dtos)
+                {
+                    var user = await _unitOfWork.Users.GetByIdAsync(dto.UserId);
+                    dto.User = user.Name;
+                    dto.Avatar = user.Avatar;
+                }
+                return dtos;
             }
-            return dtos;
+            else
+            {
+                throw new ArgumentException("Invalid article id");
+            }
         }
 
         public async Task<List<CommentDto>> CreateCommentAsync(CommentDto commentDto)

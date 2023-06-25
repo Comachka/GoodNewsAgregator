@@ -17,6 +17,8 @@ using System.Web;
 using myProject.DataCQS.Commands;
 using myProject.DataCQS.Queries;
 using MediatR;
+using Serilog;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace myProject.Business
 {
@@ -92,15 +94,17 @@ namespace myProject.Business
             }
             else
             {
-                throw new Exception("Cant find editable news");
+                throw new Exception($"Cant find article with id: {article.Id}");
             }
         }
 
         public async Task UpRaitingAsync(int id)
         {
             var article = await _unitOfWork.Articles.GetByIdAsync(id);
-            var rate = article.PositiveRaiting + 0.005; 
-            await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
+            if (article != null)
+            {
+                var rate = article.PositiveRaiting + 0.005;
+                await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
             {
                 new PatchDto()
                 {
@@ -109,15 +113,26 @@ namespace myProject.Business
                 }
             });
 
-            await _unitOfWork.SaveChangesAsync();
-            return;
+                await _unitOfWork.SaveChangesAsync();
+                return;
+            }
+            else
+            {
+                throw new Exception($"Cant find article with id: {id}");
+            }
         }
 
         public async Task DeleteArticleByIdAsync(int id)
         {
-            await _unitOfWork.Articles.Remove(id);
-            await _unitOfWork.SaveChangesAsync();
-            return;
+            if (id >0)
+            {
+                await _unitOfWork.Articles.Remove(id);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("Invalid page or pageSize");
+            }
         }
 
         public async Task<int> GetTotalArticlesCountAsync(double raiting)
@@ -130,21 +145,28 @@ namespace myProject.Business
         {
             try
             {
-                var articles = (await _unitOfWork
-                        .Articles
-                        .GetArticlesForPageAsync(page, pageSize, positivity))
-                    .Select(article => _mapper.Map<ArticleDto>(article))
-                    .ToList();
-                foreach (var article in articles)
+                if (page >= 0 && pageSize >= 1)
                 {
-                    var category = await _unitOfWork.Categories.GetByIdAsync(article.CategoryId);
-                    article.Category = category.Name;
+                    var articles = (await _unitOfWork
+                                            .Articles
+                                            .GetArticlesForPageAsync(page, pageSize, positivity))
+                                        .Select(article => _mapper.Map<ArticleDto>(article))
+                                        .ToList();
+                    foreach (var article in articles)
+                    {
+                        var category = await _unitOfWork.Categories.GetByIdAsync(article.CategoryId);
+                        article.Category = category.Name;
+                    }
+                    return articles;
                 }
-                return articles;
+                else
+                {
+                    throw new ArgumentException("Invalid page or pageSize");
+                }
             }
-            catch (Exception e)
+            catch (ArgumentException ex)
             {
-                Console.WriteLine(e);
+                Log.Error(ex, ex.Message);
                 throw;
             }
 
@@ -152,13 +174,13 @@ namespace myProject.Business
 
         public async Task<List<ArticleDto>> GetFavArticleAsync()
         {
-            var articles = await _unitOfWork
+            var articles = _unitOfWork
                     .Articles
                     .GetAsQueryable()
                     .OrderByDescending(a => a.PositiveRaiting)
                     .Take(3)
                     .Select(article => _mapper.Map<ArticleDto>(article))
-                    .ToListAsync();
+                    .ToList();
             foreach(var article in articles)
             {
                 var source = await _unitOfWork.NewsResources.GetByIdAsync(article.NewsResourceId);
@@ -174,29 +196,33 @@ namespace myProject.Business
             article.NewsResource = source;
             if (article != null)
             {
-                var dto = _mapper.Map<ArticleDto>(article);
-                dto.SourceName = source.Name;
-                dto.ArticleSourceUrl = source.OriginUrl;
-                return dto;
+                if (source != null)
+                {
+                    var dto = _mapper.Map<ArticleDto>(article);
+                    dto.SourceName = source.Name;
+                    dto.ArticleSourceUrl = source.OriginUrl;
+                    return dto;
+                }
+                throw new Exception($"This source [{article.NewsResourceId}] is not exist");
             }
-            throw new Exception("This article is not exist");
+            throw new Exception($"This article [{id}] is not exist");
         }
 
         public async Task<List<AutoCompleteDataDto>> GetArticlesNamesByPartNameAsync(string partName)
         {
-            var articles = await _unitOfWork.Articles
+            var articles = _unitOfWork.Articles
                 .GetAsQueryable()
                 .AsNoTracking()
                 .Where(article => article.Title.Contains(partName))
                 .Select(article => _mapper.Map<AutoCompleteDataDto>(article))
-                .ToListAsync();
+                .ToList();
 
             return articles;
-
         }
+
         public async Task<int> GetIdOfArticleASync(ArticleDto article)
         {
-            var ent = await _unitOfWork.Articles.FindBy(a => ((a.Title == article.Title) && (a.DatePosting == article.DatePosting))).FirstOrDefaultAsync();
+            var ent = _unitOfWork.Articles.FindBy(a => ((a.Title == article.Title) && (a.DatePosting == article.DatePosting))).FirstOrDefault();
             if (ent != null)
             {
                 return ent.Id;
@@ -213,15 +239,6 @@ namespace myProject.Business
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddArticlesAsync(IEnumerable<ArticleDto> articles)
-        {
-            var entities = articles.Select(a => _mapper.Map<Article>(a)).ToArray();
-
-            await _unitOfWork.Articles.AddRangeAsync(entities);
-            await _unitOfWork.SaveChangesAsync();
-
-        }
-
         //aggregator
         public async Task AggregateArticlesDataFromRssAsync(CancellationToken cancellationToken)
         {
@@ -230,7 +247,7 @@ namespace myProject.Business
             var sources = await _sourceService.GetSourcesAsync();
             if (sources == null)
             {
-                throw new Exception("Cant find any sources");
+                throw new Exception("Cant find and init any sources");
             }
             else
             {
@@ -241,6 +258,10 @@ namespace myProject.Business
             var articles = new ConcurrentBag<ArticleDto>();
             var urls = await GetContainsArticleUrlsBySourceAsync();
             var categorys = await _categoryService.GetCategoriesAsync();
+            if (categorys == null)
+            {
+                throw new Exception("Cant find and init any categorys");
+            }
             Parallel.ForEach(sources, async source =>
             {
                 using (var reader = XmlReader.Create(source.RssFeedUrl))
@@ -309,13 +330,11 @@ namespace myProject.Business
 
             foreach (var unratedArticle in unratedArticles)
             {
-                unratedArticle.PositiveRaiting = await GetArticleRateAsync(unratedArticle.Id);
+                unratedArticle.PositiveRaiting = await GetArticleRateAsync(unratedArticle);
             }
             await _mediator.Send(new RateArticlesCommand() { Articles = unratedArticles }, cancellationToken);
         }
 
-
-        //
 
         private int CategoryCheck(string category, List<CategoryDto> categorys)
         {
@@ -330,30 +349,30 @@ namespace myProject.Business
             {
                 case "ЗРОБЛЕНА БЕЛАРУСАМI":
                 case "КУЛЬТУРА":
-                    categoryName = "Культура"; // культура
+                    categoryName = "Культура"; 
                     break;
                 case "ЛАЙФСТАЙЛ":
                 case "ОБЩЕСТВО":
-                    categoryName = "Общество"; // общество
+                    categoryName = "Общество"; 
                     break;
                 case "ПОЛИТИКА":
-                    categoryName = "Политика"; // политика
+                    categoryName = "Политика"; 
                     break;
                 case "СПОРТ":
-                    categoryName = "Спорт"; //спорт
+                    categoryName = "Спорт"; 
                     break;
                 case "АВТО":
                 case "ТЕХНОЛОГИИ":
                 case "НАУКА":
-                    categoryName = "Наука и технологии"; // технологии и наука
+                    categoryName = "Наука и технологии";
                     break;
                 case "КОШЕЛЕК":
                 case "НЕДВИЖИМОСТЬ":
                 case "ЭКОНОМИКА":
-                    categoryName = "Экономика"; // экономика
+                    categoryName = "Экономика"; 
                     break;
                 default:
-                    categoryName = "Разное"; // другое
+                    categoryName = "Разное"; 
                     break;
             }
             var cat = categorys.FirstOrDefault(c => c.Name == categoryName);
@@ -362,15 +381,15 @@ namespace myProject.Business
 
         
 
-        public async Task<double?> GetArticleRateAsync(int articleId)
+        private async Task<double?> GetArticleRateAsync(ArticleDto unratedArticle)
         {
-            var articleText = (await _unitOfWork.Articles.GetByIdAsync(articleId))?.Content;
+            var articleText = unratedArticle.Content;
 
 
             if (string.IsNullOrEmpty(articleText))
             {
                 throw new ArgumentException("Article or article text doesn't exist",
-                    nameof(articleId));
+                    nameof(unratedArticle.Id));
             }
             else
             {
@@ -418,6 +437,10 @@ namespace myProject.Business
                             return totalRate;
                         }
                     }
+                    else
+                    {
+                        throw new Exception("Bad response status");
+                    }
                 }
                 return null;
             }
@@ -435,9 +458,9 @@ namespace myProject.Business
 
         private async Task<string[]> GetContainsArticleUrlsBySourceAsync()
         {
-            var articleUrls = await _unitOfWork.Articles.GetAsQueryable()
+            var articleUrls = _unitOfWork.Articles.GetAsQueryable()
                         .Select(article => article.ArticleSourceUrl)
-                        .ToArrayAsync();
+                        .ToArray();//////////////////////////////
             return articleUrls;
         }
 
@@ -474,9 +497,9 @@ namespace myProject.Business
                 }
                 return content;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
+                Log.Error(ex, ex.Message);
                 throw;
             }
 
@@ -511,30 +534,6 @@ namespace myProject.Business
                    .ToList()
                    .ForEach(n => n.Remove());
             return textNode.InnerHtml;
-        }
-
-
-        public async Task RateArticleAsync(int id, double? rate)
-        {
-            if (id == null)
-            {
-                throw new Exception("Id of rated article is null");
-            }
-            if (rate == null)
-            {
-                throw new Exception("Rate of rated article is null");
-            }
-            await _unitOfWork.Articles.PatchAsync(id, new List<PatchDto>()
-            {
-                new PatchDto()
-                {
-                    PropertyName = nameof(ArticleDto.PositiveRaiting),
-                    PropertyValue = rate
-                }
-            });
-
-            await _unitOfWork.SaveChangesAsync();
-
         }
     }
 }

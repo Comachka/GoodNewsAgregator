@@ -35,8 +35,8 @@ namespace myProject.Business
 
         public async Task<List<SubscriptionDto>> GetSubscriptionsAsync()
         {
-            return await _unitOfWork.Subscriptions.GetAsQueryable().
-                Select(s => _mapper.Map<SubscriptionDto>(s)).ToListAsync();
+            return _unitOfWork.Subscriptions.GetAsQueryable().
+                Select(s => _mapper.Map<SubscriptionDto>(s)).ToList();
         }
 
         public async Task<List<SubscriptionDto>> GetOnMeSubscriptionAsync(int myId)
@@ -55,7 +55,7 @@ namespace myProject.Business
         }
         public async Task DeleteSubscriptionByIdAsync(int myId, int subId)
         {
-            if ((myId != null) && (subId != null))
+            if ((myId > 0) && (subId > 0))
             {
                 var sub = await _unitOfWork.Subscriptions.FindBy(s => s.FollowerId == myId && s.FollowOnId == subId).FirstOrDefaultAsync();
                 if (sub != null)
@@ -72,7 +72,7 @@ namespace myProject.Business
 
         public async Task AddSubscriptionByIdAsync(int myId, int subId)
         {
-            if ((myId != null) && (subId != null))
+            if ((myId > 0) && (subId > 0))
             {
                 var sub = new Subscription
                 {

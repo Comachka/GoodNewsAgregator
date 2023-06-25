@@ -36,7 +36,11 @@ namespace myProject.Business
 
         public async Task<NewsResourceDto?> GetSourceIdsAsync(int id)
         {
-            return _mapper.Map<NewsResourceDto>(await _unitOfWork.NewsResources.GetByIdAsync(id));
+            if (id >0)
+            {
+                return _mapper.Map<NewsResourceDto>(await _unitOfWork.NewsResources.GetByIdAsync(id));
+            }
+            throw new ArgumentException("Incorrect id");
         }
 
         public async Task InitDefaultSourceAsync()
