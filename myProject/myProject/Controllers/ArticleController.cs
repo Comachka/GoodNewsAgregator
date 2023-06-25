@@ -322,7 +322,7 @@ namespace myProject.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Администратор")]
+        [Authorize(Roles = "Администратор, Главный модератор")]
         public async Task<IActionResult> Edit(ArticleDetailsWithCreateCommentModel article)
         {
             try

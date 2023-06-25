@@ -6,7 +6,7 @@ namespace myProject.Models
 {
     public class MyAccountModel
     {
-        [Required]
+        [Required(ErrorMessage = "Имя не может быть пустым.")]
         public string Name { get; set; }
 
         public string? Avatar { get; set; }

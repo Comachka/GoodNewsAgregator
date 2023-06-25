@@ -5,11 +5,11 @@ namespace myProject.Models
 {
     public class CreateArticleWithSourceModel
     {
-        [Required]
+        [Required(ErrorMessage = "Укажите заголовок новости.")]
         public string Title { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Укажите краткое описание новости.")]
         public string ShortDescription { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Укажите содержимое новости.")]
         public string Content { get; set; }
 
         [Required]

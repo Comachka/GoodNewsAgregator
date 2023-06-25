@@ -4,11 +4,11 @@ namespace myProject.Models
 {
     public class LoginModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Укажите Email.")]
+        [EmailAddress(ErrorMessage = "Формат не соответствует email.")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите пароль.")]
         //[RegularExpression()]
         public string Password { get; set; }
 

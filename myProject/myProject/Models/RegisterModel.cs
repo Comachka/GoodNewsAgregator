@@ -6,24 +6,25 @@ namespace myProject.Models
 {
     public class RegisterModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Укажите email.")]
+        [EmailAddress(ErrorMessage = "Формат не соответствует email.")]
         [Remote("CheckIsUserEmailIsValidAndNotExists",
         "Account",
-        ErrorMessage = "This email already used")]
+        ErrorMessage = "Такой email уже уществует.")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите пароль.")]
         [DataType(DataType.Password)]
-        //[RegularExpression()]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{6,16}$",
+            ErrorMessage = "Пароль должен содержать одну строчную букву, одну заглавную букву, одну цифру, длина пароля 6-16 символов без пробелов.")]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите подтверждение пароля.")]
         [DataType(DataType.Password)]
-        [Compare(nameof(Password))]
+        [Compare(nameof(Password), ErrorMessage = "Пароли не совпадают.")]
         public string PasswordConfirmation { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Укажите Имя.")]
         public string Name { get; set; }
 
         [Required]

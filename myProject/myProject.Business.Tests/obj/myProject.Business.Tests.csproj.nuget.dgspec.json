@@ -1,0 +1,696 @@
+{
+  "format": 1,
+  "restore": {
+    "F:\\courses\\q\\myProject\\myProject.Business.Tests\\myProject.Business.Tests.csproj": {}
+  },
+  "projects": {
+    "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj",
+        "projectName": "myProject.Abstractions",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject.Business.Tests\\myProject.Business.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Business.Tests\\myProject.Business.Tests.csproj",
+        "projectName": "myProject.Business.Tests",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Business.Tests\\myProject.Business.Tests.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Business.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject\\myProject.Mvc.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject\\myProject.Mvc.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.1.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.18.4, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj",
+        "projectName": "myProject.Business",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Business\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.46, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.16, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "Serilog": {
+              "target": "Package",
+              "version": "[2.12.0, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "System.ServiceModel.Syndication": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj",
+        "projectName": "myProject.Core",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj",
+        "projectName": "myProject.DataCQS",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj",
+        "projectName": "myProject.Data",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj",
+        "projectName": "myProject.Repositories",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Core\\myProject.Core.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\courses\\q\\myProject\\myProject\\myProject.Mvc.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\courses\\q\\myProject\\myProject\\myProject.Mvc.csproj",
+        "projectName": "myProject.Mvc",
+        "projectPath": "F:\\courses\\q\\myProject\\myProject\\myProject.Mvc.csproj",
+        "packagesPath": "C:\\Users\\evdok\\.nuget\\packages\\",
+        "outputPath": "F:\\courses\\q\\myProject\\myProject\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\evdok\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Abstractions\\myProject.Abstractions.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Business\\myProject.Business.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.DataCQS\\myProject.DataCQS.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Data\\myProject.Data.csproj"
+              },
+              "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj": {
+                "projectPath": "F:\\courses\\q\\myProject\\myProject.Repositories\\myProject.Repositories.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Hangfire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.8.2, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.8.2, )"
+            },
+            "Hangfire.Dashboard.Basic.Authentication": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Hangfire.SqlServer": {
+              "target": "Package",
+              "version": "[1.8.2, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Serilog": {
+              "target": "Package",
+              "version": "[2.12.0, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
